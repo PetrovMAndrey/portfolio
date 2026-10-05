@@ -74,13 +74,14 @@ assert.equal(await evaluate('document.querySelectorAll(".project-navigation__una
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 3);
 assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04']);
 assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
-const backgroundURLs = await evaluate('[...document.querySelectorAll("[style]")].map(section => section.style.getPropertyValue("--section-image").slice(5,-2))');
+const backgroundURLs = await evaluate('[...document.querySelectorAll("[style]")].map(section => section.style.getPropertyValue("--section-image")).filter(Boolean).map(value => value.slice(5,-2))');
 for (const url of backgroundURLs) {
   assert.equal(await evaluate(`new Promise(resolve => { const image = new Image(); image.onload = () => resolve(image.naturalWidth > 0); image.onerror = () => resolve(false); image.src = ${JSON.stringify(url)}; })`), true);
 }
 assert.equal(await evaluate('getComputedStyle(document.querySelector(".ark-gallery")).display'), 'grid');
-const heroURL = await evaluate('new URL("Вайфреймы в работу/Хиро без текста.png", document.baseURI).href');
-assert.equal(await evaluate(`new Promise(resolve => { const image = new Image(); image.onload = () => resolve(image.naturalWidth > 0); image.onerror = () => resolve(false); image.src = ${JSON.stringify(heroURL)}; })`), true);
+assert.equal(await evaluate('document.querySelectorAll(".hero-rail__item").length'), 10);
+assert.equal(await evaluate('document.querySelectorAll(".hero-rail__item a").length'), 4);
+assert.equal(await evaluate('Promise.all([...document.querySelectorAll(".hero img")].map(image => image.decode())).then(() => true)'), true);
 await screenshot('hero');
 await evaluate('document.querySelector(".ark-cover").scrollIntoView({behavior:"instant"})');
 await delay(200);
@@ -312,15 +313,15 @@ for (const width of [1920, 1440, 1280, 1024]) {
   const geometry = await evaluate(`(() => {
     const main = document.querySelector('main').getBoundingClientRect();
     const hero = document.querySelector('.hero').getBoundingClientRect();
-    const text = document.querySelector('.hero__content').getBoundingClientRect();
+    const text = document.querySelector('.hero__footer p').getBoundingClientRect();
     const sections = [...document.querySelectorAll('.hero, .ark > section, .project-separator, .grantmaster > section, .svetlo > section, .industrial > section')].map(section => section.getBoundingClientRect());
     const arrows = [...document.querySelectorAll('.gallery__controls button')].map(button => button.getBoundingClientRect());
-    return {width:main.width, gaps:sections.slice(1).map((section,index) => section.top-sections[index].bottom), hero:{width:hero.width,height:hero.height,top:hero.top},text:{right:text.right,bottom:text.bottom},arrows:arrows.map(arrow => arrow.top+arrow.height/2),navigationWidth:document.querySelector('.project-navigation').getBoundingClientRect().width};
+    return {width:main.width, gaps:sections.slice(1).map((section,index) => section.top-sections[index].bottom), hero:{width:hero.width,height:hero.height,top:hero.top},text:{left:text.left,right:text.right,bottom:text.bottom},arrows:arrows.map(arrow => arrow.top+arrow.height/2),navigationWidth:document.querySelector('.project-navigation').getBoundingClientRect().width};
   })()`);
   assert.equal(geometry.width, await evaluate('document.documentElement.clientWidth'));
   assert.equal(geometry.hero.top, 0);
   assert.equal(geometry.gaps.every(gap => Math.abs(gap) < 1), true);
-  assert.equal(geometry.text.right < geometry.hero.width * .4, true);
+  assert.equal(Math.abs((geometry.text.left + geometry.text.right) / 2 - geometry.hero.width / 2) < 1, true);
   assert.equal(geometry.text.bottom < geometry.hero.height, true);
   assert.equal(geometry.arrows[0], geometry.arrows[1]);
   assert.equal(geometry.navigationWidth, 50);
@@ -446,7 +447,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
   const scrollEnd = await evaluate('document.documentElement.scrollHeight-innerHeight');
   for (let position=await evaluate('scrollY'); position<=scrollEnd; position+=200) {
     await evaluate(`window.scrollTo({top:${position},behavior:'instant'})`);
-    await delay(20);
+    await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
     const expected = await evaluate('document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
     assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), expected);
   }

@@ -1,4 +1,4 @@
-import { renderHero } from './hero/hero.js';
+import { renderHero, mountHero } from './hero/hero.js';
 import { renderArk } from './projects/ark/ark.js';
 import { renderGrantmaster } from './projects/grantmaster/grantmaster.js';
 import { renderSvetlo } from './projects/svetlo/svetlo.js';
@@ -19,3 +19,4 @@ appendProjects(landing, projects);
 // Register only implemented projects. Future projects supply their own section IDs.
 mountProjectNavigation(projects);
 document.querySelectorAll('[data-gallery]').forEach(mountGallery);
+mountHero(document.querySelector('.hero'));
