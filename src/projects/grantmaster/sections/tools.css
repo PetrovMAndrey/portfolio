@@ -1,0 +1,9 @@
+.grantmaster-tools { display: grid; grid-template-columns: 1fr 1.55fr; align-items: start; gap: clamp(32px, 4vw, 72px); padding: 28px var(--section-gutter) 30px; }
+.grantmaster-tools .grantmaster__copy { font-size: clamp(14px, 1vw, 18px); line-height: 1.5; }
+.grantmaster-tools__item { min-width: 0; }
+.grantmaster-tools__previews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.grantmaster-tools__preview { display: block; width: 100%; padding: 0; border: 1px solid #21304325; border-radius: 5px; overflow: hidden; background: #fff; }
+.grantmaster-tools__preview img { width: 100%; height: clamp(200px, 14vw, 270px); object-fit: cover; object-position: top; transition: opacity .2s; }
+.grantmaster-tools__preview:hover img { opacity: .8; }
+@media (max-width: 900px) { .grantmaster-tools { grid-template-columns: 1fr; gap: 24px; } .grantmaster-tools__intro { max-width: 620px; } }
+@media (max-width: 600px) { .grantmaster-tools__previews { gap: 10px; } .grantmaster-tools__preview img { height: 180px; } }

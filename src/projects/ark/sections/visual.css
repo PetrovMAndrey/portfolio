@@ -1,0 +1,15 @@
+.ark-visual {
+  display: grid; grid-template-columns: minmax(0, 3.15fr) minmax(180px, 1fr);
+  gap: clamp(30px, 5vw, 80px); padding: 0 var(--section-gutter);
+  height: clamp(410px, 33vw, 570px); overflow: hidden;
+  background-image: linear-gradient(90deg, #080b0e30, #080b0e8c), var(--section-image);
+  background-size: cover; background-position: center;
+}
+.ark-visual__image { align-self: start; margin-top: 32px; transform: rotate(-3deg); transform-origin: top center; border: 1px solid #a3acb577; box-shadow: 0 20px 65px #0009; border-radius: 5px; overflow: hidden; }
+.ark-visual__image img { width: 100%; height: auto; }
+.ark-visual__content { padding: 48px 0 32px; }
+.ark-visual ul { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 24px; }
+.ark-visual li { display: flex; align-items: center; gap: 20px; font-size: clamp(16px, 1.55vw, 24px); }
+.ark-visual li::before { content: ''; width: 42px; height: 1px; background: var(--orange); flex-shrink: 0; }
+@media (max-width: 900px) { .ark-visual { gap: 24px; grid-template-columns: minmax(0, 2fr) minmax(155px, 1fr); } .ark-visual li { gap: 12px; } .ark-visual li::before { width: 24px; } }
+@media (max-width: 600px) { .ark-visual { height: auto; grid-template-columns: 1fr; } .ark-visual__image { height: 330px; } .ark-visual__content { padding-top: 10px; } .ark-visual ul { grid-template-columns: 1fr 1fr; gap: 18px; } }

@@ -1,0 +1,29 @@
+.hero {
+  aspect-ratio: 1672 / 941;
+  display: grid; align-items: center;
+  padding: clamp(24px, 5vw, 70px) var(--section-gutter);
+  background-color: #fff;
+  background-image: linear-gradient(90deg, #fff 0%, #fffffff5 23%, #ffffffb3 31%, transparent 44%), url('../../Вайфреймы в работу/Хиро без текста.png');
+  background-size: cover; background-position: center right; background-repeat: no-repeat;
+}
+.hero__content { width: 34%; max-width: 510px; }
+.hero__name { font-size: clamp(14px, 1.15vw, 21px); font-weight: 600; letter-spacing: .22em; margin-bottom: 30px; }
+.hero h1 { font: 400 clamp(48px, 5vw, 86px)/1.03 var(--serif); letter-spacing: -.045em; margin-bottom: 34px; }
+.hero__description { font-size: clamp(16px, 1.25vw, 22px); line-height: 1.55; }
+.hero__disciplines { margin-top: 32px; padding-top: 20px; border-top: 1px solid #293e4e30; font-size: clamp(12px, .95vw, 16px); line-height: 1.8; color: #3d4b54; }
+@media (max-width: 1100px) {
+  .hero__content { width: 34%; }
+  .hero h1 { font-size: clamp(32px, 4.6vw, 50px); margin-bottom: 22px; }
+  .hero__name { font-size: 12px; margin-bottom: 20px; }
+  .hero__description { font-size: clamp(13px, 1.4vw, 16px); line-height: 1.45; }
+  .hero__disciplines { font-size: 11px; margin-top: 20px; padding-top: 14px; }
+}
+@media (max-width: 700px) {
+  .hero { aspect-ratio: auto; padding: 36px 0 0; background: #f5faff; gap: 24px; }
+  .hero::after { content: ''; display: block; width: 100%; aspect-ratio: 1672 / 941; background: url('../../Вайфреймы в работу/Хиро без текста.png') center / cover no-repeat; }
+  .hero__content { width: auto; max-width: 440px; margin-inline: var(--section-gutter); }
+  .hero h1 { font-size: 46px; margin-bottom: 20px; }
+  .hero__name { margin-bottom: 20px; }
+  .hero__description { font-size: 16px; }
+  .hero__disciplines { margin-top: 18px; }
+}

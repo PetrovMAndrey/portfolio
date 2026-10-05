@@ -1,0 +1,16 @@
+.interface-section { padding-block: 24px; }
+.interface-section .interface-section__label {
+  color: var(--orange);
+  font: 500 clamp(15px, 1.2vw, 19.5px)/1.65 var(--sans);
+  letter-spacing: .3em;
+  margin-bottom: 16px;
+}
+.interface-section figcaption {
+  display: block;
+  margin-top: 12px;
+  padding: 0;
+  color: var(--ink);
+  font-size: clamp(11px, .8vw, 14px);
+  line-height: 1.5;
+  text-align: left;
+}

@@ -1,0 +1,8 @@
+.industrial-result { position: relative; isolation: isolate; display: flex; align-items: center; min-height: clamp(380px, 33.35vw, 650px); padding: 44px var(--section-gutter); color: #f6f2eb; background: var(--industrial-dark); }
+.industrial-result__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.industrial-result::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #090c10e8, #090c10a8 34%, transparent 65%); }
+.industrial-result__content { width: 45%; max-width: 750px; }
+.industrial-result .eyebrow { color: #ff834b; }
+.industrial-result h3 { margin-bottom: 26px; }
+@media (max-width: 900px) { .industrial-result__content { width: 57%; } }
+@media (max-width: 700px) { .industrial-result { display: block; min-height: 0; padding: 32px 0 0; } .industrial-result__content { width: auto; padding: 0 var(--section-gutter) 32px; } .industrial-result__image { position: static; height: auto; } .industrial-result::before { display: none; } }

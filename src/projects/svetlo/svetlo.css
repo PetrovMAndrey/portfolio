@@ -1,0 +1,14 @@
+@import url('./sections/cover.css');
+@import url('./sections/task-solution.css');
+@import url('./sections/collection.css');
+@import url('./sections/screenshots.css');
+@import url('./sections/result.css');
+
+.svetlo { --svetlo-paper: #f3efe7; --svetlo-brown: #36302a; background: var(--svetlo-paper); }
+.svetlo h2, .svetlo h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.svetlo h3 { font-size: clamp(32px, 2.9vw, 54px); line-height: 1.08; }
+.svetlo__copy { font-size: clamp(15px, 1.02vw, 19px); line-height: 1.6; }
+.svetlo__tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 22px 0 0; padding: 0; }
+.svetlo__tags li { border: 1px solid currentColor; border-radius: 24px; padding: 7px 13px; font-size: clamp(11px, .8vw, 14px); line-height: 1.3; }
+.svetlo .eyebrow { margin-bottom: 18px; }
+@media (max-width: 700px) { .svetlo h3 { font-size: 32px; } }

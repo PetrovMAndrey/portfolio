@@ -1,0 +1,9 @@
+.ark-result {
+  min-height: clamp(260px, 20vw, 360px); padding: 38px var(--section-gutter);
+  display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+  background-image: linear-gradient(90deg, #060e16b3, #060e1645 55%, #060e1655), var(--section-image);
+  background-size: cover; background-position: center;
+}
+.ark-result h3 { margin-top: 16px; font-size: clamp(30px, 3vw, 49px) !important; }
+.ark-result__links { display: grid; gap: 20px; justify-items: center; }
+@media (max-width: 800px) { .ark-result { grid-template-columns: 1fr; min-height: 420px; } .ark-result__links { justify-items: start; } }

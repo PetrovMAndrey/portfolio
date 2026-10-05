@@ -1,0 +1,15 @@
+@import url('./sections/cover.css');
+@import url('./sections/task-solution.css');
+@import url('./sections/logic-map.css');
+@import url('./sections/tools.css');
+@import url('./sections/result.css');
+
+.grantmaster { --gm-paper: #f7f3ed; --gm-ink: #111c28; color: var(--gm-ink); background: var(--gm-paper); scroll-margin-top: 0; }
+.grantmaster h3 { font: 400 clamp(32px, 3.1vw, 58px)/1.08 var(--serif); letter-spacing: -.035em; }
+.grantmaster__copy { font-size: clamp(16px, 1.2vw, 22px); line-height: 1.55; }
+.grantmaster__scene { position: relative; isolation: isolate; }
+.grantmaster__scene-image { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.grantmaster__scene::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.grantmaster__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.grantmaster__tags li { border: 1px solid #21304355; border-radius: 30px; padding: 7px 12px; font-size: clamp(11px, .82vw, 15px); line-height: 1.2; }
+@media (max-width: 700px) { .grantmaster h3 { font-size: 34px; } .grantmaster__copy { font-size: 16px; } }

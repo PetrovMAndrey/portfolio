@@ -1,0 +1,8 @@
+.project-separator {
+  width: 100%;
+  margin: 0;
+  /* SVG aspect ratio: 5506 × 70. Each white inset matches the strip height. */
+  padding-block: calc(100% * 70 / 5506);
+  background: #fff;
+}
+.project-separator img { display: block; width: 100%; height: auto; }

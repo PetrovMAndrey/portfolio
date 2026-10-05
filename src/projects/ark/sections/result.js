@@ -1,0 +1,12 @@
+import { elementFromHTML } from '../../../shared/dom.js';
+import { siteCTA } from '../../../shared/cta.js';
+
+export function renderResult(ark) {
+  const section = elementFromHTML(`
+    <section class="ark-result dark-section" aria-labelledby="ark-result-title">
+      <div><p class="eyebrow">РЕЗУЛЬТАТ</p><h3 id="ark-result-title">Понятная структура.<br>Единый визуальный язык.<br>Рабочая витрина проектов.</h3></div>
+      <div class="ark-result__links">${siteCTA(ark.url)}</div>
+    </section>`);
+  section.style.setProperty('--section-image', `url("${new URL(ark.images.result, document.baseURI).href}")`);
+  return section;
+}

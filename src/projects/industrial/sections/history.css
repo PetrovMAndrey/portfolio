@@ -1,0 +1,8 @@
+.industrial-history { position: relative; isolation: isolate; display: flex; align-items: center; min-height: clamp(440px, 37.2vw, 730px); padding: 44px var(--section-gutter); color: #f6f2eb; background: var(--industrial-dark); }
+.industrial-history__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.industrial-history::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #111315f2, #111315b8 29%, #11131518 65%); }
+.industrial-history__content { width: 36%; max-width: 610px; }
+.industrial-history .eyebrow { color: #ff834b; }
+.industrial-history h3 { margin-bottom: 28px; }
+@media (max-width: 900px) { .industrial-history__content { width: 50%; } }
+@media (max-width: 700px) { .industrial-history { display: block; min-height: 0; padding: 32px 0 0; } .industrial-history__content { width: auto; padding: 0 var(--section-gutter) 32px; } .industrial-history__image { position: static; height: auto; } .industrial-history::before { display: none; } }

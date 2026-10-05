@@ -1,0 +1,8 @@
+.svetlo-collection { color: #f8f0e4; background: var(--svetlo-brown); }
+.svetlo-collection__intro { display: grid; grid-template-columns: .9fr 1fr; gap: 7vw; align-items: center; padding: 40px var(--section-gutter); }
+.svetlo-collection .eyebrow { color: #ff9754; }
+.svetlo-collection__description { max-width: 750px; }
+.svetlo-collection .svetlo__tags { color: #ddd0bf; }
+.svetlo-collection .svetlo__tags li { border-color: #ddd0bf60; }
+.svetlo-collection__image { width: 100%; height: auto; }
+@media (max-width: 700px) { .svetlo-collection__intro { grid-template-columns: 1fr; gap: 24px; padding-block: 32px; } }

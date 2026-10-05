@@ -1,0 +1,8 @@
+@import url('./sections/cover.css');
+@import url('./sections/task-solution.css');
+@import url('./sections/visual.css');
+@import url('./sections/screenshots.css');
+@import url('./sections/result.css');
+
+.ark { scroll-margin-top: 0; }
+.ark h3:not(.eyebrow) { font: 400 clamp(30px, 3.2vw, 54px)/1.04 var(--serif); letter-spacing: -.035em; }

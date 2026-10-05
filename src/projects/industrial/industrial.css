@@ -1,0 +1,12 @@
+@import url('./sections/cover.css');
+@import url('./sections/task-solution.css');
+@import url('./sections/history.css');
+@import url('./sections/screenshots.css');
+@import url('./sections/result.css');
+
+.industrial { --industrial-paper: #f2efe8; --industrial-dark: #1c1d21; color: #202126; background: var(--industrial-paper); }
+.industrial h2, .industrial h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.industrial h3 { font-size: clamp(32px, 3.15vw, 60px); line-height: 1.08; }
+.industrial .eyebrow { margin-bottom: 20px; }
+.industrial__copy { font-size: clamp(15px, 1.05vw, 19px); line-height: 1.6; }
+@media (max-width: 700px) { .industrial h3 { font-size: 32px; } }

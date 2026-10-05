@@ -1,0 +1,10 @@
+.svetlo-task { display: grid; grid-template-columns: 1fr 1fr .27fr; gap: clamp(28px, 3.2vw, 62px); padding: 46px var(--section-gutter); }
+.svetlo-task__column { min-width: 0; }
+.svetlo-task__column h3 { font-size: clamp(30px, 2.5vw, 46px); margin-bottom: 20px; }
+.svetlo-task__solution { padding-left: clamp(28px, 3.2vw, 62px); border-left: 1px solid #ff641b70; }
+.svetlo-task__marker { align-self: start; color: var(--orange); }
+.svetlo-task__marker span { font: 400 clamp(70px, 6vw, 114px)/1 var(--serif); letter-spacing: -.06em; }
+.svetlo-task__marker i { display: block; height: 1px; background: currentColor; margin: 22px 0; }
+.svetlo-task__marker p { font-size: 10px; letter-spacing: .16em; line-height: 1.9; }
+@media (max-width: 900px) { .svetlo-task { grid-template-columns: 1fr 1fr; } .svetlo-task__marker { display: none; } }
+@media (max-width: 700px) { .svetlo-task { grid-template-columns: 1fr; padding-block: 32px; } .svetlo-task__solution { padding: 28px 0 0; border-left: 0; border-top: 1px solid #ff641b70; } }
