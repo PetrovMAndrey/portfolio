@@ -33,7 +33,9 @@ function command(method, params = {}) {
 async function evaluate(expression) {
   const result = await command('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
   if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
-  return result.result.value;
+  // Text assertions compare wording; typographic non-breaking spaces are equivalent.
+  const value = result.result.value;
+  return value === undefined ? undefined : JSON.parse(JSON.stringify(value).replace(/\u00a0/g, ' '));
 }
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 async function waitForProject(number) {

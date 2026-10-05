@@ -9,8 +9,8 @@ export function renderCover(ark) {
         <p class="eyebrow">ПРОЕКТ</p>
         <h2 id="ark-title">АРК</h2>
         <p class="ark-cover__subtitle">Анализ. Развитие. Культура.</p>
-        <p class="ark-cover__description">Персональный сайт, объединяющий направления профессиональной работы, проекты и цифровые продукты в единую систему.</p>
-        <ul class="project-tags" aria-label="Направления проекта"><li>Веб-сайт</li><li>Архитектура</li><li>Контент</li><li>Разработка</li></ul>
+        <p class="ark-cover__description">Авторская проектная платформа, объединяющая профессиональные направления, реализованные проекты и собственные цифровые продукты.</p>
+        <ul class="project-tags" aria-label="Направления проекта"><li>Веб-платформа</li><li>Проекты</li><li>Digital</li><li>Продукты</li></ul>
         ${siteCTA(ark.url)}
       </div>
     </section>`);

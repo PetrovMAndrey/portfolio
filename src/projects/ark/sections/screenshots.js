@@ -5,7 +5,7 @@ export function renderScreenshots(ark) {
     <section class="ark-gallery paper-section interface-section" data-gallery aria-labelledby="ark-gallery-title">
       <div class="ark-gallery__intro">
         <p class="eyebrow interface-section__label" id="ark-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p>
-        <p>Посмотрите основные разделы сайта. Скриншоты открываются в полном размере, их можно листать и увеличивать.</p>
+        <p>Основные разделы платформы: направления работы, проекты и цифровые продукты. Каждый раздел сохраняет собственную логику внутри общей визуальной системы.</p>
       </div>
       <div class="gallery__area">
         <div class="gallery__controls" aria-label="Открыть галерею"><button type="button" data-gallery-open="2" aria-label="Открыть предыдущее изображение">←</button><button type="button" data-gallery-open="0" aria-label="Открыть первое изображение">→</button></div>

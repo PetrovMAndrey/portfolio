@@ -1,4 +1,4 @@
-import { elementFromHTML } from './dom.js';
+import { elementFromHTML, nonBreakingText } from './dom.js';
 
 export function createLightbox(images) {
   const dialog = elementFromHTML(`
@@ -50,7 +50,7 @@ export function createLightbox(images) {
     reset();
     image.src = images[index].src;
     image.alt = images[index].alt;
-    dialog.querySelector('.lightbox__title').textContent = images[index].title;
+    dialog.querySelector('.lightbox__title').textContent = nonBreakingText(images[index].title);
     measure();
   }
 

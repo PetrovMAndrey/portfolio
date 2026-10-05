@@ -43,9 +43,24 @@ function renderHero() {
 return { renderHero };
 },
 "shared/dom.js": function(load) {
+// Bind short Russian function words to the next word without adding line breaks.
+// Unicode word boundaries avoid changing parts of words and hyphenated names.
+function nonBreakingText(value) {
+  return String(value).replace(
+    /(?<![\p{L}\p{N}_-])(?:а|и|но|да|или|либо|как|что|чем|то|в|во|к|ко|с|со|у|о|об|обо|от|до|по|из|из-за|из-под|за|на|над|под|при|без|для|про|не|ни|же|бы|ли)[ \t]+(?=\S)/giu,
+    match => match.trimEnd() + '\u00a0',
+  );
+}
+
 function elementFromHTML(html) {
   const template = document.createElement('template');
   template.innerHTML = html.trim();
+  // Only visible text changes: URLs, attributes, image paths and markup stay intact.
+  const textNodes = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+  while (textNodes.nextNode()) {
+    const node = textNodes.currentNode;
+    if (!node.parentElement?.closest('script, style')) node.data = nonBreakingText(node.data);
+  }
   return template.content.firstElementChild;
 }
 
@@ -55,7 +70,7 @@ function escapeHTML(value) {
   })[char]);
 }
 
-return { elementFromHTML, escapeHTML };
+return { nonBreakingText, elementFromHTML, escapeHTML };
 },
 "projects/ark/ark.js": function(load) {
 const { elementFromHTML } = load("shared/dom.js");
@@ -104,8 +119,8 @@ function renderCover(ark) {
         <p class="eyebrow">ПРОЕКТ</p>
         <h2 id="ark-title">АРК</h2>
         <p class="ark-cover__subtitle">Анализ. Развитие. Культура.</p>
-        <p class="ark-cover__description">Персональный сайт, объединяющий направления профессиональной работы, проекты и цифровые продукты в единую систему.</p>
-        <ul class="project-tags" aria-label="Направления проекта"><li>Веб-сайт</li><li>Архитектура</li><li>Контент</li><li>Разработка</li></ul>
+        <p class="ark-cover__description">Авторская проектная платформа, объединяющая профессиональные направления, реализованные проекты и собственные цифровые продукты.</p>
+        <ul class="project-tags" aria-label="Направления проекта"><li>Веб-платформа</li><li>Проекты</li><li>Digital</li><li>Продукты</li></ul>
         ${siteCTA(ark.url)}
       </div>
     </section>`);
@@ -129,17 +144,17 @@ function renderTaskSolution() {
     <section class="ark-task paper-section" aria-label="Задача и решение">
       <div class="ark-task__column">
         <p class="eyebrow">ЗАДАЧА</p>
-        <h3>Собрать<br>разрозненные<br>направления</h3>
-        <p>Показать профессиональную деятельность, проекты и цифровые продукты в единой, понятной и структурированной форме.</p>
+        <h3>Объединить направления в единую систему</h3>
+        <p>Собрать профессиональную экспертизу, проекты и собственные цифровые продукты в одной среде — с понятной структурой и возможностью развивать каждое направление независимо.</p>
       </div>
       <div class="ark-task__column ark-task__solution">
         <p class="eyebrow">РЕШЕНИЕ</p>
         <h3>Единая цифровая<br>платформа</h3>
-        <p>Персональный сайт с собственной архитектурой, системой проектов и единым визуальным языком, отражающим подход «Логика и практика».</p>
+        <p>Разработана собственная структура АРК: профессиональные направления, портфолио проектов и отдельный контур цифровых продуктов объединены общей навигацией и визуальной системой.</p>
       </div>
       <div class="ark-task__aside">
         <span class="ark-task__number" aria-hidden="true">01</span>
-        <p>ОДНА ПЛАТФОРМА<br>ДЛЯ ПРОЕКТОВ,<br>ПРОДУКТОВ<br>И ИДЕЙ</p>
+        <p>ОДНА СРЕДА<br>ДЛЯ ЭКСПЕРТИЗЫ,<br>ПРОЕКТОВ<br>И ПРОДУКТОВ</p>
       </div>
     </section>`);
 }
@@ -154,7 +169,7 @@ function renderVisual(ark) {
       <div class="ark-visual__image"><img src="${ark.images.visual}" alt="Реальный скриншот раздела приложений сайта АРК" loading="lazy" decoding="async"></div>
       <div class="ark-visual__content">
         <h3 class="eyebrow">КЛЮЧЕВЫЕ<br>РАЗДЕЛЫ САЙТА</h3>
-        <ul><li>О нас</li><li>Направления</li><li>Проекты</li><li>Подход</li><li>Контакты</li></ul>
+        <ul><li>О нас</li><li>Направления</li><li>Проекты</li><li>Приложения</li><li>Подход</li><li>Контакты</li></ul>
       </div>
     </section>`);
   section.style.setProperty('--section-image', `url("${new URL(ark.images.visualBackground, document.baseURI).href}")`);
@@ -170,7 +185,7 @@ function renderScreenshots(ark) {
     <section class="ark-gallery paper-section interface-section" data-gallery aria-labelledby="ark-gallery-title">
       <div class="ark-gallery__intro">
         <p class="eyebrow interface-section__label" id="ark-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p>
-        <p>Посмотрите основные разделы сайта. Скриншоты открываются в полном размере, их можно листать и увеличивать.</p>
+        <p>Основные разделы платформы: направления работы, проекты и цифровые продукты. Каждый раздел сохраняет собственную логику внутри общей визуальной системы.</p>
       </div>
       <div class="gallery__area">
         <div class="gallery__controls" aria-label="Открыть галерею"><button type="button" data-gallery-open="2" aria-label="Открыть предыдущее изображение">←</button><button type="button" data-gallery-open="0" aria-label="Открыть первое изображение">→</button></div>
@@ -189,7 +204,7 @@ const { siteCTA } = load("shared/cta.js");
 function renderResult(ark) {
   const section = elementFromHTML(`
     <section class="ark-result dark-section" aria-labelledby="ark-result-title">
-      <div><p class="eyebrow">РЕЗУЛЬТАТ</p><h3 id="ark-result-title">Понятная структура.<br>Единый визуальный язык.<br>Рабочая витрина проектов.</h3></div>
+      <div><p class="eyebrow">РЕЗУЛЬТАТ</p><h3 id="ark-result-title">Единая профессиональная среда.<br>Проекты и продукты в одной системе.<br>Платформа для дальнейшего развития.</h3></div>
       <div class="ark-result__links">${siteCTA(ark.url)}</div>
     </section>`);
   section.style.setProperty('--section-image', `url("${new URL(ark.images.result, document.baseURI).href}")`);
@@ -673,7 +688,7 @@ function mountGallery(gallery) {
 return { mountGallery };
 },
 "shared/lightbox.js": function(load) {
-const { elementFromHTML } = load("shared/dom.js");
+const { elementFromHTML, nonBreakingText } = load("shared/dom.js");
 function createLightbox(images) {
   const dialog = elementFromHTML(`
     <dialog class="lightbox" aria-label="Просмотр скриншотов">
@@ -724,7 +739,7 @@ function createLightbox(images) {
     reset();
     image.src = images[index].src;
     image.alt = images[index].alt;
-    dialog.querySelector('.lightbox__title').textContent = images[index].title;
+    dialog.querySelector('.lightbox__title').textContent = nonBreakingText(images[index].title);
     measure();
   }
 
