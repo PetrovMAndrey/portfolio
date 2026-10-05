@@ -9,6 +9,7 @@
   background: var(--hero-background); color: #111;
 }
 .hero__scene { height: 100%; padding-top: calc(37 * var(--hero-unit)); transform: scale(var(--hero-recede, 1)); transform-origin: center 42%; }
+.hero::after { content: ''; position: absolute; inset: 0; background: #000; opacity: var(--hero-shade, 0); pointer-events: none; }
 .hero.is-covered .hero__scene { visibility: hidden; }
 /* Projects rise over the sticky Hero; their internal layouts remain unchanged. */
 .hero ~ article, .hero ~ .project-separator { position: relative; z-index: 1; }
@@ -28,13 +29,12 @@
 .hero-rail__viewport { display: flex; gap: var(--hero-gap); overflow-x: auto; overflow-y: hidden; padding: 5px 0; scrollbar-width: none; cursor: grab; touch-action: pan-x pan-y; }
 .hero-rail__viewport::-webkit-scrollbar { display: none; }
 .hero-rail__viewport.is-dragging { cursor: grabbing; }
-.hero-rail__cards { display: flex; gap: var(--hero-gap); list-style: none; margin: 0; padding: 0 calc((100vw - var(--hero-card-width)) / 2) 0 0; }
-.hero-rail__item, .hero-card--lead { flex: 0 0 var(--hero-card-width); width: var(--hero-card-width); }
+.hero-rail__cards { display: flex; flex: 0 0 auto; gap: var(--hero-gap); list-style: none; margin: 0; padding: 0; }
+.hero-rail__item, .hero-rail__copy-item { flex: 0 0 var(--hero-card-width); width: var(--hero-card-width); }
 .hero-card { position: relative; display: block; height: calc(190 * var(--hero-unit)); overflow: hidden; border-radius: calc(8 * var(--hero-unit)); color: #fff; text-decoration: none; user-select: none; transition: transform .22s ease; }
-.hero-card:hover { transform: translateY(-5px); }
-.hero-card--lead { pointer-events: none; }
+.hero-card:hover, .hero-card.is-hovered { transform: translateY(-5px); }
 .hero-card img { width: 100%; height: 100%; object-fit: cover; }
-.hero-card__number { position: absolute; left: calc(12 * var(--hero-unit)); bottom: calc(-4 * var(--hero-unit)); font: 400 calc(168 * var(--hero-unit))/1 Impact, 'Arial Narrow', sans-serif; letter-spacing: -.045em; opacity: .64; pointer-events: none; }
+.hero-card__number { position: absolute; left: calc(12 * var(--hero-unit)); bottom: calc(-4 * var(--hero-unit)); font: 400 calc(168 * var(--hero-unit))/1 Impact, 'Arial Narrow', sans-serif; letter-spacing: -.045em; color: #172028; opacity: .64; -webkit-text-stroke: 1px #ffffff99; pointer-events: none; }
 .hero__footer { text-align: center; color: #565b62; }
 .hero__footer .hero__rule { background: var(--hero-accent); width: calc(67 * var(--hero-unit)); margin: calc(34 * var(--hero-unit)) auto calc(27 * var(--hero-unit)); }
 .hero__footer p { font: 400 calc(26 * var(--hero-unit))/1.4 var(--sans); }

@@ -25,7 +25,6 @@ export function renderHero() {
         <ul class="hero__disciplines" aria-label="Направления работы"><li>АНАЛИЗ</li><li>КОНЦЕПЦИЯ</li><li>КУЛЬТУРА</li><li>ПРОЕКТЫ</li><li>РАЗВИТИЕ</li></ul>
       </header>
       <div class="hero-rail"><div class="hero-rail__viewport" tabindex="0" role="region" aria-label="Лента проектов: прокрутка колёсиком, перетаскиванием или стрелками">
-        <div class="hero-card hero-card--lead" aria-hidden="true">${cardImage(9)}</div>
         <ol class="hero-rail__cards">${cards.map(([title], index) => {
           const number = String(index + 1).padStart(2, '0');
           return `<li class="hero-rail__item">${index < 4 ? `<a class="hero-card" href="#project-${number}" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
@@ -39,41 +38,90 @@ export function mountHero(hero) {
   const first = hero.querySelector('.hero-rail__item');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const behavior = () => reducedMotion.matches ? 'instant' : 'smooth';
-  let frame = 0, drag = null, suppressClick = false, previousWidth = 0;
+  const list = hero.querySelector('.hero-rail__cards');
+  // Visual copies keep both boundaries outside the viewport. Only the original
+  // list participates in keyboard/screen-reader navigation; copies retain clicks.
+  function copy() {
+    const node = list.cloneNode(true);
+    node.setAttribute('aria-hidden', 'true');
+    node.querySelectorAll('.hero-rail__item').forEach(item => item.className = 'hero-rail__copy-item');
+    node.querySelectorAll('a').forEach(link => link.tabIndex = -1);
+    return node;
+  }
+  rail.prepend(copy()); rail.append(copy());
+  const visualCards = [...rail.querySelectorAll('.hero-card')];
+  visualCards.forEach((card, index) => card.dataset.heroProject = index % cards.length);
+  let hoveredProject = null;
+  function hoverProject(project) {
+    if (project === hoveredProject) return;
+    hoveredProject = project;
+    visualCards.forEach(card => card.classList.toggle('is-hovered', card.dataset.heroProject === project));
+  }
+  rail.addEventListener('pointerover', event => hoverProject(event.target.closest('.hero-card')?.dataset.heroProject ?? null));
+  rail.addEventListener('pointerleave', () => hoverProject(null));
+  let frame = 0, drag = null, suppressClick = false, cycle = 0, animation = 0;
+  const modulo = (value, length) => ((value % length) + length) % length;
+  function setPosition(value) {
+    const lower = cycle - rail.clientWidth / 2;
+    const next = lower + modulo(value - lower, cycle);
+    rail.scrollLeft = next;
+    if (drag) drag.scroll += next - value;
+  }
+  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; }
+  function moveBy(distance) {
+    stopAnimation();
+    const start = rail.scrollLeft;
+    if (reducedMotion.matches) { setPosition(start + distance); return; }
+    const began = performance.now();
+    function tick(now) {
+      const progress = Math.min(1, (now - began) / 350);
+      setPosition(start + distance * (1 - Math.pow(1 - progress, 3)));
+      animation = progress < 1 ? requestAnimationFrame(tick) : 0;
+    }
+    animation = requestAnimationFrame(tick);
+  }
   function update() {
     frame = 0;
     const progress = Math.max(0, Math.min(1, scrollY / hero.offsetHeight));
-    hero.style.setProperty('--hero-recede', reducedMotion.matches ? 1 : 1 - progress * .035);
+    hero.style.setProperty('--hero-recede', reducedMotion.matches ? 1 : 1 - progress * .08);
+    hero.style.setProperty('--hero-shade', reducedMotion.matches ? 0 : progress * .18);
     hero.classList.toggle('is-covered', progress >= 1);
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   function resize() {
-    const width = first.offsetWidth;
-    // Decorative tail of 10 precedes the ordered 01–10 list, as in the reference.
-    rail.scrollLeft = previousWidth ? rail.scrollLeft * width / previousWidth : width * (168 / 386);
-    previousWidth = width; update();
+    stopAnimation();
+    const previousCycle = cycle;
+    cycle = parseFloat(getComputedStyle(list).width) + parseFloat(getComputedStyle(rail).gap);
+    setPosition(previousCycle ? rail.scrollLeft * cycle / previousCycle : cycle - parseFloat(getComputedStyle(first).width) * (234 / 386));
+    update();
   }
+  rail.addEventListener('scroll', () => {
+    const lower = cycle - rail.clientWidth / 2;
+    if (cycle && (rail.scrollLeft < lower || rail.scrollLeft >= lower + cycle)) setPosition(rail.scrollLeft);
+  }, { passive: true });
   rail.addEventListener('wheel', event => {
-    if (Math.abs(event.deltaX) >= Math.abs(event.deltaY) || event.ctrlKey) return;
-    const delta = event.deltaY * (event.deltaMode === 1 ? 20 : event.deltaMode === 2 ? rail.clientWidth : 1);
-    const next = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, rail.scrollLeft + delta));
-    if (next !== rail.scrollLeft) { event.preventDefault(); rail.scrollLeft = next; }
+    if (event.ctrlKey) return;
+    const delta = (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * (event.deltaMode === 1 ? 20 : event.deltaMode === 2 ? rail.clientWidth : 1);
+    event.preventDefault(); stopAnimation(); setPosition(rail.scrollLeft + delta);
   }, { passive: false });
   rail.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
-    rail.scrollBy({ left: (first.offsetWidth + parseFloat(getComputedStyle(rail).gap)) * (event.key === 'ArrowLeft' ? -1 : 1), behavior: behavior() });
+    moveBy((parseFloat(getComputedStyle(first).width) + parseFloat(getComputedStyle(rail).gap)) * (event.key === 'ArrowLeft' ? -1 : 1));
   });
   rail.addEventListener('pointerdown', event => {
     if (event.button !== 0 || event.pointerType !== 'mouse') return;
+    stopAnimation();
     drag = { id: event.pointerId, start: event.clientX, scroll: rail.scrollLeft, moved: false }; suppressClick = false;
   });
   rail.addEventListener('dragstart', event => event.preventDefault());
   rail.addEventListener('pointermove', event => {
+    const card = document.elementFromPoint(event.clientX, event.clientY)?.closest('.hero-card');
+    hoverProject(card && rail.contains(card) ? card.dataset.heroProject : null);
     if (!drag || drag.id !== event.pointerId) return;
     const delta = event.clientX - drag.start;
     if (!drag.moved && Math.abs(delta) > 5) { drag.moved = true; rail.setPointerCapture(event.pointerId); rail.classList.add('is-dragging'); }
-    if (drag.moved) { rail.scrollLeft = drag.scroll - delta; event.preventDefault(); }
+    if (drag.moved) { setPosition(drag.scroll - delta); event.preventDefault(); }
   });
   const endDrag = () => { suppressClick = !!drag?.moved; drag = null; rail.classList.remove('is-dragging'); };
   rail.addEventListener('pointerup', endDrag);

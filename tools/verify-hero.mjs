@@ -67,7 +67,7 @@ await delay(1200);
 for(const width of [1920,1440,1280]) {
   await command('Emulation.setDeviceMetricsOverride', {width,height:1080,deviceScaleFactor:1,mobile:false});
   await evaluate('document.activeElement.blur(); scrollTo({top:0,behavior:"instant"})');
-  await evaluate('document.querySelector(".hero-rail__viewport").scrollLeft=document.querySelector(".hero-rail__item").offsetWidth*(168/386)');
+  await evaluate('(() => {const list=document.querySelector(".hero-rail__cards:not([aria-hidden])");const rail=document.querySelector(".hero-rail__viewport");rail.scrollLeft=parseFloat(getComputedStyle(list).width)+parseFloat(getComputedStyle(rail).gap)-parseFloat(getComputedStyle(document.querySelector(".hero-rail__item")).width)*(234/386);})()');
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:5,y:5});
   await delay(150);
   const layout=await evaluate(`(() => {
@@ -93,6 +93,27 @@ for(const width of [1920,1440,1280]) {
   assert.equal(layout.scrollbar,'none');
   assert.ok(layout.mask.every(mask=>mask.background.includes('linear-gradient')&&mask.pointer==='none'&&mask.z==='2'));
   assert.equal(await evaluate('Promise.all([...document.querySelectorAll(".hero img")].map(image=>image.decode())).then(()=>true)'),true);
+  const loop = await evaluate(`(() => {
+    const rail=document.querySelector('.hero-rail__viewport'), list=rail.querySelector('.hero-rail__cards:not([aria-hidden])');
+    const cycle=parseFloat(getComputedStyle(list).width)+parseFloat(getComputedStyle(rail).gap), lower=cycle-rail.clientWidth/2, start=rail.scrollLeft;
+    const sample=()=>[...rail.querySelectorAll('.hero-card')].map(card=>({number:card.querySelector('.hero-card__number').textContent,x:card.getBoundingClientRect().left,width:card.getBoundingClientRect().width})).filter(card=>card.x>50&&card.x+card.width<innerWidth-50);
+    const errors=[];let boundaries=0;
+    for(const direction of [1,-1]){
+      rail.scrollLeft=direction>0?lower+cycle-20:lower+20;
+      for(let i=0;i<120;i++){
+        const before=sample(), previous=rail.scrollLeft, delta=direction*(i%4===0?40:cycle/5);
+        rail.dispatchEvent(new WheelEvent('wheel',{deltaX:delta,bubbles:true,cancelable:true}));
+        const after=sample();
+        for(const old of before){const next=after.find(card=>card.number===old.number);if(next&&Math.abs(next.x-old.x+delta)>1.5)errors.push({old,next,delta});}
+        if(Math.abs(rail.scrollLeft-previous)>Math.abs(delta)+cycle/2)boundaries++;
+        if(rail.scrollLeft<=0||rail.scrollLeft>=rail.scrollWidth-rail.clientWidth)errors.push('Physical edge');
+      }
+    }
+    rail.scrollLeft=start;
+    return {errors,boundaries};
+  })()`);
+  assert.deepEqual(loop.errors,[]);
+  assert.ok(loop.boundaries>30);
   await screenshot('hero-final-'+width);
   const point=await evaluate('(() => {const r=document.querySelector(".hero-rail__item a").getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()');
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
@@ -119,13 +140,16 @@ for(const width of [1920,1440,1280]) {
   await key('ArrowRight');await delay(550);
   assert.ok(await evaluate('document.querySelector(".hero-rail__viewport").scrollLeft')>keyboardStart+100);
   await evaluate('document.activeElement.blur()');
-  for(const progress of [.25,.5,.9,1,1.25]){
+  for(const progress of [.25,.5,.9,1,1.25,.9,.5,.25,0]){
     await evaluate(`scrollTo({top:${layout.height*progress},behavior:'instant'})`);await delay(100);
-    const transition=await evaluate(`(() => {const hero=document.querySelector('.hero');const box=hero.getBoundingClientRect();const ark=document.querySelector('#project-01').getBoundingClientRect();const testY=Math.min(innerHeight-1,Math.max(1,ark.top+20));return {top:box.top,ark:ark.top,scale:new DOMMatrix(getComputedStyle(hero.querySelector('.hero__scene')).transform).a,covered:hero.classList.contains('is-covered'),front:document.elementFromPoint(innerWidth/2,testY).closest('#project-01')!==null};})()`);
+    const transition=await evaluate(`(() => {const hero=document.querySelector('.hero');const box=hero.getBoundingClientRect();const ark=document.querySelector('#project-01').getBoundingClientRect();const testY=Math.min(innerHeight-1,Math.max(1,ark.top+20));return {top:box.top,ark:ark.top,scale:new DOMMatrix(getComputedStyle(hero.querySelector('.hero__scene')).transform).a,shade:parseFloat(getComputedStyle(hero,'::after').opacity),covered:hero.classList.contains('is-covered'),front:document.elementFromPoint(innerWidth/2,testY).closest('#project-01')!==null};})()`);
     assert.equal(transition.top,0);
     assert.ok(Math.abs(transition.ark-(layout.height-await evaluate('scrollY')))<1);
-    assert.ok(transition.scale>=.965&&transition.scale<1);
-    assert.equal(transition.front,true);
+    const actualProgress=Math.min(1,await evaluate('scrollY/document.querySelector(".hero").offsetHeight'));
+    assert.ok(Math.abs(transition.scale-(1-actualProgress*.08))<.0001);
+    assert.ok(Math.abs(transition.shade-actualProgress*.18)<.0001);
+    if(progress>0)assert.equal(transition.front,true);
+    assert.equal(transition.covered,progress>=1);
     if(progress===.5)await screenshot('hero-overlap-'+width);
     if(progress>=1)assert.equal(transition.covered,true);
   }
