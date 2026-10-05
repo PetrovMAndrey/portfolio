@@ -15,7 +15,15 @@ const cards = [
 ];
 function cardImage(index) {
   const [title, file] = cards[index];
-  return `<img src="${escapeHTML(directory + file)}" alt="${escapeHTML(title)}" width="1672" height="941" decoding="async" draggable="false"><span class="hero-card__number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>`;
+  return `<img src="${escapeHTML(directory + file)}" alt="${escapeHTML(title)}" width="1672" height="941" loading="eager" decoding="sync" draggable="false"><span class="hero-card__number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>`;
+}
+function cardList(copy = false) {
+  // Build every cycle before attaching the Hero. Copies retain mouse links but
+  // only the original cycle participates in keyboard/screen-reader navigation.
+  return `<ol class="hero-rail__cards"${copy ? ' aria-hidden="true"' : ''}>${cards.map(([title], index) => {
+    const number = String(index + 1).padStart(2, '0');
+    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 4 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
+  }).join('')}</ol>`;
 }
 export function renderHero() {
   return elementFromHTML(`
@@ -25,10 +33,7 @@ export function renderHero() {
         <ul class="hero__disciplines" aria-label="Направления работы"><li>АНАЛИЗ</li><li>КОНЦЕПЦИЯ</li><li>КУЛЬТУРА</li><li>ПРОЕКТЫ</li><li>РАЗВИТИЕ</li></ul>
       </header>
       <div class="hero-rail"><div class="hero-rail__viewport" tabindex="0" role="region" aria-label="Лента проектов: прокрутка колёсиком, перетаскиванием или стрелками">
-        <ol class="hero-rail__cards">${cards.map(([title], index) => {
-          const number = String(index + 1).padStart(2, '0');
-          return `<li class="hero-rail__item">${index < 4 ? `<a class="hero-card" href="#project-${number}" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
-        }).join('')}</ol>
+        ${cardList(true)}${cardList()}${cardList(true)}
       </div></div>
       <footer class="hero__footer"><span class="hero__rule" aria-hidden="true"></span><p>От анализа к работающим решениям<br>в культуре, образовании и общественных проектах.</p></footer>
     </div></section>`);
@@ -38,17 +43,7 @@ export function mountHero(hero) {
   const first = hero.querySelector('.hero-rail__item');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const behavior = () => reducedMotion.matches ? 'instant' : 'smooth';
-  const list = hero.querySelector('.hero-rail__cards');
-  // Visual copies keep both boundaries outside the viewport. Only the original
-  // list participates in keyboard/screen-reader navigation; copies retain clicks.
-  function copy() {
-    const node = list.cloneNode(true);
-    node.setAttribute('aria-hidden', 'true');
-    node.querySelectorAll('.hero-rail__item').forEach(item => item.className = 'hero-rail__copy-item');
-    node.querySelectorAll('a').forEach(link => link.tabIndex = -1);
-    return node;
-  }
-  rail.prepend(copy()); rail.append(copy());
+  const list = hero.querySelector('.hero-rail__cards:not([aria-hidden])');
   const visualCards = [...rail.querySelectorAll('.hero-card')];
   visualCards.forEach((card, index) => card.dataset.heroProject = index % cards.length);
   let hoveredProject = null;

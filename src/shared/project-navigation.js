@@ -22,12 +22,20 @@ export function mountProjectNavigation(projects, total = 10) {
     target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   navigation.addEventListener('click', onNavigate);
+  let pointerFocus = false;
   const onPointerDown = event => {
-    if (navigation.contains(event.target)) navigation.focus({ preventScroll: true });
+    pointerFocus = navigation.contains(event.target);
+    if (pointerFocus) navigation.focus({ preventScroll: true });
     else if (navigation.contains(document.activeElement)) document.activeElement.blur();
   };
+  const onPointerLeave = () => {
+    if (pointerFocus && navigation.contains(document.activeElement)) document.activeElement.blur();
+    pointerFocus = false;
+  };
   document.addEventListener('pointerdown', onPointerDown);
+  navigation.addEventListener('pointerleave', onPointerLeave);
   navigation.addEventListener('keydown', event => {
+    pointerFocus = false;
     if (event.key === 'Escape') document.activeElement.blur();
   });
   const sections = projects.map(project => document.getElementById(project.target)).filter(Boolean);
@@ -58,6 +66,7 @@ export function mountProjectNavigation(projects, total = 10) {
     window.removeEventListener('scroll', scheduleUpdate);
     window.removeEventListener('resize', scheduleUpdate);
     document.removeEventListener('pointerdown', onPointerDown);
+    navigation.removeEventListener('pointerleave', onPointerLeave);
     navigation.removeEventListener('click', onNavigate); navigation.remove();
   };
 }
