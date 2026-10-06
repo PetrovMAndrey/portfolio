@@ -1,0 +1,12 @@
+.metrika .metrika-gallery { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(28px, 3vw, 58px); padding: 34px var(--section-gutter) 40px; }
+.metrika-gallery__intro { min-width: 0; }
+.metrika-gallery__intro .metrika__copy { font-size: clamp(14px, .95vw, 17px); }
+.metrika-gallery__previews { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1vw, 20px); align-items: start; }
+.metrika-gallery__item { min-width: 0; }
+.metrika-gallery__preview { position: relative; display: block; width: 100%; aspect-ratio: 1.9; padding: 0; border: 1px solid #ffffff35; border-radius: 5px; background: #e9e7e2; overflow: hidden; }
+.metrika-gallery__preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: filter .2s; }
+.metrika-gallery__preview:hover { border-color: var(--orange); }
+.metrika-gallery__preview:hover img { filter: brightness(1.04); }
+.metrika .metrika-gallery figcaption { color: #eeece7; }
+@media (max-width: 1000px) { .metrika .metrika-gallery { grid-template-columns: 1fr; } .metrika-gallery__intro { max-width: 680px; } }
+@media (max-width: 700px) { .metrika-gallery__previews { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; } }

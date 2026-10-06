@@ -1,0 +1,8 @@
+@import url('./sections/cover.css');
+@import url('./sections/information.css');
+@import url('./sections/screenshots.css');
+
+.metrika { --metrika-dark: #101314; color: var(--ink); background: var(--paper); }
+.metrika h2, .metrika h3, .metrika h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.metrika__copy { font-size: clamp(15px, 1.05vw, 19px); line-height: 1.55; }
+.metrika .dark-section { background-color: var(--metrika-dark); }

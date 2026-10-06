@@ -8,6 +8,7 @@ const { renderArk } = load("projects/ark/ark.js");
 const { renderGrantmaster } = load("projects/grantmaster/grantmaster.js");
 const { renderSvetlo } = load("projects/svetlo/svetlo.js");
 const { renderIndustrial } = load("projects/industrial/industrial.js");
+const { renderMetrika } = load("projects/metrika/metrika.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -17,6 +18,7 @@ const projects = [
   { number: 2, target: 'project-02', label: 'Грантмастер', render: renderGrantmaster },
   { number: 3, target: 'project-03', label: 'SVETLO', render: renderSvetlo },
   { number: 4, target: 'project-04', label: 'Индустриальная история', render: renderIndustrial },
+  { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -713,6 +715,100 @@ function renderResult(project) {
 }
 
 return { renderResult };
+},
+"projects/metrika/metrika.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { metrika } = load("projects/metrika/data.js");
+const { renderCover } = load("projects/metrika/sections/cover.js");
+const { renderInformation } = load("projects/metrika/sections/information.js");
+const { renderScreenshots } = load("projects/metrika/sections/screenshots.js");
+function renderMetrika() {
+  const project = elementFromHTML('<article class="metrika" id="project-05" aria-labelledby="metrika-title"></article>');
+  [renderCover, renderInformation, renderScreenshots].forEach(render => project.append(render(metrika)));
+  return project;
+}
+
+return { renderMetrika };
+},
+"projects/metrika/data.js": function(load) {
+const directory = './REFERENCES/05_Агент.Метрика/';
+
+const metrika = {
+  tags: ['Аналитика', 'Яндекс.Метрика', 'Цифровые фонды', 'Исследования'],
+  copy: {
+    cover: 'Веб-сервис для анализа посещаемости, контента и поведения аудитории сайтов культурных учреждений. Помогает увидеть ключевые показатели, сравнить периоды, понять интерес пользователей к материалам и получить готовые аналитические выводы.',
+    taskTitle: 'Превратить данные посещаемости в понятную аналитику',
+    task: 'Создать инструмент для сотрудников библиотек, музеев и других учреждений культуры, который помогает работать с данными веб-аналитики без необходимости самостоятельно разбираться в большом количестве показателей и отчётов.',
+    solution: 'Сервис структурирует данные веб-аналитики и показывает их в понятной форме: ключевые показатели, динамику посещаемости, источники трафика, географию аудитории и интерес к контенту. Периоды можно сравнивать между собой, а результаты — использовать для анализа и подготовки отчётов.',
+    gallery: 'Все ключевые сценарии — от общей сводки до сравнения периодов, анализа динамики и подробного отчёта. Нажмите на миниатюру, чтобы открыть экран в полном размере.',
+  },
+  features: [
+    { icon: 'indicators', title: 'Ключевые показатели', text: 'Посещаемость, глубина просмотра, время на сайте и возвращаемость аудитории — основные показатели собраны в одной сводке.' },
+    { icon: 'calendar', title: 'Сравнение периодов', text: 'Сопоставление выбранных периодов помогает быстро увидеть рост, снижение и изменение ключевых показателей.' },
+    { icon: 'content', title: 'Контент и интерес', text: 'Популярные материалы и страницы показывают, какие темы и цифровые коллекции привлекают наибольшее внимание аудитории.' },
+    { icon: 'report', title: 'Отчёты и выводы', text: 'Структурированный отчёт объединяет показатели, динамику и основные наблюдения за выбранный период.' },
+  ],
+  gallery: [
+    { src: directory + '1_Агент.Метрика_ Главная.png', width: 1920, height: 1599, title: 'Главный экран', alt: 'Главный экран Агент.Метрики: показатели, материалы, география и аналитический вывод' },
+    { src: directory + '2_Агент.Метрика_ Сравнение периодов.png', width: 1920, height: 578, title: 'Сравнение периодов', alt: 'Сравнение показателей двух выбранных периодов' },
+    { src: directory + '3_Агент.Метрика_ Сравнение периодов.png', width: 1577, height: 559, title: 'Динамика посещаемости', alt: 'График динамики посещаемости для двух периодов' },
+    { src: directory + '4_Агент.Метрика_ Отчеты.png', width: 1908, height: 1061, title: 'Отчёты', alt: 'Отчёт с резюме периода, показателями и динамикой посещаемости' },
+  ],
+};
+
+return { metrika };
+},
+"projects/metrika/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  const screen = project.gallery[0];
+  return elementFromHTML(`
+    <section class="metrika-cover dark-section" aria-labelledby="metrika-title">
+      <div class="metrika-cover__content">
+        <p class="metrika__number"><span>05</span> / 10 <i aria-hidden="true"></i></p>
+        <p class="eyebrow">ПРОЕКТ</p>
+        <h2 id="metrika-title">Агент.Метрика</h2>
+        <p class="metrika-cover__subtitle">Помощник исследователя<br>цифровых фондов</p>
+        <p class="metrika__copy">${escapeHTML(project.copy.cover)}</p>
+        <ul class="metrika-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
+      </div>
+      <div class="metrika-cover__visual"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync"></div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/metrika/sections/information.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const icons = {
+  indicators: '<path d="M5 21v-5m7 5V9m7 12V3" stroke-width="5"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18M7 15h2m6 0h2m-10 3h2m6 0h2"/>',
+  content: '<path d="M14 2H5v20h14V7zM14 2v6h5M8 12h8m-8 4h8"/>',
+  report: '<path d="M4 3h16v18H4zM8 8h8m-8 4h8m-8 4h5"/>',
+};
+
+function renderInformation(project) {
+  return elementFromHTML(`
+    <section class="metrika-information paper-section" aria-label="Задача, решение и возможности сервиса">
+      <div class="metrika-information__task"><p class="eyebrow">ЗАДАЧА</p><h3>${escapeHTML(project.copy.taskTitle)}</h3><p class="metrika__copy">${escapeHTML(project.copy.task)}</p></div>
+      <div class="metrika-information__solution"><p class="eyebrow">РЕШЕНИЕ</p><h3>Агент.Метрика</h3><p class="metrika__copy">${escapeHTML(project.copy.solution)}</p></div>
+      <ul class="metrika-information__features" aria-label="Возможности сервиса">${project.features.map(feature => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[feature.icon]}</svg><div><h4>${escapeHTML(feature.title)}</h4><p>${escapeHTML(feature.text)}</p></div></li>`).join('')}</ul>
+    </section>`);
+}
+
+return { renderInformation };
+},
+"projects/metrika/sections/screenshots.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderScreenshots(project) {
+  return elementFromHTML(`
+    <section class="metrika-gallery dark-section interface-section" data-gallery aria-labelledby="metrika-gallery-title">
+      <div class="metrika-gallery__intro"><p class="eyebrow interface-section__label" id="metrika-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p><p class="metrika__copy">${escapeHTML(project.copy.gallery)}</p></div>
+      <div class="metrika-gallery__previews">${project.gallery.map((screen, index) => `<figure class="metrika-gallery__item"><button type="button" class="metrika-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
+    </section>`);
+}
+
+return { renderScreenshots };
 },
 "shared/project-separator.js": function(load) {
 const { elementFromHTML } = load("shared/dom.js");

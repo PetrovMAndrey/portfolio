@@ -1,0 +1,14 @@
+.metrika-information { display: grid; grid-template-columns: 1.2fr 1fr 1.4fr; gap: clamp(28px, 2.5vw, 48px); padding: 34px var(--section-gutter); }
+.metrika-information__task, .metrika-information__solution { min-width: 0; }
+.metrika-information .eyebrow { margin-bottom: 12px; }
+.metrika-information__task::before { content: ''; display: block; width: 36px; height: 2px; background: var(--orange); margin-bottom: 10px; }
+.metrika-information__solution { border-left: 1px solid var(--orange); padding-left: clamp(28px, 2.5vw, 48px); padding-top: 12px; }
+.metrika-information h3 { font-size: clamp(26px, 2vw, 38px); line-height: 1.1; margin-bottom: 20px; }
+.metrika-information .metrika__copy { font-size: clamp(14px, .92vw, 17px); }
+.metrika-information__features { list-style: none; padding: 12px 0 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 22px; align-content: start; }
+.metrika-information__features li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; align-items: start; }
+.metrika-information__features svg { width: 28px; height: 28px; color: var(--orange); }
+.metrika-information h4 { margin: 0 0 7px; font-size: clamp(16px, 1.12vw, 21px); line-height: 1.15; }
+.metrika-information__features p { font-size: clamp(12px, .82vw, 15px); line-height: 1.5; }
+@media (max-width: 1100px) { .metrika-information { grid-template-columns: 1fr 1fr; } .metrika-information__features { grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); } .metrika-information__features li { grid-template-columns: 1fr; gap: 10px; } }
+@media (max-width: 700px) { .metrika-information { grid-template-columns: 1fr; } .metrika-information__solution { border-left: 0; border-top: 1px solid var(--orange); padding: 24px 0 0; } .metrika-information__features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
