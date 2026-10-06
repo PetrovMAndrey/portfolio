@@ -1,1 +1,43 @@
+# Local browser profiles, screenshots and verification artifacts
 .preview/
+
+# Environment settings and private credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+/.secrets/
+/.aws/
+/.ssh/
+
+# Local tool and editor settings
+/.codex/
+/.idea/
+/.vscode/
+
+# Dependencies and caches (keep source files and src/site.js tracked)
+node_modules/
+.cache/
+coverage/
+__pycache__/
+*.pyc
+
+# Logs, temporary files and editor backups
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
