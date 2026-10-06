@@ -12,6 +12,6 @@ export function renderCover(project) {
         <p class="metrika__copy">${escapeHTML(project.copy.cover)}</p>
         <ul class="metrika-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
       </div>
-      <div class="metrika-cover__visual"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync"></div>
+      <div class="metrika-cover__visual"><img class="metrika-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true"><img class="metrika-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync"></div>
     </section>`);
 }
