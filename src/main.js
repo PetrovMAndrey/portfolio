@@ -5,6 +5,7 @@ import { renderSvetlo } from './projects/svetlo/svetlo.js';
 import { renderIndustrial } from './projects/industrial/industrial.js';
 import { renderMetrika } from './projects/metrika/metrika.js';
 import { renderNewsletter } from './projects/newsletter/newsletter.js';
+import { renderRegistry } from './projects/registry/registry.js';
 import { appendProjects } from './shared/project-separator.js';
 import { mountProjectNavigation } from './shared/project-navigation.js';
 import { mountGallery } from './shared/gallery.js';
@@ -17,6 +18,7 @@ const projects = [
   { number: 4, target: 'project-04', label: 'Индустриальная история', render: renderIndustrial },
   { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
   { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
+  { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);

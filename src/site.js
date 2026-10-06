@@ -10,6 +10,7 @@ const { renderSvetlo } = load("projects/svetlo/svetlo.js");
 const { renderIndustrial } = load("projects/industrial/industrial.js");
 const { renderMetrika } = load("projects/metrika/metrika.js");
 const { renderNewsletter } = load("projects/newsletter/newsletter.js");
+const { renderRegistry } = load("projects/registry/registry.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -21,6 +22,7 @@ const projects = [
   { number: 4, target: 'project-04', label: 'Индустриальная история', render: renderIndustrial },
   { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
   { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
+  { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -919,6 +921,105 @@ function renderScreenshots(project) {
     <section class="newsletter-gallery dark-section interface-section" data-gallery aria-labelledby="newsletter-gallery-title">
       <div class="newsletter-gallery__intro"><p class="eyebrow interface-section__label" id="newsletter-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p>${project.copy.gallery.map(text => `<p class="newsletter__copy">${escapeHTML(text)}</p>`).join('')}<p class="newsletter-gallery__count">4 экрана</p></div>
       <div class="newsletter-gallery__previews">${project.images.map((screen, index) => `<figure class="newsletter-gallery__item"><button type="button" class="newsletter-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
+    </section>`);
+}
+
+return { renderScreenshots };
+},
+"projects/registry/registry.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { registry } = load("projects/registry/data.js");
+const { renderCover } = load("projects/registry/sections/cover.js");
+const { renderInformation } = load("projects/registry/sections/information.js");
+const { renderScreenshots } = load("projects/registry/sections/screenshots.js");
+function renderRegistry() {
+  const project = elementFromHTML('<article class="registry" id="project-07" aria-labelledby="registry-title"></article>');
+  [renderCover, renderInformation, renderScreenshots].forEach(render => project.append(render(registry)));
+  return project;
+}
+
+return { renderRegistry };
+},
+"projects/registry/data.js": function(load) {
+const directory = './REFERENCES/07_Реестр ЗАЛОВ/';
+
+const registry = {
+  backgrounds: {
+    visual: directory + 'Абстрактный фон с медными дугами под скриншот.png',
+    content: directory + 'Современный офис на закате_фон для хиро под текст.png',
+  },
+  tags: ['Библиотеки', 'Excel', 'Реестр', 'Desktop-приложение'],
+  copy: {
+    subtitle: 'Сервис для работы с базой удалённых электронных читальных залов',
+    cover: 'Настольное приложение для работы с реестром удалённых электронных читальных залов Президентской библиотеки. Подключается к существующей Excel-базе и превращает её в удобный интерфейс для поиска, просмотра, добавления и редактирования записей без ручной работы с таблицей.',
+    taskTitle: 'Упростить работу',
+    taskContext: 'с реестром ЗАЛов',
+    task: 'Исходные данные хранятся в большой Excel-таблице почти на 2 000 записей. При ежедневной работе с ней сложно быстро находить нужные организации, просматривать сведения по отдельному ЗАЛу, контролировать полноту данных и вносить изменения. Задача — сохранить Excel как рабочую базу, но сделать взаимодействие с ней значительно удобнее.',
+    solution: 'Разработано настольное приложение, которое считывает структуру подключённого Excel-файла и формирует на её основе интерфейс реестра. Пользователь работает с привычными карточками и формами, а добавленные и отредактированные данные безопасно сохраняются обратно в исходную таблицу с созданием резервных копий.',
+    gallery: 'Основные сценарии работы с реестром: обзор состояния базы, поиск и просмотр записей, детальная карточка ЗАЛа, добавление и редактирование данных. Интерфейс формируется на основе структуры подключённой Excel-таблицы.',
+  },
+  features: [
+    { title: 'Поиск и навигация', text: 'Поиск по данным реестра, быстрый переход к нужной записи и просмотр подробной карточки ЗАЛа.' },
+    { title: 'Динамическая структура', text: 'Приложение распознаёт структуру подключённой таблицы и работает с изменяемым набором столбцов без жёсткой привязки к их расположению.' },
+    { title: 'Добавление и редактирование', text: 'Новые записи и изменения существующих ЗАЛов сохраняются непосредственно в Excel с корректной обработкой дат и пустых полей.' },
+    { title: 'Безопасная работа с базой', text: 'Перед изменением файла создаётся резервная копия, а запись выполняется безопасно с защитой от повреждения или блокировки Excel.' },
+  ],
+  gallery: [
+    { src: directory + '1 Реестр ЗАЛОВ главная.png', width: 1897, height: 1423, title: 'Главный экран', alt: 'Реестр ЗАЛов: главный экран с поиском, сводкой базы и недавно подключёнными залами' },
+    { src: directory + '2 Реестр ЗАЛОВ.png', width: 1897, height: 1091, title: 'Реестр ЗАЛов', alt: 'Реестр ЗАЛов: поиск и просмотр записей подключённой Excel-базы' },
+    { src: directory + '3 Реестр ЗАЛОВ добавить зал.png', width: 1844, height: 1757, title: 'Добавление ЗАЛа', alt: 'Реестр ЗАЛов: форма добавления записи с полями организации и читального зала' },
+  ],
+};
+
+return { registry };
+},
+"projects/registry/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  const screen = project.gallery[0];
+  return elementFromHTML(`
+    <section class="registry-cover dark-section" aria-labelledby="registry-title">
+      <div class="registry-cover__visual">
+        <img class="registry-cover__background" src="${escapeHTML(project.backgrounds.visual)}" alt="" aria-hidden="true" decoding="async">
+        <img class="registry-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync">
+      </div>
+      <div class="registry-cover__content">
+        <img class="registry-cover__background" src="${escapeHTML(project.backgrounds.content)}" alt="" aria-hidden="true" decoding="async">
+        <img class="registry-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true">
+        <div class="registry-cover__text">
+          <p class="registry__number"><span>07</span> / 10 <i aria-hidden="true"></i></p>
+          <p class="eyebrow">ПРОЕКТ</p>
+          <h2 id="registry-title">Реестр ЗАЛов</h2>
+          <p class="registry-cover__subtitle">${escapeHTML(project.copy.subtitle)}</p>
+          <p class="registry__copy">${escapeHTML(project.copy.cover)}</p>
+          <ul class="registry-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/registry/sections/information.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderInformation(project) {
+  return elementFromHTML(`
+    <section class="registry-information paper-section" aria-label="Задача, решение и преимущества Реестра ЗАЛов">
+      <div class="registry-information__task"><p class="eyebrow">ЗАДАЧА</p><h3>${escapeHTML(project.copy.taskTitle)}<span class="registry-information__context">${escapeHTML(project.copy.taskContext)}</span></h3><p class="registry__copy">${escapeHTML(project.copy.task)}</p></div>
+      <div class="registry-information__solution"><p class="eyebrow">РЕШЕНИЕ</p><h3>Реестр ЗАЛов</h3><p class="registry__copy">${escapeHTML(project.copy.solution)}</p></div>
+      <ul class="registry-information__features" aria-label="Преимущества приложения">${project.features.map(feature => `<li><span class="registry-information__accent" aria-hidden="true"></span><div><h4>${escapeHTML(feature.title)}</h4><p>${escapeHTML(feature.text)}</p></div></li>`).join('')}</ul>
+    </section>`);
+}
+
+return { renderInformation };
+},
+"projects/registry/sections/screenshots.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderScreenshots(project) {
+  return elementFromHTML(`
+    <section class="registry-gallery dark-section interface-section" data-gallery aria-labelledby="registry-gallery-title">
+      <div class="registry-gallery__intro"><p class="eyebrow interface-section__label" id="registry-gallery-title">ИНТЕРФЕЙС И СЦЕНАРИИ</p><p class="registry__copy">${escapeHTML(project.copy.gallery)}</p></div>
+      <div class="registry-gallery__previews">${project.gallery.map((screen, index) => `<figure class="registry-gallery__item"><button type="button" class="registry-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
     </section>`);
 }
 

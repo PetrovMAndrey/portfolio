@@ -1,0 +1,8 @@
+@import url('./sections/cover.css');
+@import url('./sections/information.css');
+@import url('./sections/screenshots.css');
+
+.registry { --registry-dark: #101314; --registry-gold: #c4a464; color: var(--ink); background: var(--paper); }
+.registry h2, .registry h3, .registry h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.registry__copy { font-size: clamp(15px, 1.05vw, 19px); line-height: 1.55; }
+.registry .dark-section { background-color: var(--registry-dark); }
