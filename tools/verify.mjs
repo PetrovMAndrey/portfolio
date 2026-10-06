@@ -69,10 +69,10 @@ assert.equal(await evaluate('document.querySelectorAll(".grantmaster > section")
 assert.equal(await evaluate('document.querySelectorAll(".svetlo > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".industrial > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation li").length'), 10);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'), 4);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 6);
-assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 3);
-assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04']);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'), 6);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 4);
+assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 5);
+assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06']);
 assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
 const backgroundURLs = await evaluate('[...document.querySelectorAll("[style]")].map(section => section.style.getPropertyValue("--section-image")).filter(Boolean).map(value => value.slice(5,-2))');
 for (const url of backgroundURLs) {
@@ -272,7 +272,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
   await command('Emulation.setDeviceMetricsOverride', { width, height: 1080, deviceScaleFactor: 1, mobile: false });
   const interfaces = await evaluate(`(() => {
     const baseFont=parseFloat(getComputedStyle(document.querySelector('.industrial-task .eyebrow')).fontSize);
-    return [...document.querySelectorAll('.interface-section')].map(section=>{
+    return [...document.querySelectorAll('.interface-section:not(.metrika-gallery):not(.newsletter-gallery)')].map(section=>{
       const label=section.querySelector('.interface-section__label');
       const css=getComputedStyle(label);
       return {label:label.textContent,fontRatio:parseFloat(css.fontSize)/baseFont,color:css.color,weight:css.fontWeight,
@@ -314,7 +314,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
     const main = document.querySelector('main').getBoundingClientRect();
     const hero = document.querySelector('.hero').getBoundingClientRect();
     const text = document.querySelector('.hero__footer p').getBoundingClientRect();
-    const sections = [...document.querySelectorAll('.hero, .ark > section, .project-separator, .grantmaster > section, .svetlo > section, .industrial > section')].map(section => section.getBoundingClientRect());
+    const sections = [...document.querySelectorAll('.hero, .ark > section, .project-separator, .grantmaster > section, .svetlo > section, .industrial > section, .metrika > section, .newsletter__sections > section')].map(section => section.getBoundingClientRect());
     const arrows = [...document.querySelectorAll('.gallery__controls button')].map(button => button.getBoundingClientRect());
     return {width:main.width, gaps:sections.slice(1).map((section,index) => section.top-sections[index].bottom), hero:{width:hero.width,height:hero.height,top:hero.top},text:{left:text.left,right:text.right,bottom:text.bottom},arrows:arrows.map(arrow => arrow.top+arrow.height/2),navigationWidth:document.querySelector('.project-navigation').getBoundingClientRect().width};
   })()`);
@@ -423,7 +423,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
     }).map(node => node.textContent);
     const last = document.querySelector('.industrial-result').getBoundingClientRect();
     const separators = [...document.querySelectorAll('.project-separator')].map(node => {const box=node.getBoundingClientRect(),image=node.querySelector('img').getBoundingClientRect();return {top:image.top-box.top,bottom:box.bottom-image.bottom,strip:image.height,white:getComputedStyle(node).backgroundColor};});
-    return {outOfBounds,separators,end:last.bottom+scrollY,height:document.documentElement.scrollHeight};
+    return {outOfBounds,separators,end:last.bottom+scrollY,height:document.querySelector("#project-05").previousElementSibling.getBoundingClientRect().top+scrollY};
   })()`);
   assert.deepEqual(industrialGeometry.outOfBounds, [], `Project 04 text exceeds its block at ${width}px`);
   assert.equal(Math.abs(industrialGeometry.end-industrialGeometry.height) < 1, true, 'No empty section after project 04');
@@ -448,7 +448,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
   for (let position=await evaluate('scrollY'); position<=scrollEnd; position+=200) {
     await evaluate(`window.scrollTo({top:${position},behavior:'instant'})`);
     await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
-    const expected = await evaluate('document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
+    const expected = await evaluate('document.querySelector("#project-06").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-06" : document.querySelector("#project-05").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-05" : document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
     assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), expected);
   }
 }

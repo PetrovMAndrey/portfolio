@@ -9,6 +9,7 @@ const { renderGrantmaster } = load("projects/grantmaster/grantmaster.js");
 const { renderSvetlo } = load("projects/svetlo/svetlo.js");
 const { renderIndustrial } = load("projects/industrial/industrial.js");
 const { renderMetrika } = load("projects/metrika/metrika.js");
+const { renderNewsletter } = load("projects/newsletter/newsletter.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -19,6 +20,7 @@ const projects = [
   { number: 3, target: 'project-03', label: 'SVETLO', render: renderSvetlo },
   { number: 4, target: 'project-04', label: 'Индустриальная история', render: renderIndustrial },
   { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
+  { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -805,6 +807,118 @@ function renderScreenshots(project) {
     <section class="metrika-gallery dark-section interface-section" data-gallery aria-labelledby="metrika-gallery-title">
       <div class="metrika-gallery__intro"><p class="eyebrow interface-section__label" id="metrika-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p><p class="metrika__copy">${escapeHTML(project.copy.gallery)}</p></div>
       <div class="metrika-gallery__previews">${project.gallery.map((screen, index) => `<figure class="metrika-gallery__item"><button type="button" class="metrika-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
+    </section>`);
+}
+
+return { renderScreenshots };
+},
+"projects/newsletter/newsletter.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { newsletter } = load("projects/newsletter/data.js");
+const { renderSidebar } = load("projects/newsletter/sections/sidebar.js");
+const { renderCover } = load("projects/newsletter/sections/cover.js");
+const { renderInformation } = load("projects/newsletter/sections/information.js");
+const { renderScreenshots } = load("projects/newsletter/sections/screenshots.js");
+function renderNewsletter() {
+  const project = elementFromHTML('<article class="newsletter" id="project-06" aria-labelledby="newsletter-title"></article>');
+  const sections = elementFromHTML('<div class="newsletter__sections"></div>');
+  [renderCover, renderInformation, renderScreenshots].forEach(render => sections.append(render(newsletter)));
+  project.append(renderSidebar(newsletter), sections);
+  return project;
+}
+
+return { renderNewsletter };
+},
+"projects/newsletter/data.js": function(load) {
+const directory = './REFERENCES/06_Студия рассылок/';
+
+const newsletter = {
+  background: directory + 'Фон.png',
+  tags: ['Новости', 'Фонды', 'События', 'Публикации'],
+  copy: {
+    subtitle: 'Дайджесты и посты для культурных организаций',
+    cover: 'Локальный сервис, который собирает материалы с сайта организации, отбирает и структурирует их и помогает создавать готовые выпуски рассылок и публикации для социальных сетей.',
+    taskTitle: 'Сократить путь от материалов сайта до готовой рассылки',
+    task: [
+      'Сотрудникам культурных организаций приходится вручную искать публикации на сайте, отбирать материалы, сокращать тексты, подбирать изображения и заново собирать их в формат рассылки или поста.',
+      'Задача проекта — объединить этот процесс в одном инструменте и сократить объём повторяющейся редакторской работы.',
+    ],
+    solution: [
+      'Сервис собирает материалы из выбранных разделов сайта, позволяет задать тематику и параметры выпуска, а затем формирует несколько вариантов готового материала.',
+      'Результат можно просмотреть в десктопном и мобильном формате, отредактировать, скопировать или экспортировать для дальнейшего использования.',
+    ],
+    gallery: [
+      'Пользователь указывает сайт, выбирает разделы и тематику, задаёт объём и дополнительные параметры. Студия собирает подходящие материалы и формирует несколько вариантов выпуска.',
+      'Готовый результат можно проверить в разных форматах, отредактировать и экспортировать — весь рабочий цикл остаётся внутри одного интерфейса.',
+    ],
+  },
+  features: [
+    { title: 'АВТОМАТИЧЕСКИЙ СБОР', text: 'Материалы собираются непосредственно с сайта организации из выбранных пользователем разделов.' },
+    { title: 'РАССЫЛКИ И СОЦСЕТИ', text: 'Один интерфейс позволяет создавать как полноценные email-дайджесты, так и отдельные публикации для социальных сетей.' },
+    { title: 'КОНТРОЛЬ РЕЗУЛЬТАТА', text: 'Несколько вариантов генерации, предпросмотр для компьютера и телефона, редактирование, копирование и экспорт готового материала.' },
+  ],
+  images: [
+    { src: directory + '1.png', width: 622, height: 1620, title: 'Настройка выпуска', alt: 'Студия рассылок: настройка источника, тематики и параметров выпуска' },
+    { src: directory + '2.png', width: 598, height: 951, title: 'Настройка соцсетей', alt: 'Студия рассылок: настройка публикации для социальных сетей' },
+    { src: directory + '3.png', width: 1299, height: 1520, title: 'Публикация для соцсетей', alt: 'Студия рассылок: готовая публикация с вариантами и инструментами редактирования' },
+    { src: directory + '4.png', width: 1921, height: 2938, title: 'Готовая рассылка', alt: 'Студия рассылок: сформированный дайджест и панель настройки выпуска' },
+  ],
+};
+
+return { newsletter };
+},
+"projects/newsletter/sections/sidebar.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderSidebar(project) {
+  const screen = project.images[0];
+  return elementFromHTML(`
+    <aside class="newsletter-sidebar" aria-label="Экран настройки выпуска Студии рассылок">
+      <img class="newsletter-sidebar__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync">
+      <img class="newsletter-sidebar__line" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true">
+    </aside>`);
+}
+
+return { renderSidebar };
+},
+"projects/newsletter/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  return elementFromHTML(`
+    <section class="newsletter-cover dark-section" aria-labelledby="newsletter-title">
+      <img class="newsletter-cover__background" src="${escapeHTML(project.background)}" width="1672" height="940" alt="" aria-hidden="true" decoding="async">
+      <div class="newsletter-cover__content">
+        <p class="newsletter__number"><span>06</span> / 10 <i aria-hidden="true"></i></p>
+        <p class="eyebrow">ПРОЕКТ</p>
+        <h2 id="newsletter-title">Студия рассылок</h2>
+        <p class="newsletter-cover__subtitle">${escapeHTML(project.copy.subtitle)}</p>
+        <p class="newsletter__copy">${escapeHTML(project.copy.cover)}</p>
+        <ul class="newsletter-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
+      </div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/newsletter/sections/information.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderInformation(project) {
+  return elementFromHTML(`
+    <section class="newsletter-information paper-section" aria-label="Задача, решение и преимущества Студии рассылок">
+      <div class="newsletter-information__task"><p class="eyebrow">ЗАДАЧА</p><h3>${escapeHTML(project.copy.taskTitle)}</h3>${project.copy.task.map(text => `<p class="newsletter__copy">${escapeHTML(text)}</p>`).join('')}</div>
+      <div class="newsletter-information__solution"><p class="eyebrow">РЕШЕНИЕ</p><h3>Студия рассылок</h3>${project.copy.solution.map(text => `<p class="newsletter__copy">${escapeHTML(text)}</p>`).join('')}</div>
+      <ul class="newsletter-information__features" aria-label="Преимущества сервиса">${project.features.map(feature => `<li><span class="newsletter-information__accent" aria-hidden="true"></span><div><h4>${escapeHTML(feature.title)}</h4><p>${escapeHTML(feature.text)}</p></div></li>`).join('')}</ul>
+    </section>`);
+}
+
+return { renderInformation };
+},
+"projects/newsletter/sections/screenshots.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderScreenshots(project) {
+  return elementFromHTML(`
+    <section class="newsletter-gallery dark-section interface-section" data-gallery aria-labelledby="newsletter-gallery-title">
+      <div class="newsletter-gallery__intro"><p class="eyebrow interface-section__label" id="newsletter-gallery-title">ИНТЕРФЕЙС И РАЗДЕЛЫ</p>${project.copy.gallery.map(text => `<p class="newsletter__copy">${escapeHTML(text)}</p>`).join('')}<p class="newsletter-gallery__count">4 экрана</p></div>
+      <div class="newsletter-gallery__previews">${project.images.map((screen, index) => `<figure class="newsletter-gallery__item"><button type="button" class="newsletter-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
     </section>`);
 }
 

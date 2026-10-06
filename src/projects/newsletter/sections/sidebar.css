@@ -1,0 +1,5 @@
+.newsletter-sidebar { position: relative; align-self: stretch; min-width: 0; background: #faf9f7; }
+.newsletter-sidebar__screen { position: sticky; top: 0; width: 100%; height: auto; object-fit: contain; }
+/* The prepared SVG already uses #c4a464, identical to History/Culture buttons. */
+.newsletter-sidebar__line { position: absolute; z-index: 2; left: 100%; top: 0; height: 100%; width: auto; max-width: none; transform: translateX(-50%); object-fit: contain; pointer-events: none; }
+@media (max-width: 700px) { .newsletter-sidebar { min-height: 0; } .newsletter-sidebar__screen { position: static; height: auto; width: 100%; } .newsletter-sidebar__line { display: none; } }

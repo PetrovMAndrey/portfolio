@@ -1,0 +1,11 @@
+@import url('./sections/sidebar.css');
+@import url('./sections/cover.css');
+@import url('./sections/information.css');
+@import url('./sections/screenshots.css');
+
+.newsletter { --newsletter-gold: #c4a464; --newsletter-gutter: clamp(32px, 3vw, 58px); --newsletter-right-gutter: max(var(--newsletter-gutter), 64px); display: grid; grid-template-columns: 27% minmax(0, 1fr); background: var(--paper); color: var(--ink); }
+.newsletter__sections { min-width: 0; }
+.newsletter h2, .newsletter h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.newsletter__copy { font-size: clamp(14px, .97vw, 18px); line-height: 1.55; }
+.newsletter .dark-section { background-color: #101211; }
+@media (max-width: 700px) { .newsletter { grid-template-columns: 1fr; } }
