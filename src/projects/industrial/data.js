@@ -2,7 +2,7 @@ const directory = './REFERENCES/04_Индустриальная история/'
 
 export const industrial = {
   images: {
-    cover: directory + '1 Хиро Индустриальный архив на закате.png',
+    cover: directory + '1 Хиро Монохромный интерьер с цветным экраном.png',
     history: directory + '2 Индустриальный город над рекой.png',
     result: directory + '3 Стальной мост на закате над рекой_подвал.png',
   },
