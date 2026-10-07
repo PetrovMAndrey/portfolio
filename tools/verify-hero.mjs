@@ -88,7 +88,7 @@ for(const width of [1920,1440,1280]) {
   assert.ok(layout.footer < layout.height);
   assert.ok(Math.abs(layout.firstProject-layout.height)<1);
   assert.deepEqual(layout.titles,Array.from({length:10},(_,i)=>String(i+1).padStart(2,'0')));
-  assert.deepEqual(layout.links,['#project-01','#project-02','#project-03','#project-04',null,null,null,null,null,null]);
+  assert.deepEqual(layout.links,['#project-01','#project-02','#project-03','#project-04','#project-05','#project-06','#project-07',null,null,null]);
   assert.equal(new Set(layout.opacity).size,1);
   assert.equal(layout.scrollbar,'none');
   assert.ok(layout.mask.every(mask=>mask.background.includes('linear-gradient')&&mask.pointer==='none'&&mask.z==='2'));
@@ -153,7 +153,7 @@ for(const width of [1920,1440,1280]) {
     if(progress===.5)await screenshot('hero-overlap-'+width);
     if(progress>=1)assert.equal(transition.covered,true);
   }
-  for(const number of ['01','02','03','04']){
+  for(const number of ['01','02','03','04','05','06','07']){
     await evaluate('scrollTo({top:0,behavior:"instant"})');await delay(100);
     await evaluate(`(() => {const link=document.querySelector('.hero-rail__item a[href="#project-${number}"]');const r=link.getBoundingClientRect();document.querySelector('.hero-rail__viewport').scrollLeft+=r.left+r.width/2-innerWidth/2;})()`);
     const click=await evaluate(`(() => {const r=document.querySelector('.hero-rail__item a[href="#project-${number}"]').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()`);

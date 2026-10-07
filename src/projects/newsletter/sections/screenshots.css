@@ -1,6 +1,6 @@
 .newsletter .newsletter-gallery { display: grid; grid-template-columns: 1.1fr 2.3fr; gap: clamp(24px, 2vw, 38px); padding: 32px var(--newsletter-right-gutter) 32px var(--newsletter-gutter); }
 .newsletter-gallery__intro { min-width: 0; }
-.newsletter .newsletter-gallery .interface-section__label { color: var(--newsletter-gold); font-size: clamp(14px, 1.05vw, 18px); }
+.newsletter .newsletter-gallery .interface-section__label { font-size: clamp(14px, 1.05vw, 18px); }
 .newsletter-gallery__intro .newsletter__copy + .newsletter__copy { margin-top: 14px; }
 .newsletter-gallery__count { color: #b5b1a8; font-size: 13px; margin-top: 22px; }
 .newsletter-gallery__previews { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1vw, 18px); align-items: start; }
