@@ -6,6 +6,7 @@ import { renderIndustrial } from './projects/industrial/industrial.js';
 import { renderMetrika } from './projects/metrika/metrika.js';
 import { renderNewsletter } from './projects/newsletter/newsletter.js';
 import { renderRegistry } from './projects/registry/registry.js';
+import { renderBranches } from './projects/branches/branches.js';
 import { appendProjects } from './shared/project-separator.js';
 import { mountProjectNavigation } from './shared/project-navigation.js';
 import { mountGallery } from './shared/gallery.js';
@@ -19,6 +20,7 @@ const projects = [
   { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
   { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
   { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
+  { number: 8, target: 'project-08', label: '8 филиалов', render: renderBranches },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);

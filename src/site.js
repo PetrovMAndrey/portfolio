@@ -11,6 +11,7 @@ const { renderIndustrial } = load("projects/industrial/industrial.js");
 const { renderMetrika } = load("projects/metrika/metrika.js");
 const { renderNewsletter } = load("projects/newsletter/newsletter.js");
 const { renderRegistry } = load("projects/registry/registry.js");
+const { renderBranches } = load("projects/branches/branches.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -23,6 +24,7 @@ const projects = [
   { number: 5, target: 'project-05', label: 'Агент.Метрика', render: renderMetrika },
   { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
   { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
+  { number: 8, target: 'project-08', label: '8 филиалов', render: renderBranches },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -57,7 +59,7 @@ function cardList(copy = false) {
   // only the original cycle participates in keyboard/screen-reader navigation.
   return `<ol class="hero-rail__cards"${copy ? ' aria-hidden="true"' : ''}>${cards.map(([title], index) => {
     const number = String(index + 1).padStart(2, '0');
-    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 7 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
+    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 8 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
   }).join('')}</ol>`;
 }
 function renderHero() {
@@ -1020,6 +1022,112 @@ function renderScreenshots(project) {
     <section class="registry-gallery dark-section interface-section" data-gallery aria-labelledby="registry-gallery-title">
       <div class="registry-gallery__intro"><p class="eyebrow interface-section__label" id="registry-gallery-title">ИНТЕРФЕЙС И СЦЕНАРИИ</p><p class="registry__copy">${escapeHTML(project.copy.gallery)}</p></div>
       <div class="registry-gallery__previews">${project.gallery.map((screen, index) => `<figure class="registry-gallery__item"><button type="button" class="registry-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
+    </section>`);
+}
+
+return { renderScreenshots };
+},
+"projects/branches/branches.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { branches } = load("projects/branches/data.js");
+const { renderCover } = load("projects/branches/sections/cover.js");
+const { renderInformation } = load("projects/branches/sections/information.js");
+const { renderScreenshots } = load("projects/branches/sections/screenshots.js");
+function renderBranches() {
+  const project = elementFromHTML('<article class="branches" id="project-08" aria-labelledby="branches-title"></article>');
+  [renderCover, renderInformation, renderScreenshots].forEach(render => project.append(render(branches)));
+  return project;
+}
+
+return { renderBranches };
+},
+"projects/branches/data.js": function(load) {
+const directory = './REFERENCES/08_8 филиалов/';
+
+const branches = {
+  backgrounds: {
+    visual: directory + 'Футуристический фон для скриншота.png',
+    content: directory + 'Фон для текста в хиро_Современный офис на закате.png',
+  },
+  tags: ['Управление', 'Мониторинг', 'Отчётность', 'Веб-сервис'],
+  copy: {
+    subtitle: 'Единый контур управления филиальной сетью',
+    cover: 'Концептуальный веб-сервис для мониторинга работы распределённой сети филиалов. Объединяет планы, задачи, показатели, отчётность, контроль сроков и рисков в едином управленческом интерфейсе.',
+    taskTitle: 'Собрать работу 8 филиалов в единую систему контроля',
+    task: 'Спроектировать инструмент, в котором головной офис видит состояние всей филиальной сети: выполнение планов, текущие задачи, сроки, показатели, риски и отчётную дисциплину — без разрозненных таблиц и ручного сведения информации.',
+    solutionTitle: 'Единый сервис управления сетью',
+    solution: 'Прототип объединяет общий обзор сети и детальную работу с каждым филиалом. Данные структурированы по единым правилам, а сводные показатели, просрочки и контрольные события собираются в общую управленческую картину.',
+    gallery: 'Все основные уровни управления — от общей картины сети до отчётной дисциплины и сопоставления филиалов. Нажмите на миниатюру, чтобы открыть экран в полном размере.',
+  },
+  features: [
+    { icon: 'overview', title: 'Обзор сети', text: 'Состояние всех 8 филиалов на одном экране: выполнение планов, активные задачи, показатели, риски и ближайшие контрольные точки.' },
+    { icon: 'report', title: 'Единая отчётность', text: 'Матрица показывает, какие сведения должен представить каждый филиал, что уже принято, что находится на проверке и где нарушен срок.' },
+    { icon: 'clock', title: 'Контроль сроков и рисков', text: 'Просроченные задачи, непредоставленная отчётность, высокие риски и вопросы, требующие решения головного офиса, собираются автоматически.' },
+    { icon: 'network', title: 'Сравнение филиалов', text: 'Единый набор показателей позволяет сопоставлять филиалы и видеть различия в состоянии сети без превращения мониторинга в формальный рейтинг.' },
+  ],
+  gallery: [
+    { src: directory + '1 главная.png', width: 1905, height: 1990, title: 'Обзор сети', alt: '8 филиалов: обзор сети с показателями, задачами, рисками и контрольными точками' },
+    { src: directory + '2 отчетность.png', width: 1890, height: 1142, title: 'Отчётность', alt: '8 филиалов: мониторинг отчётной дисциплины и матрица отчётности филиальной сети' },
+    { src: directory + '3 сравнение.png', width: 1885, height: 689, title: 'Сравнение филиалов', alt: '8 филиалов: сопоставление подразделений по единым показателям' },
+  ],
+};
+
+return { branches };
+},
+"projects/branches/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  const screen = project.gallery[0];
+  return elementFromHTML(`
+    <section class="branches-cover dark-section" aria-labelledby="branches-title">
+      <div class="branches-cover__visual">
+        <img class="branches-cover__background" src="${escapeHTML(project.backgrounds.visual)}" alt="" aria-hidden="true" decoding="async">
+        <img class="branches-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync">
+      </div>
+      <div class="branches-cover__content">
+        <img class="branches-cover__background" src="${escapeHTML(project.backgrounds.content)}" alt="" aria-hidden="true" decoding="async">
+        <img class="branches-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true">
+        <div class="branches-cover__text">
+          <p class="branches__number"><span>08</span> / 10 <i aria-hidden="true"></i></p>
+          <p class="eyebrow">ПРОЕКТ</p>
+          <h2 id="branches-title">8 филиалов</h2>
+          <p class="branches-cover__subtitle">${escapeHTML(project.copy.subtitle)}</p>
+          <p class="branches__copy">${escapeHTML(project.copy.cover)}</p>
+          <ul class="branches-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/branches/sections/information.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const icons = {
+  overview: '<path d="M5 21v-5m7 5V9m7 12V3" stroke-width="5"/>',
+  report: '<rect x="4" y="4" width="16" height="18" rx="2"/><path d="M9 2h6v5H9zM8 11h2m3 0h3m-8 4h2m3 0h3m-8 4h2m3 0h3"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  network: '<circle cx="12" cy="4" r="3"/><rect x="2" y="17" width="6" height="5" rx="1"/><rect x="16" y="17" width="6" height="5" rx="1"/><path d="M12 7v5M5 17v-5h14v5"/>',
+};
+
+function renderInformation(project) {
+  return elementFromHTML(`
+    <section class="branches-information paper-section" aria-label="Задача, решение и преимущества сервиса управления филиалами">
+      <div class="branches-information__task"><p class="eyebrow">ЗАДАЧА</p><h3>${escapeHTML(project.copy.taskTitle)}</h3><p class="branches__copy">${escapeHTML(project.copy.task)}</p></div>
+      <div class="branches-information__solution"><p class="eyebrow">РЕШЕНИЕ</p><h3>${escapeHTML(project.copy.solutionTitle)}</h3><p class="branches__copy">${escapeHTML(project.copy.solution)}</p></div>
+      <ul class="branches-information__features" aria-label="Преимущества сервиса">${project.features.map(feature => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[feature.icon]}</svg><div><h4>${escapeHTML(feature.title)}</h4><p>${escapeHTML(feature.text)}</p></div></li>`).join('')}</ul>
+    </section>`);
+}
+
+return { renderInformation };
+},
+"projects/branches/sections/screenshots.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderScreenshots(project) {
+  return elementFromHTML(`
+    <section class="branches-gallery dark-section interface-section" data-gallery aria-labelledby="branches-gallery-title">
+      <div class="branches-gallery__intro"><p class="eyebrow interface-section__label" id="branches-gallery-title">ИНТЕРФЕЙС И СЦЕНАРИИ</p><p class="branches__copy">${escapeHTML(project.copy.gallery)}</p></div>
+      <div class="branches-gallery__previews">${project.gallery.map((screen, index) => `<figure class="branches-gallery__item"><button type="button" class="branches-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
     </section>`);
 }
 

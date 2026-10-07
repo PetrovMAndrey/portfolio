@@ -1,0 +1,8 @@
+@import url('./sections/cover.css');
+@import url('./sections/information.css');
+@import url('./sections/screenshots.css');
+
+.branches { --branches-dark: #101314; --branches-accent: var(--orange); color: var(--ink); background: var(--paper); }
+.branches h2, .branches h3, .branches h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -.035em; }
+.branches__copy { font-size: clamp(15px, 1.05vw, 19px); line-height: 1.55; }
+.branches .dark-section { background-color: var(--branches-dark); }

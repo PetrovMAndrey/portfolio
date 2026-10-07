@@ -1,0 +1,10 @@
+.branches .branches-gallery { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(28px, 3vw, 58px); padding: 34px var(--section-gutter) 40px; }
+.branches-gallery__intro, .branches-gallery__item { min-width: 0; }
+.branches-gallery__intro .branches__copy { font-size: clamp(14px, .95vw, 17px); }
+.branches-gallery__previews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1vw, 20px); align-items: start; }
+.branches-gallery__preview { position: relative; display: block; width: 100%; aspect-ratio: 1.9; padding: 0; border: 1px solid #ffffff35; border-radius: 5px; background: #151718; overflow: hidden; }
+.branches-gallery__preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.branches-gallery__preview:hover { border-color: var(--branches-accent); }
+.branches .branches-gallery figcaption { color: #eeece7; }
+@media (max-width: 1000px) { .branches .branches-gallery { grid-template-columns: 1fr; } .branches-gallery__intro { max-width: 680px; } }
+@media (max-width: 700px) { .branches-gallery__previews { grid-template-columns: 1fr; gap: 24px; } }

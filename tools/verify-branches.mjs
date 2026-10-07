@@ -58,57 +58,56 @@ async function screenshot(name) {
   const result = await command('Page.captureScreenshot', { format: 'png' });
   await writeFile(`.preview/${name}.png`, Buffer.from(result.data, 'base64'));
 }
-const {registry}=await import('../src/projects/registry/data.js');
+const {branches}=await import('../src/projects/branches/data.js');
 await mkdir('.preview', {recursive:true});
 await command('Runtime.enable');await command('Page.enable');
 await command('Page.navigate',{url:pageURL});await delay(500);
-const titles=registry.gallery.map(n=>n.title);
-assert.equal(await evaluate('document.querySelectorAll("#project-07 > section").length'),3);
-assert.equal(await evaluate('document.querySelectorAll("#project-07 a").length'),0);
+const titles=branches.gallery.map(n=>n.title);
+assert.equal(await evaluate('document.querySelectorAll("#project-08 > section").length'),3);
+assert.equal(await evaluate('document.querySelectorAll("#project-08 a").length'),0);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'),8);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'),2);
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'),7);
-assert.deepEqual(await evaluate('[...document.querySelectorAll(".registry-gallery figcaption")].map(n=>n.textContent)'),titles);
-assert.deepEqual(await evaluate('[...document.querySelectorAll(".registry-gallery [data-src]")].map(n=>n.dataset.src)'),registry.gallery.map(n=>n.src));
-const words=await evaluate('document.querySelector("#project-07").textContent');
-for(const text of [...Object.values(registry.copy),...registry.tags,...registry.features.flatMap(n=>[n.title,n.text])])assert.ok(words.includes(text),text);
+assert.deepEqual(await evaluate('[...document.querySelectorAll(".branches-gallery figcaption")].map(n=>n.textContent)'),titles);
+assert.deepEqual(await evaluate('[...document.querySelectorAll(".branches-gallery [data-src]")].map(n=>n.dataset.src)'),branches.gallery.map(n=>n.src));
+const words=await evaluate('document.querySelector("#project-08").textContent');
+for(const text of [...Object.values(branches.copy),...branches.tags,...branches.features.flatMap(n=>[n.title,n.text])])assert.ok(words.includes(text),text);
 for(const width of [1920,1440,1280]) {
  await command('Emulation.setDeviceMetricsOverride',{width,height:1080,deviceScaleFactor:1,mobile:false});
- await evaluate('document.querySelector("#project-07").scrollIntoView({behavior:"instant"})');
- // Wait for actual load events before decoding lazy previews after a restored scroll.
- await evaluate('Promise.all([...document.querySelectorAll("#project-07 img")].map(n=>n.complete&&n.naturalWidth?Promise.resolve():new Promise((resolve,reject)=>{n.addEventListener("load",resolve,{once:true});n.addEventListener("error",()=>reject(new Error("Image failed: "+n.getAttribute("src"))),{once:true});})))');
- await evaluate('Promise.all([...document.querySelectorAll("#project-07 img")].map(n=>n.decode()))');await delay(100);
+ await evaluate('document.querySelector("#project-08").scrollIntoView({behavior:"instant"})');
+ await evaluate('Promise.all([...document.querySelectorAll("#project-08 img")].map(n=>n.complete&&n.naturalWidth?Promise.resolve():new Promise((resolve,reject)=>{n.addEventListener("load",resolve,{once:true});n.addEventListener("error",()=>reject(new Error("Image failed: "+n.getAttribute("src"))),{once:true});})))');
+ await evaluate('Promise.all([...document.querySelectorAll("#project-08 img")].map(n=>n.decode()))');await delay(100);
  const geometry=await evaluate(`(()=>{
-  const rect=n=>n.getBoundingClientRect(),p=document.querySelector('#project-07'),cover=p.querySelector('.registry-cover'),visual=p.querySelector('.registry-cover__visual'),content=p.querySelector('.registry-cover__content'),screen=p.querySelector('.registry-cover__screen'),line=p.querySelector('.registry-cover__divider'),s=rect(screen),v=rect(visual),c=rect(content),l=rect(line),sections=[...p.children],nav=rect(document.querySelector('.project-navigation'));
-  const outside=[...document.querySelectorAll('.ark h2,.grantmaster h2,.svetlo h2,.industrial h2,.metrika h2,.newsletter h2,.registry h2,.registry h3,.registry h4,.registry p,.registry li,.registry figcaption')].filter(n=>{const a=rect(n),b=rect(n.closest('section'));return a.left<b.left-.5||a.right>b.right+.5||a.top<b.top-.5||a.bottom>b.bottom+.5||a.right>nav.left-1}).map(n=>n.textContent);
-  return {overflow:document.documentElement.scrollWidth>innerWidth,coverHeight:rect(cover).height,leftWidth:v.width,rightWidth:c.width,centerX:s.left+s.width/2-(v.left+v.width/2),centerY:s.top+s.height/2-(v.top+v.height/2),screenRatio:s.width/s.height,naturalRatio:screen.naturalWidth/screen.naturalHeight,screenTransform:getComputedStyle(screen).transform,screenFit:getComputedStyle(screen).objectFit,margins:[s.left-v.left,v.right-s.right,s.top-v.top,v.bottom-s.bottom],backgrounds:[...p.querySelectorAll('.registry-cover__background')].map(n=>({src:n.getAttribute('src'),fit:getComputedStyle(n).objectFit})),line:{src:line.getAttribute('src'),ratio:l.width/l.height,x:l.left+l.width/2-c.left,filter:getComputedStyle(line).filter,transform:getComputedStyle(line).transform},outside,gaps:sections.slice(1).map((n,i)=>rect(n).top-rect(sections[i]).bottom),captions:[...p.querySelectorAll('figcaption')].map(n=>({x:rect(n).left-rect(n.parentElement.querySelector('button')).left,align:getComputedStyle(n).textAlign})),previews:[...p.querySelectorAll('.registry-gallery__preview')].map(n=>({width:rect(n).width,height:rect(n).height,top:rect(n).top,captionTop:rect(n.parentElement.querySelector('figcaption')).top,fit:getComputedStyle(n.querySelector('img')).objectFit,position:getComputedStyle(n.querySelector('img')).objectPosition})),transition:{name:p.previousElementSibling.className,gap:rect(p).top-rect(p.previousElementSibling).bottom,previousGap:rect(p.previousElementSibling).top-rect(document.querySelector('#project-06')).bottom},gold:getComputedStyle(p).getPropertyValue('--registry-gold').trim()};
+  const rect=n=>n.getBoundingClientRect(),p=document.querySelector('#project-08'),cover=p.querySelector('.branches-cover'),visual=p.querySelector('.branches-cover__visual'),content=p.querySelector('.branches-cover__content'),screen=p.querySelector('.branches-cover__screen'),line=p.querySelector('.branches-cover__divider'),s=rect(screen),v=rect(visual),c=rect(content),l=rect(line),sections=[...p.children],nav=rect(document.querySelector('.project-navigation'));
+  const outside=[...document.querySelectorAll('.ark h2,.grantmaster h2,.svetlo h2,.industrial h2,.metrika h2,.newsletter h2,.branches h2,.branches h3,.branches h4,.branches p,.branches li,.branches figcaption')].filter(n=>{const a=rect(n),b=rect(n.closest('section'));return a.left<b.left-.5||a.right>b.right+.5||a.top<b.top-.5||a.bottom>b.bottom+.5||a.right>nav.left-1}).map(n=>n.textContent);
+  return {overflow:document.documentElement.scrollWidth>innerWidth,coverHeight:rect(cover).height,leftWidth:v.width,rightWidth:c.width,centerX:s.left+s.width/2-(v.left+v.width/2),centerY:s.top+s.height/2-(v.top+v.height/2),screenRatio:s.width/s.height,naturalRatio:screen.naturalWidth/screen.naturalHeight,screenTransform:getComputedStyle(screen).transform,screenFit:getComputedStyle(screen).objectFit,margins:[s.left-v.left,v.right-s.right,s.top-v.top,v.bottom-s.bottom],backgrounds:[...p.querySelectorAll('.branches-cover__background')].map(n=>({src:n.getAttribute('src'),fit:getComputedStyle(n).objectFit})),line:{src:line.getAttribute('src'),ratio:l.width/l.height,x:l.left+l.width/2-c.left,filter:getComputedStyle(line).filter,transform:getComputedStyle(line).transform},outside,gaps:sections.slice(1).map((n,i)=>rect(n).top-rect(sections[i]).bottom),captions:[...p.querySelectorAll('figcaption')].map(n=>({x:rect(n).left-rect(n.parentElement.querySelector('button')).left,align:getComputedStyle(n).textAlign})),previews:[...p.querySelectorAll('.branches-gallery__preview')].map(n=>({width:rect(n).width,height:rect(n).height,top:rect(n).top,captionTop:rect(n.parentElement.querySelector('figcaption')).top,fit:getComputedStyle(n.querySelector('img')).objectFit,position:getComputedStyle(n.querySelector('img')).objectPosition})),transition:{name:p.previousElementSibling.className,gap:rect(p).top-rect(p.previousElementSibling).bottom,previousGap:rect(p.previousElementSibling).top-rect(document.querySelector('#project-07')).bottom},gold:getComputedStyle(p).getPropertyValue('--branches-accent').trim()};
  })()`);
  assert.equal(geometry.overflow,false);assert.deepEqual(geometry.outside,[]);
  assert.ok(geometry.coverHeight>=520&&geometry.coverHeight<850);
- assert.ok(geometry.leftWidth<geometry.rightWidth);
+ assert.ok(geometry.leftWidth>geometry.rightWidth);
  assert.ok(Math.abs(geometry.centerX)<.5&&Math.abs(geometry.centerY)<.5);
  assert.ok(geometry.margins.every(n=>n>=40));assert.equal(geometry.screenTransform,'none');assert.equal(geometry.screenFit,'contain');
  assert.ok(Math.abs(geometry.screenRatio-geometry.naturalRatio)<.0001);
- assert.deepEqual(geometry.backgrounds.map(n=>n.src),Object.values(registry.backgrounds));assert.ok(geometry.backgrounds.every(n=>n.fit==='cover'));
- assert.equal(geometry.line.src,'./Вайфреймы в работу/Line.svg');assert.ok(Math.abs(geometry.line.ratio-29/1104)<.0001);assert.ok(Math.abs(geometry.line.x)<.5);assert.equal(geometry.line.filter,'none');assert.ok(geometry.line.transform.startsWith('matrix(1, 0, 0, 1,'));assert.equal(geometry.gold,'#c4a464');
+ assert.deepEqual(geometry.backgrounds.map(n=>n.src),Object.values(branches.backgrounds));assert.ok(geometry.backgrounds.every(n=>n.fit==='cover'));
+ assert.equal(geometry.line.src,'./Вайфреймы в работу/Line.svg');assert.ok(Math.abs(geometry.line.ratio-29/1104)<.0001);assert.ok(Math.abs(geometry.line.x)<.5);assert.equal(geometry.line.filter,'brightness(0) invert(1)');assert.ok(geometry.line.transform.startsWith('matrix(1, 0, 0, 1,'));assert.equal(geometry.gold,'#ff641b');
  assert.ok(geometry.gaps.every(n=>Math.abs(n)<.5));assert.ok(geometry.captions.every(n=>Math.abs(n.x)<.5&&n.align==='left'));assert.ok(geometry.previews.every(n=>Math.abs(n.width/1.9-n.height)<.1&&Math.abs(n.width-geometry.previews[0].width)<.1&&Math.abs(n.height-geometry.previews[0].height)<.1&&Math.abs(n.top-geometry.previews[0].top)<.1&&Math.abs(n.captionTop-geometry.previews[0].captionTop)<.1&&n.fit==='cover'&&n.position==='50% 0%'));
- assert.deepEqual(await evaluate(`[...document.querySelectorAll('.industrial-gallery .interface-section__label,.metrika-gallery .interface-section__label,.newsletter-gallery .interface-section__label,.registry-gallery .interface-section__label')].map(n=>getComputedStyle(n).color)`),Array(4).fill('rgb(255, 100, 27)'));
+ assert.deepEqual(await evaluate(`[...document.querySelectorAll('.industrial-gallery .interface-section__label,.metrika-gallery .interface-section__label,.newsletter-gallery .interface-section__label,.registry-gallery .interface-section__label,.branches-gallery .interface-section__label')].map(n=>getComputedStyle(n).color)`),Array(5).fill('rgb(255, 100, 27)'));
  assert.equal(geometry.transition.name,'project-separator');assert.ok(Math.abs(geometry.transition.gap)<.5&&Math.abs(geometry.transition.previousGap)<.5);
- const clip=await evaluate('(()=>{const r=document.querySelector("#project-07").getBoundingClientRect();return {x:0,y:r.top+scrollY,width:r.width,height:r.height,scale:1}})()');
- const shot=await command('Page.captureScreenshot',{format:'png',clip,captureBeyondViewport:true});await writeFile('.preview/registry-full-'+width+'.png',Buffer.from(shot.data,'base64'));
- for(const selector of ['.registry-cover','.registry-information','.registry-gallery']) {
+ const clip=await evaluate('(()=>{const r=document.querySelector("#project-08").getBoundingClientRect();return {x:0,y:r.top+scrollY,width:r.width,height:r.height,scale:1}})()');
+ const shot=await command('Page.captureScreenshot',{format:'png',clip,captureBeyondViewport:true});await writeFile('.preview/branches-full-'+width+'.png',Buffer.from(shot.data,'base64'));
+ for(const selector of ['.branches-cover','.branches-information','.branches-gallery']) {
   await evaluate(`document.querySelector('${selector}').scrollIntoView({behavior:'instant'})`);await delay(100);
-  assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-07');
+  assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-08');
  }
- await evaluate('document.querySelector("#project-06").scrollIntoView({behavior:"instant"})');await delay(100);
- assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-06');
- await evaluate('document.querySelector(".project-navigation a[href=\\"#project-07\\"]").click()');await waitForProject('07');
+ await evaluate('document.querySelector("#project-07").scrollIntoView({behavior:"instant"})');await delay(100);
  assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-07');
+ await evaluate('document.querySelector(".project-navigation a[href=\\"#project-08\\"]").click()');await waitForProject('08');
+ assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-08');
  for(let i=0;i<3;i++) {
-  await evaluate(`document.querySelector('.registry-gallery [data-gallery-open="${i}"]').click()`);await evaluate('document.querySelector("dialog[open] img").decode()');await delay(50);
+  await evaluate(`document.querySelector('.branches-gallery [data-gallery-open="${i}"]').click()`);await evaluate('document.querySelector("dialog[open] img").decode()');await delay(50);
   const title=()=>evaluate('document.querySelector("dialog[open] .lightbox__title").textContent');
-  assert.equal(await title(),titles[i]);assert.equal(await evaluate('document.querySelector("dialog[open] img").getAttribute("src")'),registry.gallery[i].src);
-  const fullImage=await evaluate('(()=>{const n=document.querySelector("dialog[open] img"),r=n.getBoundingClientRect();return {width:n.naturalWidth,height:n.naturalHeight,ratio:r.width/r.height}})()');assert.equal(fullImage.width,registry.gallery[i].width);assert.equal(fullImage.height,registry.gallery[i].height);assert.ok(Math.abs(fullImage.ratio-fullImage.width/fullImage.height)<.0001);
+  assert.equal(await title(),titles[i]);assert.equal(await evaluate('document.querySelector("dialog[open] img").getAttribute("src")'),branches.gallery[i].src);
+  const fullImage=await evaluate('(()=>{const n=document.querySelector("dialog[open] img"),r=n.getBoundingClientRect();return {width:n.naturalWidth,height:n.naturalHeight,ratio:r.width/r.height}})()');assert.equal(fullImage.width,branches.gallery[i].width);assert.equal(fullImage.height,branches.gallery[i].height);assert.ok(Math.abs(fullImage.ratio-fullImage.width/fullImage.height)<.0001);
   await key('ArrowRight');assert.equal(await title(),titles[(i+1)%3]);await key('ArrowLeft');assert.equal(await title(),titles[i]);
   await evaluate('document.querySelector("dialog[open] [data-action=previous]").click()');assert.equal(await title(),titles[(i+2)%3]);await evaluate('document.querySelector("dialog[open] [data-action=next]").click()');assert.equal(await title(),titles[i]);
   await evaluate('document.querySelector("dialog[open] img").decode()');await key('+');assert.equal(await evaluate('document.querySelector("dialog[open] .lightbox__scale").textContent'),'150%');await key('-');assert.equal(await evaluate('document.querySelector("dialog[open] .lightbox__scale").textContent'),'100%');
@@ -120,6 +119,6 @@ for(const width of [1920,1440,1280]) {
   if(i%2)await key('Escape');else await evaluate('document.querySelector("dialog[open] [data-action=close]").click()');await delay(50);
   assert.equal(await evaluate('document.querySelectorAll("dialog[open]").length'),0);assert.equal(await evaluate('document.activeElement.dataset.galleryOpen'),String(i));
  }
- console.log('PASS project 07 file://',width,JSON.stringify({heroHeight:geometry.coverHeight,center:[geometry.centerX,geometry.centerY]}),'approved sources, proportions, no overflow/overlaps, navigation 06/07, lightbox/zoom/drag/keyboard');
+ console.log('PASS project 08 file://',width,JSON.stringify({heroHeight:geometry.coverHeight,center:[geometry.centerX,geometry.centerY]}),'approved sources, proportions, no overflow/overlaps, navigation 07/08, lightbox/zoom/drag/keyboard');
 }
 assert.deepEqual(errors,[]);socket.close();
