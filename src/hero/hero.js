@@ -22,7 +22,7 @@ function cardList(copy = false) {
   // only the original cycle participates in keyboard/screen-reader navigation.
   return `<ol class="hero-rail__cards"${copy ? ' aria-hidden="true"' : ''}>${cards.map(([title], index) => {
     const number = String(index + 1).padStart(2, '0');
-    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 8 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
+    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 9 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
   }).join('')}</ol>`;
 }
 export function renderHero() {

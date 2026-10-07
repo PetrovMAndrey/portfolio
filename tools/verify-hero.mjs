@@ -88,7 +88,7 @@ for(const width of [1920,1440,1280]) {
   assert.ok(layout.footer < layout.height);
   assert.ok(Math.abs(layout.firstProject-layout.height)<1);
   assert.deepEqual(layout.titles,Array.from({length:10},(_,i)=>String(i+1).padStart(2,'0')));
-  assert.deepEqual(layout.links,['#project-01','#project-02','#project-03','#project-04','#project-05','#project-06','#project-07','#project-08',null,null]);
+  assert.deepEqual(layout.links,['#project-01','#project-02','#project-03','#project-04','#project-05','#project-06','#project-07','#project-08','#project-09',null]);
   assert.equal(new Set(layout.opacity).size,1);
   assert.equal(layout.scrollbar,'none');
   assert.ok(layout.mask.every(mask=>mask.background.includes('linear-gradient')&&mask.pointer==='none'&&mask.z==='2'));
@@ -117,11 +117,11 @@ for(const width of [1920,1440,1280]) {
   await screenshot('hero-final-'+width);
   const point=await evaluate('(() => {const r=document.querySelector(".hero-rail__item a").getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()');
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
-  await delay(300);
+  await evaluate('Promise.all(document.querySelector(".hero-rail__item a").getAnimations().map(animation => animation.finished))');
   const hover=await evaluate('(() => {const css=getComputedStyle(document.querySelector(".hero-rail__item a"));const m=new DOMMatrix(css.transform);return {x:m.a,y:m.d,lift:m.f,shadow:css.boxShadow};})()');
   assert.deepEqual(hover,{x:1,y:1,lift:-5,shadow:'none'});
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:5,y:5});
-  await delay(300);
+  await evaluate('Promise.all(document.querySelector(".hero-rail__item a").getAnimations().map(animation => animation.finished))');
   assert.equal(await evaluate('getComputedStyle(document.querySelector(".hero-rail__item a")).transform'),'none');
   const start=await evaluate('document.querySelector(".hero-rail__viewport").scrollLeft');
   await command('Input.dispatchMouseEvent',{type:'mouseWheel',...point,deltaX:0,deltaY:180});
@@ -153,7 +153,7 @@ for(const width of [1920,1440,1280]) {
     if(progress===.5)await screenshot('hero-overlap-'+width);
     if(progress>=1)assert.equal(transition.covered,true);
   }
-  for(const number of ['01','02','03','04','05','06','07','08']){
+  for(const number of ['01','02','03','04','05','06','07','08','09']){
     await evaluate('scrollTo({top:0,behavior:"instant"})');await delay(100);
     await evaluate(`(() => {const link=document.querySelector('.hero-rail__item a[href="#project-${number}"]');const r=link.getBoundingClientRect();document.querySelector('.hero-rail__viewport').scrollLeft+=r.left+r.width/2-innerWidth/2;})()`);
     const click=await evaluate(`(() => {const r=document.querySelector('.hero-rail__item a[href="#project-${number}"]').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()`);

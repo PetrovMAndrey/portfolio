@@ -12,6 +12,7 @@ const { renderMetrika } = load("projects/metrika/metrika.js");
 const { renderNewsletter } = load("projects/newsletter/newsletter.js");
 const { renderRegistry } = load("projects/registry/registry.js");
 const { renderBranches } = load("projects/branches/branches.js");
+const { renderCompass } = load("projects/compass/compass.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -25,6 +26,7 @@ const projects = [
   { number: 6, target: 'project-06', label: 'Студия рассылок', render: renderNewsletter },
   { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
   { number: 8, target: 'project-08', label: '8 филиалов', render: renderBranches },
+  { number: 9, target: 'project-09', label: 'Рабочий компас', render: renderCompass },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -59,7 +61,7 @@ function cardList(copy = false) {
   // only the original cycle participates in keyboard/screen-reader navigation.
   return `<ol class="hero-rail__cards"${copy ? ' aria-hidden="true"' : ''}>${cards.map(([title], index) => {
     const number = String(index + 1).padStart(2, '0');
-    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 8 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
+    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 9 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
   }).join('')}</ol>`;
 }
 function renderHero() {
@@ -1128,6 +1130,112 @@ function renderScreenshots(project) {
     <section class="branches-gallery dark-section interface-section" data-gallery aria-labelledby="branches-gallery-title">
       <div class="branches-gallery__intro"><p class="eyebrow interface-section__label" id="branches-gallery-title">ИНТЕРФЕЙС И СЦЕНАРИИ</p><p class="branches__copy">${escapeHTML(project.copy.gallery)}</p></div>
       <div class="branches-gallery__previews">${project.gallery.map((screen, index) => `<figure class="branches-gallery__item"><button type="button" class="branches-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
+    </section>`);
+}
+
+return { renderScreenshots };
+},
+"projects/compass/compass.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { compass } = load("projects/compass/data.js");
+const { renderCover } = load("projects/compass/sections/cover.js");
+const { renderInformation } = load("projects/compass/sections/information.js");
+const { renderScreenshots } = load("projects/compass/sections/screenshots.js");
+function renderCompass() {
+  const project = elementFromHTML('<article class="compass" id="project-09" aria-labelledby="compass-title"></article>');
+  [renderCover, renderInformation, renderScreenshots].forEach(render => project.append(render(compass)));
+  return project;
+}
+
+return { renderCompass };
+},
+"projects/compass/data.js": function(load) {
+const directory = './REFERENCES/09_Рабочий компас/';
+
+const compass = {
+  backgrounds: {
+    visual: directory + 'Фон для скриншота.png',
+    content: directory + 'Фон для текста.png',
+  },
+  tags: ['Внутренние процессы', 'Навигация', 'Оргструктура', 'B2B / B2G'],
+  copy: {
+    subtitle: 'Навигатор внутри организации',
+    cover: 'Цифровой сервис для сотрудников, который помогает ориентироваться в структуре, процессах и рабочих ситуациях. Показывает, кто за что отвечает, куда обращаться с конкретной задачей и какой путь пройти для её решения.',
+    taskTitle: 'Сделать сложную организацию понятной сотруднику',
+    task: 'Собрать структуру, зоны ответственности, рабочие маршруты и внутреннюю информацию в одном интерфейсе, чтобы сотруднику не приходилось искать нужного человека, выяснять порядок действий у коллег или разбираться в разрозненных регламентах.',
+    solutionTitle: 'Рабочий компас',
+    solution: 'Сервис превращает устройство организации в понятную систему навигации: связывает подразделения, сотрудников, функции и типовые рабочие ситуации. Пользователь начинает не с документа или регламента, а со своего вопроса — и получает понятный маршрут дальнейших действий.',
+    gallery: 'Структура организации, зоны ответственности и готовые маршруты решения рабочих задач собраны в единой системе. Нажмите на миниатюру, чтобы открыть экран в полном размере.',
+  },
+  features: [
+    { icon: 'network', title: 'Структура и ответственность', text: 'Наглядная иерархия подразделений показывает, как устроена организация, кто руководит направлениями и за какие функции отвечает каждый отдел.' },
+    { icon: 'document', title: 'Типовые ситуации', text: 'Готовые маршруты для частых рабочих задач: с чего начать, куда обратиться, какие подразделения подключаются и в какой последовательности.' },
+    { icon: 'building', title: 'Инфраструктура', text: 'Навигация по зданию и внутренним сервисам: помещения, службы, рабочие пространства и другая необходимая сотруднику информация.' },
+    { icon: 'search', title: 'Поиск и быстрые ответы', text: 'Единая точка входа для поиска по людям, функциям, подразделениям и рабочим вопросам без необходимости знать внутреннюю структуру заранее.' },
+  ],
+  gallery: [
+    { src: directory + '1.png', width: 2560, height: 2126, title: 'Главный экран', alt: 'Рабочий компас: главный экран с поиском и разделами навигатора' },
+    { src: directory + '2.png', width: 2048, height: 2547, title: 'Структура организации', alt: 'Рабочий компас: иерархия подразделений и зоны ответственности' },
+    { src: directory + '3.png', width: 2048, height: 1867, title: 'Типовые ситуации', alt: 'Рабочий компас: маршруты решения типовых рабочих задач' },
+  ],
+};
+
+return { compass };
+},
+"projects/compass/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  const screen = project.gallery[0];
+  return elementFromHTML(`
+    <section class="compass-cover dark-section" aria-labelledby="compass-title">
+      <div class="compass-cover__content">
+        <img class="compass-cover__background" src="${escapeHTML(project.backgrounds.content)}" alt="" aria-hidden="true" decoding="async">
+        <div class="compass-cover__text">
+          <p class="compass__number"><span>09</span> / 10 <i aria-hidden="true"></i></p>
+          <p class="eyebrow">ПРОЕКТ</p>
+          <h2 id="compass-title">Рабочий компас</h2>
+          <p class="compass-cover__subtitle">${escapeHTML(project.copy.subtitle)}</p>
+          <p class="compass__copy">${escapeHTML(project.copy.cover)}</p>
+          <ul class="compass-cover__tags" aria-label="Направления проекта">${project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="compass-cover__visual">
+        <img class="compass-cover__background" src="${escapeHTML(project.backgrounds.visual)}" alt="" aria-hidden="true" decoding="async">
+        <img class="compass-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true">
+        <img class="compass-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync">
+      </div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/compass/sections/information.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const icons = {
+  document: '<path d="M5 2h10l4 4v16H5zM15 2v5h4M8 11h8M8 15h8M8 19h8"/>',
+  building: '<rect x="4" y="2" width="12" height="20" rx="1"/><path d="M16 8h4v14H4M8 6h1m3 0h1M8 10h1m3 0h1M8 14h1m3 0h1M9 22v-4h3v4"/>',
+  search: '<circle cx="10" cy="10" r="8"/><path d="m16 16 6 6"/>',
+  network: '<circle cx="12" cy="4" r="3"/><rect x="2" y="17" width="6" height="5" rx="1"/><rect x="16" y="17" width="6" height="5" rx="1"/><path d="M12 7v5M5 17v-5h14v5"/>',
+};
+
+function renderInformation(project) {
+  return elementFromHTML(`
+    <section class="compass-information paper-section" aria-label="Задача, решение и преимущества навигатора внутри организации">
+      <div class="compass-information__task"><p class="eyebrow">ЗАДАЧА</p><h3>${escapeHTML(project.copy.taskTitle)}</h3><p class="compass__copy">${escapeHTML(project.copy.task)}</p></div>
+      <div class="compass-information__solution"><p class="eyebrow">РЕШЕНИЕ</p><h3>${escapeHTML(project.copy.solutionTitle)}</h3><p class="compass__copy">${escapeHTML(project.copy.solution)}</p></div>
+      <ul class="compass-information__features" aria-label="Преимущества сервиса">${project.features.map(feature => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[feature.icon]}</svg><div><h4>${escapeHTML(feature.title)}</h4><p>${escapeHTML(feature.text)}</p></div></li>`).join('')}</ul>
+    </section>`);
+}
+
+return { renderInformation };
+},
+"projects/compass/sections/screenshots.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderScreenshots(project) {
+  return elementFromHTML(`
+    <section class="compass-gallery dark-section interface-section" data-gallery aria-labelledby="compass-gallery-title">
+      <div class="compass-gallery__intro"><p class="eyebrow interface-section__label" id="compass-gallery-title">ИНТЕРФЕЙС И СЦЕНАРИИ</p><p class="compass__copy">${escapeHTML(project.copy.gallery)}</p></div>
+      <div class="compass-gallery__previews">${project.gallery.map((screen, index) => `<figure class="compass-gallery__item"><button type="button" class="compass-gallery__preview" data-gallery-open="${index}" data-src="${escapeHTML(screen.src)}" data-title="${escapeHTML(screen.title)}" aria-label="Открыть скриншот: ${escapeHTML(screen.title)}"><img src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async"></button><figcaption>${escapeHTML(screen.title)}</figcaption></figure>`).join('')}</div>
     </section>`);
 }
 
