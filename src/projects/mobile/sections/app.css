@@ -19,8 +19,9 @@
 .mobile-app__feature-title { font-size: clamp(13px, .9vw, 17px); line-height: 1.35; font-weight: 450; }
 .mobile-app__feature-copy { margin-top: 8px; font-size: clamp(12px, .8vw, 15px); line-height: 1.5; }
 .mobile-app__mockups { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; justify-items: center; gap: clamp(16px, 1.5vw, 28px); padding-block: 12px 28px; }
-.mobile-app__mockup { display: block; width: 77%; max-width: clamp(169.4px, 13.09vw, 251.02px); height: auto; object-fit: contain; filter: drop-shadow(0 16px 20px #10203430); }
-.mobile-app--dark .mobile-app__mockup { filter: drop-shadow(0 16px 22px #00000040); }
+.mobile-app__mockup { display: block; width: 77%; max-width: clamp(169.4px, 13.09vw, 251.02px); height: auto; object-fit: contain; filter: drop-shadow(0 24px 28px #10203470) drop-shadow(0 12px 12px #10203445); }
+.mobile-app--dark .mobile-app__mockup { filter: drop-shadow(0 26px 30px #100c1880) drop-shadow(0 14px 14px #100c184d); }
+.mobile-app--note .mobile-app__mockup { filter: drop-shadow(0 28px 32px #000000bf) drop-shadow(0 14px 16px #00000080); }
 .mobile-project__middle .mobile-app { display: flex; flex-direction: column; padding: 32px clamp(32px, 3vw, 58px) 60px; gap: 32px; }
 .mobile-project__middle .mobile-app--forum { padding-left: var(--section-gutter); }
 .mobile-project__middle .mobile-app--shelf { padding-right: var(--section-gutter); }
