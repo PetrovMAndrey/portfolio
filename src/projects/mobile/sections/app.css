@@ -1,0 +1,32 @@
+.mobile-app { position: relative; isolation: isolate; min-width: 0; display: grid; gap: clamp(32px, 4vw, 76px); padding: 48px var(--section-gutter); }
+.mobile-app--light { color: #15212e; background: #e2eefb; }
+.mobile-app--dark { color: #fffaf4; background: #181614; }
+.mobile-app--owl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+.mobile-app--owl .mobile-app__text { grid-column: 2; grid-row: 1; }
+.mobile-app--owl .mobile-app__mockups { grid-column: 1; grid-row: 1; }
+.mobile-app--note { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; }
+.mobile-app__text { min-width: 0; }
+.mobile-app__number { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; font-size: 14px; }
+.mobile-app__number span { width: 28px; height: 3px; background: var(--orange); }
+.mobile-app h3 { font-size: clamp(38px, 3.4vw, 65px); line-height: 1.06; margin-bottom: 14px; }
+.mobile-app__subtitle { font-size: clamp(22px, 1.65vw, 31px); line-height: 1.25; margin-bottom: 24px; max-width: 630px; }
+.mobile-app__description { display: grid; gap: 16px; max-width: 710px; }
+.mobile-app__features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 18px; list-style: none; padding: 0; margin: 32px 0 0; }
+.mobile-app__features li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; }
+.mobile-app__features svg { width: 28px; height: 28px; color: var(--orange); }
+.mobile-app__feature-title { font-size: clamp(13px, .9vw, 17px); line-height: 1.35; font-weight: 450; }
+.mobile-app__feature-copy { margin-top: 8px; font-size: clamp(12px, .8vw, 15px); line-height: 1.5; }
+.mobile-app__mockups { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; justify-items: center; gap: clamp(16px, 1.5vw, 28px); }
+.mobile-app__mockup { display: block; width: 100%; max-width: clamp(220px, 17vw, 326px); height: auto; object-fit: contain; }
+.mobile-project__middle .mobile-app { display: flex; flex-direction: column; padding: 48px clamp(32px, 3vw, 58px); gap: 40px; }
+.mobile-project__middle .mobile-app--forum { padding-left: var(--section-gutter); }
+.mobile-project__middle .mobile-app--shelf { padding-right: var(--section-gutter); }
+.mobile-app--forum::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #38203888, #38203830 40%, transparent 70%); }
+.mobile-project__middle .mobile-app__text { width: 100%; }
+.mobile-project__middle .mobile-app__subtitle { max-width: 600px; }
+.mobile-project__middle .mobile-app__mockups { width: 100%; }
+.mobile-app--forum .mobile-app__mockups { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1vw, 20px); }
+.mobile-app--forum .mobile-app__mockup { max-width: 280px; }
+.mobile-app--shelf .mobile-app__mockup { max-width: 320px; }
+@media (max-width: 1000px) { .mobile-project__middle .mobile-app { padding-inline: var(--section-gutter); } .mobile-project__middle .mobile-app__mockups { margin-top: 0; } }
+@media (max-width: 700px) { .mobile-app--owl, .mobile-app--note { grid-template-columns: 1fr; } .mobile-app--owl .mobile-app__text, .mobile-app--owl .mobile-app__mockups { grid-column: auto; grid-row: auto; } .mobile-app__features { grid-template-columns: 1fr; } .mobile-app--forum .mobile-app__mockups { grid-template-columns: 1fr; } }

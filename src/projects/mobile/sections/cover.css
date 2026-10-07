@@ -1,0 +1,9 @@
+.mobile-cover { position: relative; isolation: isolate; display: flex; align-items: center; min-height: clamp(450px, 32vw, 620px); padding: 46px var(--section-gutter); }
+.mobile-cover::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #08101765, transparent 75%); }
+.mobile-cover__text { width: min(100%, 750px); }
+.mobile-cover__number { display: flex; align-items: baseline; gap: 14px; font-size: 19px; margin-bottom: 18px; }
+.mobile-cover__number span { font-size: 38px; color: var(--orange); }
+.mobile-cover .eyebrow { margin-bottom: 18px; }
+.mobile-cover h2 { font-size: clamp(42px, 3.6vw, 69px); line-height: 1.02; max-width: 9em; margin-bottom: 20px; }
+.mobile-cover__subtitle { font-size: clamp(24px, 1.9vw, 36px); line-height: 1.25; max-width: 15em; margin-bottom: 24px; }
+.mobile-cover .mobile-project__copy { max-width: 700px; color: #e4e7e9; }

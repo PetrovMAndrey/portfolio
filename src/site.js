@@ -13,6 +13,7 @@ const { renderNewsletter } = load("projects/newsletter/newsletter.js");
 const { renderRegistry } = load("projects/registry/registry.js");
 const { renderBranches } = load("projects/branches/branches.js");
 const { renderCompass } = load("projects/compass/compass.js");
+const { renderMobile } = load("projects/mobile/mobile.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -27,6 +28,7 @@ const projects = [
   { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
   { number: 8, target: 'project-08', label: '8 филиалов', render: renderBranches },
   { number: 9, target: 'project-09', label: 'Рабочий компас', render: renderCompass },
+  { number: 10, target: 'project-10', label: 'Мобильные приложения', render: renderMobile },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
@@ -61,7 +63,7 @@ function cardList(copy = false) {
   // only the original cycle participates in keyboard/screen-reader navigation.
   return `<ol class="hero-rail__cards"${copy ? ' aria-hidden="true"' : ''}>${cards.map(([title], index) => {
     const number = String(index + 1).padStart(2, '0');
-    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 9 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
+    return `<li class="${copy ? 'hero-rail__copy-item' : 'hero-rail__item'}">${index < 10 ? `<a class="hero-card" href="#project-${number}"${copy ? ' tabindex="-1"' : ''} aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</a>` : `<div class="hero-card" aria-label="Проект ${number}: ${escapeHTML(title)}">${cardImage(index)}</div>`}</li>`;
   }).join('')}</ol>`;
 }
 function renderHero() {
@@ -1240,6 +1242,151 @@ function renderScreenshots(project) {
 }
 
 return { renderScreenshots };
+},
+"projects/mobile/mobile.js": function(load) {
+const { elementFromHTML } = load("shared/dom.js");
+const { mobile } = load("projects/mobile/data.js");
+const { renderCover } = load("projects/mobile/sections/cover.js");
+const { renderApp } = load("projects/mobile/sections/app.js");
+function renderMobile() {
+  const project = elementFromHTML('<article class="mobile-project" id="project-10" aria-labelledby="mobile-title"></article>');
+  project.append(renderCover(mobile), renderApp(mobile.apps[0]));
+  const middle = elementFromHTML('<div class="mobile-project__middle"></div>');
+  middle.append(renderApp(mobile.apps[1]), renderApp(mobile.apps[2]));
+  project.append(middle, renderApp(mobile.apps[3]));
+  return project;
+}
+
+return { renderMobile };
+},
+"projects/mobile/data.js": function(load) {
+const directory = './REFERENCES/10/';
+
+const mobile = {
+  background: directory + '1 фон для хиро.png',
+  title: 'Мобильные приложения',
+  subtitle: 'Четыре самостоятельных цифровых продукта',
+  description: 'Полезные сервисы, которые делают повседневные и профессиональные задачи проще. Разные сценарии, единый подход: понятные интерфейсы, продуманная логика и современный дизайн.',
+  apps: [
+    {
+      id: 'owl', number: '01', title: 'Сова', theme: 'light',
+      background: directory + '2 фон для Сова.png',
+      subtitle: 'Передача файлов между устройствами',
+      paragraphs: ['Приложение для прямой передачи файлов, папок, фотографий, видео и текста между устройствами в одной локальной сети. Без облачного хранилища, регистрации и загрузки данных на внешние серверы.'],
+      features: [
+        { icon: 'transfer', title: 'Быстрая передача', text: 'Файлы и данные передаются напрямую между устройствами.' },
+        { icon: 'devices', title: 'Android + Windows', text: 'Обмен между смартфонами и компьютерами в одной сети.' },
+        { icon: 'shield', title: 'Без облака', text: 'Данные не загружаются на внешние серверы.' },
+      ],
+      mockups: [
+        { src: directory + '1 Сова/Сова 1 мокап.png', width: 1203, height: 2468, alt: 'Сова: главный экран передачи файлов между устройствами' },
+        { src: directory + '1 Сова/Сова 2 мокап.png', width: 1203, height: 2468, alt: 'Сова: история передачи файлов' },
+      ],
+    },
+    {
+      id: 'forum', number: '02', title: 'Форум', theme: 'dark',
+      background: directory + '3 фон для Форум.png',
+      subtitle: 'Мобильный навигатор по форумам и конференциям',
+      paragraphs: ['Приложение собирает программу мероприятия в удобном мобильном формате. Можно быстро находить сессии, участников и организации, смотреть расписание по дням и сохранять интересующие события в персональную программу.'],
+      features: [
+        { icon: 'calendar', title: 'Программа по дням' },
+        { icon: 'search', title: 'Поиск по содержанию' },
+        { icon: 'star', title: 'Своя программа' },
+      ],
+      mockups: [
+        { src: directory + '2 Форум/Форум 1 мокап.png', width: 1203, height: 4415, alt: 'Форум: список мероприятий' },
+        { src: directory + '2 Форум/Форум 2 мокап.png', width: 1203, height: 2725, alt: 'Форум: программа по дням и календарь' },
+        { src: directory + '2 Форум/Форум 3 мокап.png', width: 1203, height: 4050, alt: 'Форум: подробная информация о событии и участниках' },
+      ],
+    },
+    {
+      id: 'shelf', number: '03', title: 'Полка', theme: 'light',
+      background: directory + '4 фон для Полка.png',
+      subtitle: 'Умный список покупок с голосовым вводом',
+      paragraphs: [
+        'Помогает быстро собрать список покупок голосом или вручную. Распознаёт товары и количество, распределяет позиции по категориям и превращает обычный список в удобный сценарий похода в магазин.',
+        'Дополнительно — каталог товаров и готовые рецепты: ингредиенты из рецепта можно перенести в корзину и использовать при планировании покупок.',
+      ],
+      features: [
+        { icon: 'cart', title: 'Умная корзина' },
+        { icon: 'microphone', title: 'Голосовой ввод' },
+        { icon: 'heart', title: 'Рецепты и подборки' },
+      ],
+      mockups: [
+        { src: directory + '3 Полка/Полка 1 мокап.png', width: 1203, height: 4855, alt: 'Полка: ситуации, каталог товаров и рецепты' },
+        { src: directory + '3 Полка/Полка 2 мокап.png', width: 1203, height: 2468, alt: 'Полка: голосовой список покупок' },
+      ],
+    },
+    {
+      id: 'note', number: '04', title: 'Заметка', theme: 'dark',
+      background: directory + '5 фон для Заметка.png',
+      subtitle: 'Голосовой ввод для заметок и напоминаний',
+      paragraphs: ['Быстрый способ сохранить мысль, задачу или напоминание голосом. Приложение распознаёт естественную речь, определяет дату и время и помогает сразу превратить сказанное в структурированную запись.'],
+      features: [
+        { icon: 'microphone', title: 'Голосовой ввод' },
+        { icon: 'document', title: 'Заметки и напоминания' },
+        { icon: 'clock', title: 'Распознавание даты и времени' },
+      ],
+      mockups: [
+        { src: directory + '4 Заметка/Заметка 1 мокап.png', width: 1203, height: 2728, alt: 'Заметка: голосовой ввод и создание записи' },
+        { src: directory + '4 Заметка/Заметка 2 мокап.png', width: 1203, height: 2774, alt: 'Заметка: обзор заметок, напоминаний и входящих записей' },
+      ],
+    },
+  ],
+};
+
+return { mobile };
+},
+"projects/mobile/sections/cover.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+function renderCover(project) {
+  return elementFromHTML(`
+    <section class="mobile-cover dark-section" aria-labelledby="mobile-title">
+      <img class="mobile-project__background" src="${escapeHTML(project.background)}" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
+      <div class="mobile-cover__text">
+        <p class="mobile-cover__number"><span>10</span> / 10</p>
+        <p class="eyebrow">ПРОЕКТ</p>
+        <h2 id="mobile-title">${escapeHTML(project.title)}</h2>
+        <p class="mobile-cover__subtitle">${escapeHTML(project.subtitle)}</p>
+        <p class="mobile-project__copy">${escapeHTML(project.description)}</p>
+      </div>
+    </section>`);
+}
+
+return { renderCover };
+},
+"projects/mobile/sections/app.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const icons = {
+  transfer: '<path d="m13 2-9 12h7l-1 8 10-13h-7z"/>',
+  devices: '<rect x="2" y="3" width="13" height="13" rx="1"/><path d="M5 20h7m-4-4v4"/><rect x="16" y="9" width="6" height="13" rx="1"/>',
+  shield: '<path d="M12 2 3 5v6c0 5 4 8 9 11 5-3 9-6 9-11V5zM8 12l3 3 5-6"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M7 2v4m10-4v4M3 10h18M7 14h2m4 0h2m-8 4h2m4 0h2"/>',
+  search: '<circle cx="10" cy="10" r="8"/><path d="m16 16 6 6"/>',
+  star: '<path d="m12 2 3 6.5 7 1-5 5 1 7-6-3.5L6 21l1-7-5-4.5 7-1z"/>',
+  cart: '<path d="M2 3h3l3 13h11l3-9H6M9 21h.01M18 21h.01"/>',
+  microphone: '<rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/>',
+  heart: '<path d="M12 21 3 12a6 6 0 0 1 9-8 6 6 0 0 1 9 8z"/>',
+  document: '<path d="M5 2h10l4 4v18H5zM15 2v5h4M8 11h8M8 15h8M8 19h6"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+};
+
+function renderApp(app) {
+  return elementFromHTML(`
+    <section class="mobile-app mobile-app--${app.id} mobile-app--${app.theme}" aria-labelledby="mobile-${app.id}-title">
+      <img class="mobile-project__background" src="${escapeHTML(app.background)}" width="1672" height="941" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <div class="mobile-app__text">
+        <p class="mobile-app__number"><span aria-hidden="true"></span>${app.number}</p>
+        <h3 id="mobile-${app.id}-title">${escapeHTML(app.title)}</h3>
+        <p class="mobile-app__subtitle">${escapeHTML(app.subtitle)}</p>
+        <div class="mobile-app__description">${app.paragraphs.map(text => `<p class="mobile-project__copy">${escapeHTML(text)}</p>`).join('')}</div>
+        <ul class="mobile-app__features">${app.features.map(feature => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[feature.icon]}</svg><div><p class="mobile-app__feature-title">${escapeHTML(feature.title)}</p>${feature.text ? `<p class="mobile-app__feature-copy">${escapeHTML(feature.text)}</p>` : ''}</div></li>`).join('')}</ul>
+      </div>
+      <div class="mobile-app__mockups" role="group" aria-label="Экраны приложения ${escapeHTML(app.title)}">${app.mockups.map(screen => `<img class="mobile-app__mockup" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" loading="lazy" decoding="async">`).join('')}</div>
+    </section>`);
+}
+
+return { renderApp };
 },
 "shared/project-separator.js": function(load) {
 const { elementFromHTML } = load("shared/dom.js");

@@ -8,6 +8,7 @@ import { renderNewsletter } from './projects/newsletter/newsletter.js';
 import { renderRegistry } from './projects/registry/registry.js';
 import { renderBranches } from './projects/branches/branches.js';
 import { renderCompass } from './projects/compass/compass.js';
+import { renderMobile } from './projects/mobile/mobile.js';
 import { appendProjects } from './shared/project-separator.js';
 import { mountProjectNavigation } from './shared/project-navigation.js';
 import { mountGallery } from './shared/gallery.js';
@@ -23,6 +24,7 @@ const projects = [
   { number: 7, target: 'project-07', label: 'Реестр ЗАЛов', render: renderRegistry },
   { number: 8, target: 'project-08', label: '8 филиалов', render: renderBranches },
   { number: 9, target: 'project-09', label: 'Рабочий компас', render: renderCompass },
+  { number: 10, target: 'project-10', label: 'Мобильные приложения', render: renderMobile },
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);

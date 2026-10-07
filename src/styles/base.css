@@ -9,6 +9,7 @@
 @import url('../projects/registry/registry.css');
 @import url('../projects/branches/branches.css');
 @import url('../projects/compass/compass.css');
+@import url('../projects/mobile/mobile.css');
 @import url('./interface-section.css');
 @import url('./project-separator.css');
 @import url('./lightbox.css');

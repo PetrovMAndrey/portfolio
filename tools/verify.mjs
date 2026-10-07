@@ -69,10 +69,10 @@ assert.equal(await evaluate('document.querySelectorAll(".grantmaster > section")
 assert.equal(await evaluate('document.querySelectorAll(".svetlo > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".industrial > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation li").length'), 10);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'), 9);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 1);
-assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 8);
-assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06', 'project-separator', 'project-07', 'project-separator', 'project-08', 'project-separator', 'project-09']);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'), 10);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 0);
+assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 9);
+assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06', 'project-separator', 'project-07', 'project-separator', 'project-08', 'project-separator', 'project-09', 'project-separator', 'project-10']);
 assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
 const backgroundURLs = await evaluate('[...document.querySelectorAll("[style]")].map(section => section.style.getPropertyValue("--section-image")).filter(Boolean).map(value => value.slice(5,-2))');
 for (const url of backgroundURLs) {
@@ -80,7 +80,7 @@ for (const url of backgroundURLs) {
 }
 assert.equal(await evaluate('getComputedStyle(document.querySelector(".ark-gallery")).display'), 'grid');
 assert.equal(await evaluate('document.querySelectorAll(".hero-rail__item").length'), 10);
-assert.equal(await evaluate('document.querySelectorAll(".hero-rail__item a").length'), 9);
+assert.equal(await evaluate('document.querySelectorAll(".hero-rail__item a").length'), 10);
 assert.equal(await evaluate('Promise.all([...document.querySelectorAll(".hero img")].map(image => image.decode())).then(() => true)'), true);
 await screenshot('hero');
 await evaluate('document.querySelector(".ark-cover").scrollIntoView({behavior:"instant"})');
@@ -448,7 +448,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
   for (let position=await evaluate('scrollY'); position<=scrollEnd; position+=200) {
     await evaluate(`window.scrollTo({top:${position},behavior:'instant'})`);
     await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
-    const expected = await evaluate('document.querySelector("#project-09").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-09" : document.querySelector("#project-08").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-08" : document.querySelector("#project-07").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-07" : document.querySelector("#project-06").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-06" : document.querySelector("#project-05").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-05" : document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
+    const expected = await evaluate('document.querySelector("#project-10").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-10" : document.querySelector("#project-09").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-09" : document.querySelector("#project-08").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-08" : document.querySelector("#project-07").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-07" : document.querySelector("#project-06").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-06" : document.querySelector("#project-05").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-05" : document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
     assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), expected);
   }
 }
