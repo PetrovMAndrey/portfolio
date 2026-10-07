@@ -3,14 +3,14 @@ import { elementFromHTML, escapeHTML } from './dom.js';
 export function mountProjectNavigation(projects, total = 10) {
   const available = new Map(projects.map(project => [project.number, project]));
   const titles = ['АРК', 'Грантмастер', 'SVETLO', 'Индустриальная история', 'Агент.Метрика', 'Студия рассылок', 'Реестр ЗАЛов', '8 филиалов', 'Рабочий компас', 'Мобильные приложения'];
-  const navigation = elementFromHTML(`<nav class="project-navigation" tabindex="0" aria-label="Навигация по проектам"><ol>${Array.from({ length: total }, (_, index) => {
+  const navigation = elementFromHTML(`<nav class="project-navigation" tabindex="0" aria-label="Навигация по проектам"><ol><li><a class="project-navigation__service" href="#hero">Главная</a></li>${Array.from({ length: total }, (_, index) => {
     const number = index + 1;
     const label = String(number).padStart(2, '0');
     const project = available.get(number);
     const title = escapeHTML(project?.label || titles[index] || `Проект ${label}`);
     const content = `<span class="project-navigation__number">${label}</span><span class="project-navigation__name">${title}</span>`;
     return `<li>${project ? `<a href="#${escapeHTML(project.target)}" aria-label="Проект ${label}: ${title}" ${number === 1 ? 'aria-current="location"' : ''}>${content}</a>` : `<span class="project-navigation__unavailable" aria-disabled="true" aria-label="Проект ${label}: ${title}, пока недоступен">${content}</span>`}</li>`;
-  }).join('')}</ol></nav>`);
+  }).join('')}<li><span class="project-navigation__service project-navigation__service--disabled" aria-disabled="true">Обсудить</span></li></ol></nav>`);
   document.body.append(navigation);
   const onNavigate = event => {
     const link = event.target.closest('a[href^="#"]');
@@ -19,7 +19,10 @@ export function mountProjectNavigation(projects, total = 10) {
     if (!target) return;
     event.preventDefault();
     if (location.hash !== link.hash) history.pushState(history.state, '', link.hash);
-    target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+    // Sticky Hero remains at the viewport edge; Home must return to document start.
+    if (link.hash === '#hero') window.scrollTo({ top: 0, behavior });
+    else target.scrollIntoView({ behavior });
   };
   navigation.addEventListener('click', onNavigate);
   let pointerFocus = false;

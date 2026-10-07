@@ -65,7 +65,7 @@ await command('Page.navigate',{url:pageURL});await delay(500);
 const titles=registry.gallery.map(n=>n.title);
 assert.equal(await evaluate('document.querySelectorAll("#project-07 > section").length'),3);
 assert.equal(await evaluate('document.querySelectorAll("#project-07 a").length'),0);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'),10);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation a:not(.project-navigation__service)").length'),10);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'),0);
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'),9);
 assert.deepEqual(await evaluate('[...document.querySelectorAll(".registry-gallery figcaption")].map(n=>n.textContent)'),titles);

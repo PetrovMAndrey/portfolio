@@ -18,4 +18,13 @@
 .project-navigation a[aria-current] { background: #a64c39; color: #fff; }
 .project-navigation a[aria-current] .project-navigation__name { border-color: transparent; }
 .project-navigation a:hover { background: #924331; color: #fff; }
+.project-navigation .project-navigation__service { display: grid; place-items: center; height: 36px; padding: 0 2px; background: #e9e1d5; color: #754635; font: 500 9.5px/1.2 var(--sans); letter-spacing: .01em; white-space: nowrap; }
+.project-navigation:is(:hover, :focus-within) .project-navigation__service { font-size: 11.5px; }
+.project-navigation .project-navigation__service:hover { background: #924331; color: #fff; }
+.project-navigation .project-navigation__service--disabled, .project-navigation .project-navigation__service--disabled:hover { background: #eee8df; color: #8a7464; cursor: default; }
+[data-gallery] [data-src][data-gallery-open] { position: relative; }
+.gallery-lightbox-indicator { position: absolute; z-index: 2; right: 9px; bottom: 9px; display: grid; place-items: center; width: clamp(32px, 2.5vw, 42px); aspect-ratio: 1; border-radius: 50%; background: #101518a6; opacity: .8; pointer-events: none; transition: opacity .18s ease; }
+.gallery-lightbox-indicator::before { content: ''; width: 56%; aspect-ratio: 1217 / 1168; background: url('../../Вайфреймы в работу/Лупа.svg') center / contain no-repeat; }
+[data-gallery-open]:is(:hover, :focus-visible) .gallery-lightbox-indicator { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .project-navigation { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .gallery-lightbox-indicator { transition: none; } }

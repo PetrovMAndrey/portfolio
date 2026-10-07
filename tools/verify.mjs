@@ -68,8 +68,8 @@ assert.equal(await evaluate('document.querySelectorAll(".ark > section").length'
 assert.equal(await evaluate('document.querySelectorAll(".grantmaster > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".svetlo > section").length'), 5);
 assert.equal(await evaluate('document.querySelectorAll(".industrial > section").length'), 5);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation li").length'), 10);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'), 10);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation li").length'), 12);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation a:not(.project-navigation__service)").length'), 10);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 0);
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 9);
 assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06', 'project-separator', 'project-07', 'project-separator', 'project-08', 'project-separator', 'project-09', 'project-separator', 'project-10']);
@@ -433,7 +433,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
   }
   assert.equal(await evaluate('[...document.querySelectorAll(".industrial img")].every(image => image.complete && image.naturalWidth > 0)'), true);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
-  await evaluate('document.querySelectorAll(".project-navigation a")[3].click()');
+  await evaluate('document.querySelectorAll(".project-navigation a:not(.project-navigation__service)")[3].click()');
   await waitForProject('04');
   assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), '#project-04');
   assert.equal(await evaluate('Math.abs(document.querySelector("#project-04").getBoundingClientRect().top) < 2'), true);

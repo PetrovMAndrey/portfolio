@@ -63,7 +63,7 @@ await mkdir('.preview',{recursive:true});
 await command('Runtime.enable');await command('Page.enable');
 await command('Network.enable');await command('Network.setCacheDisabled',{cacheDisabled:true});
 await command('Page.navigate',{url:pageURL});await delay(600);
-assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'),10);
+assert.equal(await evaluate('document.querySelectorAll(".project-navigation a:not(.project-navigation__service)").length'),10);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'),0);
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'),9);
 assert.equal(await evaluate('document.querySelectorAll("#project-10 [data-gallery],#project-10 [data-gallery-open],#project-10 button,#project-10 a,#project-10 dialog").length'),0);
