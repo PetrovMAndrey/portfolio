@@ -1,6 +1,6 @@
-.mobile-cover { position: relative; isolation: isolate; display: flex; align-items: center; min-height: clamp(450px, 32vw, 620px); padding: 46px var(--section-gutter); }
+.mobile-cover { position: relative; isolation: isolate; display: grid; grid-template-rows: minmax(30.6667px, 1fr) auto minmax(61.3333px, 2fr); min-height: clamp(450px, 32vw, 620px); padding: 0 var(--section-gutter); }
 .mobile-cover::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #08101765, transparent 75%); }
-.mobile-cover__text { width: min(100%, 750px); }
+.mobile-cover__text { grid-row: 2; width: min(100%, 750px); }
 .mobile-cover__number { display: flex; align-items: baseline; gap: 14px; font-size: 19px; margin-bottom: 18px; }
 .mobile-cover__number span { font-size: 38px; color: var(--orange); }
 .mobile-cover .eyebrow { margin-bottom: 18px; }

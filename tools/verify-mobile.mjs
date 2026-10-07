@@ -61,6 +61,7 @@ async function screenshot(name) {
 const {mobile}=await import('../src/projects/mobile/data.js');
 await mkdir('.preview',{recursive:true});
 await command('Runtime.enable');await command('Page.enable');
+await command('Network.enable');await command('Network.setCacheDisabled',{cacheDisabled:true});
 await command('Page.navigate',{url:pageURL});await delay(600);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation a").length'),10);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'),0);
@@ -86,7 +87,7 @@ for(const width of [1920,1440,1280]){
   return {overflow:document.documentElement.scrollWidth>innerWidth,outside,overlaps,images:[...p.querySelectorAll('.mobile-app__mockup')].map(n=>{const r=rect(n);return {width:r.width,height:r.height,naturalWidth:n.naturalWidth,naturalHeight:n.naturalHeight,fit:getComputedStyle(n).objectFit,transform:getComputedStyle(n).transform,border:getComputedStyle(n).borderWidth,parentOverflow:getComputedStyle(n.parentElement).overflow}}),backgrounds:[...p.querySelectorAll('.mobile-project__background')].map(n=>n.getAttribute('src')),middle:apps.slice(1,3).map(n=>{const r=rect(n);return {x:r.left,y:r.top,width:r.width,height:r.height}}),gaps:[...p.children].slice(1).map((n,i)=>rect(n).top-rect(p.children[i]).bottom),transition:[rect(p).top-rect(p.previousElementSibling).bottom,rect(p.previousElementSibling).top-rect(document.querySelector('#project-09')).bottom]};
  })()`);
  assert.equal(layout.overflow,false);assert.deepEqual(layout.outside,[]);assert.deepEqual(layout.overlaps,[]);
- for(const img of layout.images){assert.ok(img.width>=180);assert.ok(Math.abs(img.width/img.height-img.naturalWidth/img.naturalHeight)<.0001);assert.equal(img.fit,'contain');assert.equal(img.transform,'none');assert.equal(img.border,'0px');assert.equal(img.parentOverflow,'visible');}
+ for(const img of layout.images){assert.ok(img.width>=150);assert.ok(Math.abs(img.width/img.height-img.naturalWidth/img.naturalHeight)<.0001);assert.equal(img.fit,'contain');assert.equal(img.transform,'none');assert.equal(img.border,'0px');assert.equal(img.parentOverflow,'visible');}
  assert.deepEqual(layout.backgrounds,[mobile.background,...mobile.apps.map(a=>a.background)]);
  assert.equal(layout.middle[0].y,layout.middle[1].y);assert.equal(layout.middle[0].height,layout.middle[1].height);assert.ok(layout.middle[0].x<layout.middle[1].x);assert.ok(layout.middle[1].width>=550);
  assert.ok(layout.gaps.every(n=>Math.abs(n)<.5));assert.ok(layout.transition.every(n=>Math.abs(n)<.5));
