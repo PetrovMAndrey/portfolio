@@ -136,7 +136,7 @@ await evaluate('document.querySelector("dialog[open] [data-action=close]").click
 await delay(50);
 assert.equal(await evaluate('document.body.style.overflow'), '');
 assert.equal(await evaluate('getComputedStyle(document.querySelector(".project-navigation")).position'), 'fixed');
-await evaluate('document.querySelector(".project-navigation a").click()');
+await evaluate('document.querySelector(".project-navigation a[href=\\"#project-01\\"]").click()');
 await waitForProject('01');
 assert.equal(await evaluate('location.hash'), '#project-01');
 assert.equal(await evaluate('Math.abs(document.querySelector("#project-01").getBoundingClientRect().top) < 2'), true);
@@ -314,7 +314,7 @@ for (const width of [1920, 1440, 1280, 1024]) {
     const main = document.querySelector('main').getBoundingClientRect();
     const hero = document.querySelector('.hero').getBoundingClientRect();
     const text = document.querySelector('.hero__footer p').getBoundingClientRect();
-    const sections = [...document.querySelectorAll('.hero, .ark > section, .project-separator, .grantmaster > section, .svetlo > section, .industrial > section, .metrika > section, .newsletter__sections > section, .registry > section, .branches > section')].map(section => section.getBoundingClientRect());
+    const sections = [...document.querySelectorAll('.hero, .ark > section, .project-separator, .grantmaster > section, .svetlo > section, .industrial > section, .metrika > section, .newsletter__sections > section, .registry > section, .branches > section, .compass > section, .mobile-project > section, .mobile-project__middle, #discuss')].map(section => section.getBoundingClientRect());
     const arrows = [...document.querySelectorAll('.gallery__controls button')].map(button => button.getBoundingClientRect());
     return {width:main.width, gaps:sections.slice(1).map((section,index) => section.top-sections[index].bottom), hero:{width:hero.width,height:hero.height,top:hero.top},text:{left:text.left,right:text.right,bottom:text.bottom},arrows:arrows.map(arrow => arrow.top+arrow.height/2),navigationWidth:document.querySelector('.project-navigation').getBoundingClientRect().width};
   })()`);
@@ -449,7 +449,8 @@ for (const width of [1920, 1440, 1280, 1024]) {
     await evaluate(`window.scrollTo({top:${position},behavior:'instant'})`);
     await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
     const expected = await evaluate('document.querySelector("#project-10").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-10" : document.querySelector("#project-09").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-09" : document.querySelector("#project-08").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-08" : document.querySelector("#project-07").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-07" : document.querySelector("#project-06").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-06" : document.querySelector("#project-05").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-05" : document.querySelector("#project-04").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-04" : document.querySelector("#project-03").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-03" : document.querySelector("#project-02").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) ? "#project-02" : "#project-01"');
-    assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), expected);
+    const atDiscuss = await evaluate('document.querySelector("#discuss").getBoundingClientRect().top <= Math.min(160,innerHeight*.15) || document.documentElement.scrollHeight-innerHeight-scrollY < 2');
+    assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'), atDiscuss ? '#discuss' : expected);
   }
 }
 assert.deepEqual(errors, []);
