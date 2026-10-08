@@ -21,9 +21,8 @@
 .discuss__contact:is(:hover, :focus-visible)::before { opacity: 1; filter: brightness(1.25); }
 .discuss__contact:is(:hover, :focus-visible)::after { opacity: 1; filter: brightness(1.3); }
 .discuss__contact:is(:hover, :focus-visible) svg { color: #ffc775; filter: drop-shadow(0 0 5px #f2b25a55); }
-.discuss__decoration { position: absolute; top: 27%; left: 54%; right: 6%; font: 400 clamp(100px, 9vw, 173px)/.8 var(--serif); letter-spacing: -.05em; background: linear-gradient(125deg, #a79982 5%, #b89c74 36%, #f1c980 58%, #c79353 82%, #dec298); background-clip: text; -webkit-background-clip: text; color: transparent; pointer-events: none; }
-.discuss__decoration span { display: block; }
-.discuss__decoration span:last-child { font-size: .84em; margin-top: 8px; letter-spacing: -.055em; }
+.discuss__decoration { position: absolute; top: 27%; left: 54%; right: 6%; font: 400 clamp(84px, 7.56vw, 145.32px)/.93 var(--serif); letter-spacing: -.05em; padding-bottom: .18em; overflow: visible; pointer-events: none; }
+.discuss__decoration span { display: block; font: inherit; letter-spacing: inherit; padding-bottom: .18em; margin-bottom: -.18em; overflow: visible; background: linear-gradient(90deg, #9d8974 0%, #b7986f 25%, #e8b963 52%, #ffe1a0 78%, #ffd27b 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
 @media (max-width: 1350px) { .discuss__content { width: 49%; } .discuss__subtitle { font-size: 28px; } .discuss__body { gap: 20px; } .discuss__contacts { gap: 18px; } }
 @media (max-width: 900px) { .discuss { min-height: 1000px; padding-block: 48px 300px; } .discuss__content { width: min(100%, 620px); } .discuss__decoration { top: auto; bottom: 65px; left: 7%; right: auto; font-size: 70px; } .discuss__background { object-position: 68% center; } }
 @media (prefers-reduced-motion: reduce) { .discuss__contact, .discuss__contact::before, .discuss__contact::after, .discuss__contact svg { transition: none; } .discuss__contact:is(:hover, :focus-visible) { transform: none; } }
