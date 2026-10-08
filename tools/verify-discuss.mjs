@@ -69,6 +69,7 @@ const copy=await evaluate('document.querySelector("#discuss").textContent');
 for(const text of [discuss.name,discuss.subtitle,...discuss.paragraphs,'Есть задача или идея?','Давайте обсудим.'])assert.ok(copy.includes(text),text);
 assert.deepEqual(await evaluate('Array.from(document.querySelectorAll(".discuss__contact"),n=>n.getAttribute("href"))'),[discuss.telegram,discuss.email]);
 assert.equal(await evaluate('document.querySelector(".discuss__background").getAttribute("src")'),discuss.background);
+assert.deepEqual(await evaluate('Array.from(document.querySelectorAll(".discuss__contact-detail"),n=>n.textContent)'),[discuss.telegramUsername,discuss.emailAddress]);
 for(const width of [1920,1440,1280]) {
  await command('Emulation.setDeviceMetricsOverride',{width,height:1080,deviceScaleFactor:1,mobile:false});
  await evaluate('document.querySelector("#discuss").scrollIntoView({behavior:"instant"})');
@@ -84,6 +85,8 @@ for(const width of [1920,1440,1280]) {
  assert.equal(layout.overflow,false);assert.deepEqual(layout.outside,[]);assert.equal(layout.personVisible,true);assert.equal(layout.personClear,true);
  assert.equal(layout.backgroundFit,'cover');assert.equal(layout.active,'#discuss');assert.equal(layout.previous,'project-10');assert.equal(layout.gap,0);
  assert.ok(Math.abs(layout.buttonWidths[0]-layout.buttonWidths[1])<.1);assert.equal(layout.decorOverflow,false);
+ const details=await evaluate(`Array.from(document.querySelectorAll('.discuss__contact-item'),n=>{const a=n.querySelector('a'),p=n.querySelector('.discuss__contact-detail'),r=p.getBoundingClientRect(),b=a.getBoundingClientRect(),s=getComputedStyle(p);const range=document.createRange();range.selectNodeContents(p);getSelection().removeAllRanges();getSelection().addRange(range);const selected=getSelection().toString();getSelection().removeAllRanges();return {center:r.left+r.width/2-b.left-b.width/2,below:r.top>=b.bottom+9,font:parseFloat(s.fontSize),buttonFont:parseFloat(getComputedStyle(a).fontSize),align:s.textAlign,selectable:s.userSelect,selected,text:p.textContent,overflow:p.scrollWidth>p.clientWidth};})`);
+ for(const detail of details){assert.ok(Math.abs(detail.center)<.1);assert.equal(detail.below,true);assert.ok(detail.font<detail.buttonFont*.8);assert.equal(detail.align,'center');assert.equal(detail.selectable,'text');assert.equal(detail.selected,detail.text);assert.equal(detail.overflow,false);}
  await screenshot(`discuss-${width}`);
  const button=await evaluate('document.querySelector(".discuss__contact").getBoundingClientRect().toJSON()');
  await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:button.left+button.width/2,y:button.top+button.height/2});await delay(260);
