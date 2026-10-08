@@ -38,4 +38,10 @@
 .hero__footer { text-align: center; color: #565b62; }
 .hero__footer .hero__rule { background: var(--hero-accent); width: calc(67 * var(--hero-unit)); margin: calc(34 * var(--hero-unit)) auto calc(27 * var(--hero-unit)); }
 .hero__footer p { font: 400 calc(26 * var(--hero-unit))/1.4 var(--sans); }
+.hero__cta { display: inline-flex; align-items: center; justify-content: center; gap: 18px; min-height: max(34px, calc(42 * var(--hero-unit))); margin-top: calc(8 * var(--hero-unit)); padding: 0 22px; border: 1px solid var(--hero-accent); border-radius: 100px; background: transparent; color: #34383d; font: 500 max(13px, calc(15 * var(--hero-unit)))/1.3 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s ease, border-color .2s ease; }
+.hero__cta span { display: inline-block; transition: transform .2s ease; }
+.hero__cta:hover { background: #e344190d; border-color: #b8472b; }
+.hero__cta:hover span { transform: translateX(3px); }
+.hero__cta:focus-visible { outline: 2px solid var(--hero-accent); outline-offset: -3px; }
 @media (prefers-reduced-motion: reduce) { .hero-card { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .hero__cta, .hero__cta span { transition: none; } .hero__cta:hover span { transform: none; } }

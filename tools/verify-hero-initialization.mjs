@@ -46,17 +46,28 @@ try {
       await command('Page.bringToFront');
       await command('Page.addScriptToEvaluateOnNewDocument', { source: `
         window.heroInitialFrames = [];
+        window.heroImagePaints = [];
+        new PerformanceObserver(list => {
+          heroImagePaints.push(...list.getEntries().map(entry => ({ id: entry.identifier, time: entry.renderTime })));
+        }).observe({ type: 'element', buffered: true });
+        // Test-only attributes let Chrome report actual image presentation,
+        // rather than treating a pre-paint rAF callback as a screenshot.
+        new MutationObserver(() => {
+          document.querySelectorAll('.hero-card img').forEach((image, index) => {
+            image.setAttribute('elementtiming', 'hero-image-' + index);
+          });
+        }).observe(document, { childList: true, subtree: true });
         function sample() {
           const rail = document.querySelector('.hero-rail__viewport');
           if (rail) {
             const list = rail.querySelector('.hero-rail__cards:not([aria-hidden])');
             const cycle = parseFloat(getComputedStyle(list).width) + parseFloat(getComputedStyle(rail).gap);
             const expected = cycle - parseFloat(getComputedStyle(list.firstElementChild).width) * (234 / 386);
-            heroInitialFrames.push({ position: rail.scrollLeft, expected,
+            heroInitialFrames.push({ time: performance.now(), position: rail.scrollLeft, expected,
               overflow: document.documentElement.scrollWidth > innerWidth,
               images: [...rail.querySelectorAll('img')].filter(image => {
                 const rect = image.getBoundingClientRect(); return rect.right > 0 && rect.left < innerWidth;
-              }).map(image => ({ complete: image.complete, naturalWidth: image.naturalWidth,
+              }).map(image => ({ id: image.getAttribute('elementtiming'), complete: image.complete, naturalWidth: image.naturalWidth,
                 decoding: image.decoding, left: image.getBoundingClientRect().left,
                 number: image.nextElementSibling.textContent })) });
             if (heroInitialFrames.length === 12) return;
@@ -77,11 +88,18 @@ try {
           await delay(30);
         }
         assert.equal(frames.length, 12);
+        // The text may paint while requests are still loading. Assert that
+        // every initially visible card image is actually presented together,
+        // without decoding, scrolling or other user interaction by this test.
+        const paints = await evaluate('window.heroImagePaints');
+        const visiblePaints = frames[0].images.map(image => paints.find(paint => paint.id === image.id));
+        assert.ok(visiblePaints.every(paint => paint?.time > 0), 'Every visible image must actually paint without interaction');
+        assert.ok(Math.max(...visiblePaints.map(paint => paint.time)) - Math.min(...visiblePaints.map(paint => paint.time)) <= 8, 'Visible card images must appear in the same presentation frame');
+        assert.ok(frames.at(-1).images.every(image => image.complete && image.naturalWidth === 1672), 'Every visible original finishes loading without interaction');
         for (const frame of frames) {
           assert.ok(Math.abs(frame.position - frame.expected) <= 1, 'Initial cycle position');
           assert.equal(frame.overflow, false);
           assert.ok(frame.images.length >= 4);
-          assert.ok(frame.images.every(image => image.complete && image.naturalWidth === 1672), 'Every visible image ready on first render');
           assert.deepEqual(frame.images.map(image => [image.number, image.left]), frames[0].images.map(image => [image.number, image.left]));
         }
         const screenshot = await command('Page.captureScreenshot', { format: 'png' });

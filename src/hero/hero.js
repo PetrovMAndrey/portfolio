@@ -35,7 +35,7 @@ export function renderHero() {
       <div class="hero-rail"><div class="hero-rail__viewport" tabindex="0" role="region" aria-label="Лента проектов: прокрутка колёсиком, перетаскиванием или стрелками">
         ${cardList(true)}${cardList()}${cardList(true)}
       </div></div>
-      <footer class="hero__footer"><span class="hero__rule" aria-hidden="true"></span><p>От анализа к работающим решениям<br>в культуре, образовании и общественных проектах.</p></footer>
+      <footer class="hero__footer"><span class="hero__rule" aria-hidden="true"></span><p>От анализа к работающим решениям<br>в культуре, образовании и общественных проектах.</p><a class="hero__cta" href="#discuss">Обсудить проект <span aria-hidden="true">→</span></a></footer>
     </div></section>`);
 }
 export function mountHero(hero) {
@@ -43,6 +43,14 @@ export function mountHero(hero) {
   const first = hero.querySelector('.hero-rail__item');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const behavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+  function navigateToSection(event, link) {
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const target = document.getElementById(link.hash.slice(1)); if (!target) return;
+    event.preventDefault();
+    if (location.hash !== link.hash) history.pushState(history.state, '', link.hash);
+    target.scrollIntoView({ behavior: behavior() });
+  }
+  hero.querySelector('.hero__cta').addEventListener('click', event => navigateToSection(event, event.currentTarget));
   const list = hero.querySelector('.hero-rail__cards:not([aria-hidden])');
   const visualCards = [...rail.querySelectorAll('.hero-card')];
   visualCards.forEach((card, index) => card.dataset.heroProject = index % cards.length);
@@ -124,12 +132,7 @@ export function mountHero(hero) {
   rail.addEventListener('lostpointercapture', () => { if (drag) endDrag(); });
   rail.addEventListener('click', event => {
     if (suppressClick) { event.preventDefault(); suppressClick = false; return; }
-    const link = event.target.closest('a[href^="#project-"]');
-    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const target = document.getElementById(link.hash.slice(1)); if (!target) return;
-    event.preventDefault();
-    if (location.hash !== link.hash) history.pushState(history.state, '', link.hash);
-    target.scrollIntoView({ behavior: behavior() });
+    navigateToSection(event, event.target.closest('a[href^="#project-"]'));
   });
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', resize);

@@ -166,7 +166,22 @@ for(const width of [1920,1440,1280]) {
     await waitForProject(number);
     assert.equal(await evaluate('document.querySelector(".project-navigation a[aria-current]").hash'),'#project-'+number);
   }
-  console.log('PASS Hero: assets/order, masks, hover, wheel, drag, keyboard, smooth clicks, overlap',width);
+  await evaluate('scrollTo({top:0,behavior:"instant"})'); await delay(100);
+  const cta = await evaluate(`(() => {const a=document.querySelector('.hero__cta'),r=a.getBoundingClientRect(),p=document.querySelector('.hero__footer p').getBoundingClientRect(),h=document.querySelector('.hero').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2,center:h.left+h.width/2,top:r.top,bottom:r.bottom,textBottom:p.bottom,heroBottom:h.bottom,height:r.height,width:r.width,href:a.hash,border:getComputedStyle(a).borderTopWidth,background:getComputedStyle(a).backgroundColor};})()`);
+  assert.ok(Math.abs(cta.x-cta.center)<1); assert.ok(cta.top>cta.textBottom);
+  assert.ok(cta.bottom<cta.heroBottom); assert.ok(cta.height>=34 && cta.height<50);
+  assert.equal(cta.href,'#discuss'); assert.equal(cta.border,'1px'); assert.equal(cta.background,'rgba(0, 0, 0, 0)');
+  await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:cta.x,y:cta.y}); await delay(250);
+  assert.equal(await evaluate('new DOMMatrix(getComputedStyle(document.querySelector(".hero__cta span")).transform).m41'),3);
+  await screenshot('hero-cta-'+width);
+  await command('Input.dispatchMouseEvent',{type:'mousePressed',x:cta.x,y:cta.y,button:'left',clickCount:1});
+  await command('Input.dispatchMouseEvent',{type:'mouseReleased',x:cta.x,y:cta.y,button:'left',clickCount:1});
+  await delay(80);
+  assert.ok(await evaluate('scrollY>0 && scrollY<document.querySelector("#discuss").offsetTop-10'),'CTA navigation should be smooth');
+  for(let i=0;i<100;i++){if(await evaluate('document.documentElement.scrollHeight-innerHeight-scrollY<2'))break;await delay(50);}
+  assert.equal(await evaluate('location.hash'),'#discuss');
+  assert.equal(await evaluate('document.querySelector(".project-navigation [aria-current]").hash'),'#discuss');
+  console.log('PASS Hero: assets/order, masks, hover, wheel, drag, keyboard, smooth clicks, overlap and centered Discuss CTA',width);
 }
 assert.deepEqual(errors,[]);
 socket.close();
