@@ -72,7 +72,7 @@ assert.equal(await evaluate('document.querySelectorAll(".project-navigation li")
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation a:not(.project-navigation__service)").length'), 10);
 assert.equal(await evaluate('document.querySelectorAll(".project-navigation__unavailable").length'), 0);
 assert.equal(await evaluate('document.querySelectorAll(".project-separator").length'), 9);
-assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06', 'project-separator', 'project-07', 'project-separator', 'project-08', 'project-separator', 'project-09', 'project-separator', 'project-10']);
+assert.deepEqual(await evaluate('[...document.querySelector("#landing").children].map(node => node.id || node.className)'), ['hero', 'project-01', 'project-separator', 'project-02', 'project-separator', 'project-03', 'project-separator', 'project-04', 'project-separator', 'project-05', 'project-separator', 'project-06', 'project-separator', 'project-07', 'project-separator', 'project-08', 'project-separator', 'project-09', 'project-separator', 'project-10', 'discuss']);
 assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
 const backgroundURLs = await evaluate('[...document.querySelectorAll("[style]")].map(section => section.style.getPropertyValue("--section-image")).filter(Boolean).map(value => value.slice(5,-2))');
 for (const url of backgroundURLs) {

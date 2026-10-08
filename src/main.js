@@ -9,6 +9,7 @@ import { renderRegistry } from './projects/registry/registry.js';
 import { renderBranches } from './projects/branches/branches.js';
 import { renderCompass } from './projects/compass/compass.js';
 import { renderMobile } from './projects/mobile/mobile.js';
+import { renderDiscuss } from './discuss/discuss.js';
 import { appendProjects } from './shared/project-separator.js';
 import { mountProjectNavigation } from './shared/project-navigation.js';
 import { mountGallery } from './shared/gallery.js';
@@ -28,6 +29,7 @@ const projects = [
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
+landing.append(renderDiscuss());
 // Register only implemented projects. Future projects supply their own section IDs.
 mountProjectNavigation(projects);
 document.querySelectorAll('[data-gallery]').forEach(mountGallery);

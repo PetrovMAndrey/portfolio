@@ -14,6 +14,7 @@ const { renderRegistry } = load("projects/registry/registry.js");
 const { renderBranches } = load("projects/branches/branches.js");
 const { renderCompass } = load("projects/compass/compass.js");
 const { renderMobile } = load("projects/mobile/mobile.js");
+const { renderDiscuss } = load("discuss/discuss.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
@@ -32,6 +33,7 @@ const projects = [
 ];
 landing.append(renderHero());
 appendProjects(landing, projects);
+landing.append(renderDiscuss());
 // Register only implemented projects. Future projects supply their own section IDs.
 mountProjectNavigation(projects);
 document.querySelectorAll('[data-gallery]').forEach(mountGallery);
@@ -1388,6 +1390,46 @@ function renderApp(app) {
 
 return { renderApp };
 },
+"discuss/discuss.js": function(load) {
+const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const { discuss } = load("discuss/data.js");
+function renderDiscuss() {
+  return elementFromHTML(`
+    <section class="discuss" id="discuss" aria-labelledby="discuss-title">
+      <img class="discuss__background" src="${escapeHTML(discuss.background)}" width="1672" height="941" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <div class="discuss__content">
+        <p class="discuss__label eyebrow"><span aria-hidden="true"></span>ОБСУДИТЬ</p>
+        <h2 id="discuss-title">${escapeHTML(discuss.name)}</h2>
+        <p class="discuss__subtitle">${escapeHTML(discuss.subtitle)}</p>
+        <div class="discuss__body">${discuss.paragraphs.map(text => `<p>${escapeHTML(text)}</p>`).join('')}</div>
+        <p class="discuss__invitation">Есть задача или идея?<span>Давайте обсудим.</span></p>
+        <div class="discuss__contacts" aria-label="Связаться с Андреем Петровым">
+          <a class="discuss__contact" href="${escapeHTML(discuss.telegram)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 3-4 18-6-5-3 3 1-6L22 3 2 11l8 2m2 3 10-13"/></svg><span>Telegram</span><span class="discuss__arrow" aria-hidden="true">↗</span></a>
+          <a class="discuss__contact" href="${escapeHTML(discuss.email)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m3 6 9 7 9-7"/></svg><span>E-mail</span><span class="discuss__arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <p class="discuss__decoration" aria-hidden="true"><span>Есть</span><span>что</span><span>обсудить?</span></p>
+    </section>`);
+}
+
+return { renderDiscuss };
+},
+"discuss/data.js": function(load) {
+const discuss = {
+  background: 'Вайфреймы в работу/Фон для Обсудить_Инопланетный рассвет над ледяной равниной_1.png',
+  name: 'Андрей Петров',
+  subtitle: 'От идеи — к работающему решению',
+  paragraphs: [
+    'Занимаюсь проектами на стыке анализа, цифровых продуктов и практической реализации. Разбираюсь в задаче, выстраиваю логику, проектирую решение и довожу идею до формы, которую можно показать, проверить и использовать.',
+    'Мне интересны задачи, где недостаточно просто выполнить техническое задание — нужно понять, что именно стоит сделать, зачем и как это должно работать.',
+    'Открыт к проектам, сотрудничеству и предложениям о работе в направлениях развития, цифровых продуктов и проектного управления.',
+  ],
+  telegram: 'https://t.me/Andrey_M_Petrov',
+  email: 'mailto:petrov_nlr@mail.ru',
+};
+
+return { discuss };
+},
 "shared/project-separator.js": function(load) {
 const { elementFromHTML } = load("shared/dom.js");
 function renderProjectSeparator() {
@@ -1416,7 +1458,7 @@ function mountProjectNavigation(projects, total = 10) {
     const title = escapeHTML(project?.label || titles[index] || `Проект ${label}`);
     const content = `<span class="project-navigation__number">${label}</span><span class="project-navigation__name">${title}</span>`;
     return `<li>${project ? `<a href="#${escapeHTML(project.target)}" aria-label="Проект ${label}: ${title}" ${number === 1 ? 'aria-current="location"' : ''}>${content}</a>` : `<span class="project-navigation__unavailable" aria-disabled="true" aria-label="Проект ${label}: ${title}, пока недоступен">${content}</span>`}</li>`;
-  }).join('')}<li><span class="project-navigation__service project-navigation__service--disabled" aria-disabled="true">Обсудить</span></li></ol></nav>`);
+  }).join('')}<li><a class="project-navigation__service" href="#discuss">Обсудить</a></li></ol></nav>`);
   document.body.append(navigation);
   const onNavigate = event => {
     const link = event.target.closest('a[href^="#"]');
@@ -1447,7 +1489,7 @@ function mountProjectNavigation(projects, total = 10) {
     pointerFocus = false;
     if (event.key === 'Escape') document.activeElement.blur();
   });
-  const sections = projects.map(project => document.getElementById(project.target)).filter(Boolean);
+  const sections = [document.getElementById('hero'), ...projects.map(project => document.getElementById(project.target)), document.getElementById('discuss')].filter(Boolean);
   let frame = 0;
   function updateActiveProject() {
     frame = 0;
@@ -1455,7 +1497,7 @@ function mountProjectNavigation(projects, total = 10) {
     let active = sections[0];
     const readingLine = Math.min(160, window.innerHeight * .15);
     for (const section of sections) {
-      if (section.getBoundingClientRect().top <= readingLine) active = section;
+      if (section.getBoundingClientRect().top <= readingLine || (section.id === 'discuss' && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2)) active = section;
     }
     navigation.querySelectorAll('a').forEach(link => {
       if (active && link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');

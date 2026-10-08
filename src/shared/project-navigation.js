@@ -10,7 +10,7 @@ export function mountProjectNavigation(projects, total = 10) {
     const title = escapeHTML(project?.label || titles[index] || `Проект ${label}`);
     const content = `<span class="project-navigation__number">${label}</span><span class="project-navigation__name">${title}</span>`;
     return `<li>${project ? `<a href="#${escapeHTML(project.target)}" aria-label="Проект ${label}: ${title}" ${number === 1 ? 'aria-current="location"' : ''}>${content}</a>` : `<span class="project-navigation__unavailable" aria-disabled="true" aria-label="Проект ${label}: ${title}, пока недоступен">${content}</span>`}</li>`;
-  }).join('')}<li><span class="project-navigation__service project-navigation__service--disabled" aria-disabled="true">Обсудить</span></li></ol></nav>`);
+  }).join('')}<li><a class="project-navigation__service" href="#discuss">Обсудить</a></li></ol></nav>`);
   document.body.append(navigation);
   const onNavigate = event => {
     const link = event.target.closest('a[href^="#"]');
@@ -41,7 +41,7 @@ export function mountProjectNavigation(projects, total = 10) {
     pointerFocus = false;
     if (event.key === 'Escape') document.activeElement.blur();
   });
-  const sections = projects.map(project => document.getElementById(project.target)).filter(Boolean);
+  const sections = [document.getElementById('hero'), ...projects.map(project => document.getElementById(project.target)), document.getElementById('discuss')].filter(Boolean);
   let frame = 0;
   function updateActiveProject() {
     frame = 0;
@@ -49,7 +49,7 @@ export function mountProjectNavigation(projects, total = 10) {
     let active = sections[0];
     const readingLine = Math.min(160, window.innerHeight * .15);
     for (const section of sections) {
-      if (section.getBoundingClientRect().top <= readingLine) active = section;
+      if (section.getBoundingClientRect().top <= readingLine || (section.id === 'discuss' && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2)) active = section;
     }
     navigation.querySelectorAll('a').forEach(link => {
       if (active && link.hash === `#${active.id}`) link.setAttribute('aria-current', 'location');
