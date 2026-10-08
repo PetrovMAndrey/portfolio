@@ -174,10 +174,13 @@ for(const width of [1920,1440,1280]) {
   assert.ok(directions.rects[0].right < directions.rects[1].left);
   assert.ok(directions.rects[1].right < directions.rects[2].left);
   assert.ok(cta.bottom<cta.heroBottom); assert.ok(cta.height>=34 && cta.height<50);
-  assert.equal(cta.href,'#discuss'); assert.equal(cta.border,'1px'); assert.equal(cta.background,'rgba(0, 0, 0, 0)');
+  assert.equal(cta.href,'#discuss'); assert.equal(cta.border,'2px'); assert.equal(cta.background,'rgba(227, 68, 25, 0.04)'); assert.equal(await evaluate('getComputedStyle(document.querySelector(".hero__cta")).color'),'rgb(183, 39, 0)');
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:cta.x,y:cta.y}); await delay(250);
   assert.equal(await evaluate('new DOMMatrix(getComputedStyle(document.querySelector(".hero__cta span")).transform).m41'),3);
-  await screenshot('hero-cta-'+width);
+  assert.equal(await evaluate('getComputedStyle(document.querySelector(".hero__cta")).backgroundColor'),'rgb(227, 68, 25)');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hero__cta")).color'),'rgb(255, 255, 255)');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hero__cta span")).color'),'rgb(255, 255, 255)');
+    await screenshot('hero-cta-'+width);
   await command('Input.dispatchMouseEvent',{type:'mousePressed',x:cta.x,y:cta.y,button:'left',clickCount:1});
   await command('Input.dispatchMouseEvent',{type:'mouseReleased',x:cta.x,y:cta.y,button:'left',clickCount:1});
   await delay(80);
