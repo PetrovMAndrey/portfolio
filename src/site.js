@@ -73,12 +73,16 @@ function renderHero() {
     <section class="hero" id="hero" aria-labelledby="hero-title"><div class="hero__scene">
       <header class="hero__heading"><p class="hero__name">АНДРЕЙ ПЕТРОВ</p><span class="hero__rule" aria-hidden="true"></span>
         <h1 id="hero-title"><span>Логика</span><span>и практика</span></h1>
-        <ul class="hero__disciplines" aria-label="Направления работы"><li>АНАЛИЗ</li><li>КОНЦЕПЦИЯ</li><li>КУЛЬТУРА</li><li>ПРОЕКТЫ</li><li>РАЗВИТИЕ</li></ul>
+        <div class="hero__directions">
+          <ul class="hero__disciplines" aria-label="Направления работы"><li>АНАЛИЗ</li><li>КОНЦЕПЦИИ</li><li>DIGITAL</li></ul>
+          <a class="hero__cta" href="#discuss">Обсудить проект <span aria-hidden="true">→</span></a>
+          <ul class="hero__disciplines" aria-label="Направления работы"><li>КУЛЬТУРА</li><li>ПРОЕКТЫ</li><li>РАЗВИТИЕ</li></ul>
+        </div>
       </header>
       <div class="hero-rail"><div class="hero-rail__viewport" tabindex="0" role="region" aria-label="Лента проектов: прокрутка колёсиком, перетаскиванием или стрелками">
         ${cardList(true)}${cardList()}${cardList(true)}
       </div></div>
-      <footer class="hero__footer"><span class="hero__rule" aria-hidden="true"></span><p>От анализа к работающим решениям<br>в культуре, образовании и общественных проектах.</p><a class="hero__cta" href="#discuss">Обсудить проект <span aria-hidden="true">→</span></a></footer>
+      <footer class="hero__footer"><span class="hero__rule" aria-hidden="true"></span><p>От анализа к работающим решениям<br>в культуре, образовании и общественных проектах.</p></footer>
     </div></section>`);
 }
 function mountHero(hero) {

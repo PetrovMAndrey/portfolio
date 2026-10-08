@@ -168,7 +168,11 @@ for(const width of [1920,1440,1280]) {
   }
   await evaluate('scrollTo({top:0,behavior:"instant"})'); await delay(100);
   const cta = await evaluate(`(() => {const a=document.querySelector('.hero__cta'),r=a.getBoundingClientRect(),p=document.querySelector('.hero__footer p').getBoundingClientRect(),h=document.querySelector('.hero').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2,center:h.left+h.width/2,top:r.top,bottom:r.bottom,textBottom:p.bottom,heroBottom:h.bottom,height:r.height,width:r.width,href:a.hash,border:getComputedStyle(a).borderTopWidth,background:getComputedStyle(a).backgroundColor};})()`);
-  assert.ok(Math.abs(cta.x-cta.center)<1); assert.ok(cta.top>cta.textBottom);
+  assert.ok(Math.abs(cta.x-cta.center)<1); assert.ok(cta.bottom<cta.textBottom); assert.equal(await evaluate('document.querySelectorAll(".hero__footer .hero__cta").length'),0);
+  const directions = await evaluate(`(() => {const row=document.querySelector('.hero__directions');return {words:[...row.querySelectorAll('li')].map(li=>li.textContent),rects:[...row.children].map(child=>child.getBoundingClientRect().toJSON())};})()`);
+  assert.deepEqual(directions.words,['АНАЛИЗ','КОНЦЕПЦИИ','DIGITAL','КУЛЬТУРА','ПРОЕКТЫ','РАЗВИТИЕ']);
+  assert.ok(directions.rects[0].right < directions.rects[1].left);
+  assert.ok(directions.rects[1].right < directions.rects[2].left);
   assert.ok(cta.bottom<cta.heroBottom); assert.ok(cta.height>=34 && cta.height<50);
   assert.equal(cta.href,'#discuss'); assert.equal(cta.border,'1px'); assert.equal(cta.background,'rgba(0, 0, 0, 0)');
   await command('Input.dispatchMouseEvent',{type:'mouseMoved',x:cta.x,y:cta.y}); await delay(250);
