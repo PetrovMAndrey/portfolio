@@ -13,6 +13,7 @@ import { renderDiscuss } from './discuss/discuss.js';
 import { appendProjects } from './shared/project-separator.js';
 import { mountProjectNavigation } from './shared/project-navigation.js';
 import { mountGallery } from './shared/gallery.js';
+import { mountImageLoading } from './shared/images.js';
 
 const landing = document.querySelector('#landing');
 const projects = [
@@ -33,4 +34,5 @@ landing.append(renderDiscuss());
 // Register only implemented projects. Future projects supply their own section IDs.
 mountProjectNavigation(projects);
 document.querySelectorAll('[data-gallery]').forEach(mountGallery);
+mountImageLoading(landing);
 mountHero(document.querySelector('.hero'));

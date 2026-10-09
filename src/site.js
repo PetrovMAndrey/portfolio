@@ -18,6 +18,7 @@ const { renderDiscuss } = load("discuss/discuss.js");
 const { appendProjects } = load("shared/project-separator.js");
 const { mountProjectNavigation } = load("shared/project-navigation.js");
 const { mountGallery } = load("shared/gallery.js");
+const { mountImageLoading } = load("shared/images.js");
 const landing = document.querySelector('#landing');
 const projects = [
   { number: 1, target: 'project-01', label: 'АРК', render: renderArk },
@@ -37,12 +38,14 @@ landing.append(renderDiscuss());
 // Register only implemented projects. Future projects supply their own section IDs.
 mountProjectNavigation(projects);
 document.querySelectorAll('[data-gallery]').forEach(mountGallery);
+mountImageLoading(landing);
 mountHero(document.querySelector('.hero'));
 
 return {  };
 },
 "hero/hero.js": function(load) {
 const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const { loadImage, imageIsReady } = load("shared/images.js");
 const directory = './Вайфреймы в работу/Для горизонтального скролла в хиро блоке/';
 const cards = [
   ['АРК', '1 АРК для горизонтального скролла.png'],
@@ -111,24 +114,61 @@ function mountHero(hero) {
   rail.addEventListener('pointerleave', () => hoverProject(null));
   let frame = 0, drag = null, suppressClick = false, cycle = 0, animation = 0;
   const modulo = (value, length) => ((value % length) + length) % length;
-  function setPosition(value) {
+  let positionRequest = 0, pendingPosition = null;
+  function normalize(value) {
     const lower = cycle - rail.clientWidth / 2;
-    const next = lower + modulo(value - lower, cycle);
+    return lower + modulo(value - lower, cycle);
+  }
+  function imagesAt(value, margin = 0) {
+    const rect = rail.getBoundingClientRect();
+    const scale = rect.width / rail.clientWidth || 1;
+    const projects = new Set(visualCards.filter(card => {
+      const left = rail.scrollLeft + (card.getBoundingClientRect().left - rect.left) / scale;
+      return left < value + rail.clientWidth + margin && left + card.offsetWidth > value - margin;
+    }).map(card => card.dataset.heroProject));
+    // Decode every DOM copy of a requested project, including the wrap boundary.
+    return visualCards.filter(card => projects.has(card.dataset.heroProject)).map(card => card.querySelector('img'));
+  }
+  function prepare(images) { return Promise.all(images.map(loadImage)); }
+  function warmRail() { return prepare(visualCards.map(card => card.querySelector('img'))); }
+  function applyPosition(next, value = next) {
     rail.scrollLeft = next;
     if (drag) drag.scroll += next - value;
   }
-  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; }
+  function setPosition(value) {
+    const next = normalize(value);
+    const images = imagesAt(next);
+    const request = ++positionRequest;
+    pendingPosition = next;
+    if (images.every(imageIsReady)) {
+      applyPosition(next, value); pendingPosition = null;
+    } else {
+      // Network latency must never expose an empty target card. Keep the current
+      // painted position until the requested images and all their copies decode.
+      prepare(images).then(() => {
+        if (request !== positionRequest) return;
+        applyPosition(next, value); pendingPosition = null;
+      }).catch(error => console.error('Hero image failed to load', error));
+    }
+    prepare(imagesAt(next, first.offsetWidth)).catch(error => console.error('Hero neighbour failed to load', error));
+  }
+  let movement = 0;
+  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; movement++; }
   function moveBy(distance) {
     stopAnimation();
+    const request = movement;
     const start = rail.scrollLeft;
     if (reducedMotion.matches) { setPosition(start + distance); return; }
-    const began = performance.now();
-    function tick(now) {
+    warmRail().then(() => {
+      if (request !== movement) return;
+      const began = performance.now();
+      function tick(now) {
       const progress = Math.min(1, (now - began) / 350);
       setPosition(start + distance * (1 - Math.pow(1 - progress, 3)));
       animation = progress < 1 ? requestAnimationFrame(tick) : 0;
-    }
-    animation = requestAnimationFrame(tick);
+      }
+      animation = requestAnimationFrame(tick);
+    }).catch(error => console.error('Hero image failed to load', error));
   }
   function update() {
     frame = 0;
@@ -142,7 +182,10 @@ function mountHero(hero) {
     stopAnimation();
     const previousCycle = cycle;
     cycle = parseFloat(getComputedStyle(list).width) + parseFloat(getComputedStyle(rail).gap);
-    setPosition(previousCycle ? rail.scrollLeft * cycle / previousCycle : cycle - parseFloat(getComputedStyle(first).width) * (234 / 386));
+    const next = normalize(previousCycle ? rail.scrollLeft * cycle / previousCycle : cycle - parseFloat(getComputedStyle(first).width) * (234 / 386));
+    // Initial geometry is established synchronously before the first paint.
+    pendingPosition = null; applyPosition(next);
+    prepare(imagesAt(next)).catch(error => console.error('Hero image failed to load', error));
     update();
   }
   rail.addEventListener('scroll', () => {
@@ -152,7 +195,7 @@ function mountHero(hero) {
   rail.addEventListener('wheel', event => {
     if (event.ctrlKey) return;
     const delta = (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * (event.deltaMode === 1 ? 20 : event.deltaMode === 2 ? rail.clientWidth : 1);
-    event.preventDefault(); stopAnimation(); setPosition(rail.scrollLeft + delta);
+    event.preventDefault(); stopAnimation(); warmRail().catch(error => console.error('Hero image failed to load', error)); setPosition((pendingPosition ?? rail.scrollLeft) + delta);
   }, { passive: false });
   rail.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
@@ -162,6 +205,7 @@ function mountHero(hero) {
   rail.addEventListener('pointerdown', event => {
     if (event.button !== 0 || event.pointerType !== 'mouse') return;
     stopAnimation();
+    warmRail().catch(error => console.error('Hero image failed to load', error));
     drag = { id: event.pointerId, start: event.clientX, scroll: rail.scrollLeft, moved: false }; suppressClick = false;
   });
   rail.addEventListener('dragstart', event => event.preventDefault());
@@ -174,6 +218,9 @@ function mountHero(hero) {
     if (drag.moved) { setPosition(drag.scroll - delta); event.preventDefault(); }
   });
   const endDrag = () => { suppressClick = !!drag?.moved; drag = null; rail.classList.remove('is-dragging'); };
+  rail.addEventListener('pointerenter', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { once: true });
+  rail.addEventListener('focusin', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { once: true });
+  rail.addEventListener('touchstart', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { passive: true, once: true });
   rail.addEventListener('pointerup', endDrag);
   rail.addEventListener('pointercancel', endDrag);
   rail.addEventListener('lostpointercapture', () => { if (drag) endDrag(); });
@@ -191,6 +238,7 @@ function mountHero(hero) {
 return { renderHero, mountHero };
 },
 "shared/dom.js": function(load) {
+const { prepareImages } = load("shared/images.js");
 // Bind short Russian function words to the next word without adding line breaks.
 // Unicode word boundaries avoid changing parts of words and hyphenated names.
 function nonBreakingText(value) {
@@ -203,6 +251,7 @@ function nonBreakingText(value) {
 function elementFromHTML(html) {
   const template = document.createElement('template');
   template.innerHTML = html.trim();
+  prepareImages(template.content);
   // Only visible text changes: URLs, attributes, image paths and markup stay intact.
   const textNodes = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
   while (textNodes.nextNode()) {
@@ -219,6 +268,2090 @@ function escapeHTML(value) {
 }
 
 return { nonBreakingText, elementFromHTML, escapeHTML };
+},
+"shared/images.js": function(load) {
+const { imageManifest } = load("shared/image-manifest.js");
+const loading = new WeakMap();
+const backgrounds = new WeakMap();
+const observed = new WeakSet();
+let observer;
+let sizesObserver;
+
+function keyFor(source) { return decodeURI(source).replace(/^\.\//, ''); }
+
+// Transform inert template images before they enter the document. Original
+// gallery data-src values are deliberately untouched: only Lightbox uses them.
+function prepareImages(fragment) {
+  fragment.querySelectorAll('img[src]').forEach(image => {
+    const source = image.getAttribute('src');
+    const key = keyFor(source);
+    const asset = imageManifest[key];
+    if (!asset) return;
+    const role = image.closest('.hero-card') ? 'hero'
+      : image.closest('[data-gallery-open]') ? 'thumbnail'
+      : image.classList.contains('mobile-app__mockup') ? 'mockup'
+      : asset.photo ? 'photo' : 'display';
+    const rendition = asset[role];
+    if (!rendition) throw new Error(`Missing ${role} derivative: ${source}`);
+    image.dataset.imageKey = key;
+    image.dataset.imageRole = role;
+    image.removeAttribute('src');
+    image.removeAttribute('srcset');
+    image.loading = role === 'hero' ? 'eager' : 'lazy';
+    const first = rendition.variants[0];
+    if (!image.hasAttribute('width')) image.width = first.width;
+    if (!image.hasAttribute('height')) image.height = first.height;
+    const width = rendition.aspectWidth ?? first.width;
+    const height = rendition.aspectHeight ?? first.height;
+    if (role !== 'hero') image.style.aspectRatio = `${width} / ${height}`;
+    // An inert, transparent placeholder reserves the exact aspect ratio and
+    // prevents a no-src image's long alt text becoming grid min-content width.
+    // It has no network transfer and disappears as soon as the rendition loads.
+    image.src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"></svg>`)}`;
+  });
+}
+
+function updateSize(image) {
+  // Measured CSS pixels are independent of DPR. The browser chooses the matching
+  // density from srcset; fixed CSS geometry and intrinsic master ratio stay intact.
+  image.sizes = `${Math.max(1, Math.ceil(image.clientWidth))}px`;
+}
+
+function loadImage(image) {
+  if (loading.has(image)) return loading.get(image);
+  const rendition = imageManifest[image.dataset.imageKey][image.dataset.imageRole];
+  updateSize(image);
+  image.srcset = rendition.variants.map(v => `${v.src} ${v.width}w`).join(', ');
+  image.src = rendition.variants[0].src;
+  const ready = image.decode().then(() => { image.dataset.imageReady = 'true'; });
+  loading.set(image, ready);
+  sizesObserver?.observe(image);
+  return ready;
+}
+
+function imageIsReady(image) {
+  return image.dataset.imageReady === 'true' && image.complete && image.naturalWidth > 0;
+}
+
+function setDeferredBackground(element, source, property = '--section-image') {
+  const key = keyFor(source);
+  const variant = imageManifest[key]?.photo?.variants[0];
+  if (!variant) throw new Error(`Missing background derivative: ${source}`);
+  backgrounds.set(element, { src: variant.src, property });
+  element.dataset.imageBackground = key;
+}
+
+function loadBackground(element) {
+  const config = backgrounds.get(element);
+  if (!config || config.loading) return;
+  config.loading = true;
+  const image = new Image();
+  image.src = config.src;
+  image.decode().then(() => {
+    element.style.setProperty(config.property, `url("${new URL(config.src, document.baseURI).href}")`);
+    element.dataset.imageBackgroundReady = 'true';
+  }).catch(error => console.error('Background failed to load', config.src, error));
+}
+
+function mountImageLoading(root) {
+  sizesObserver = new ResizeObserver(entries => entries.forEach(({ target }) => updateSize(target)));
+  observer = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const element = entry.target;
+    if (backgrounds.has(element)) loadBackground(element);
+    else loadImage(element).catch(error => console.error('Image failed to load', element.dataset.imageKey, error));
+    observer.unobserve(element);
+  }), { rootMargin: '800px 0px' });
+  root.querySelectorAll('[data-image-key]:not([data-image-role="hero"]), [data-image-background]').forEach(element => {
+    if (!observed.has(element)) { observed.add(element); observer.observe(element); }
+  });
+  // ARK is the next layer over Hero, so its cover must already be available.
+  const arkCover = root.querySelector('.ark-cover');
+  if (arkCover) loadBackground(arkCover);
+}
+
+return { prepareImages, loadImage, imageIsReady, setDeferredBackground, mountImageLoading };
+},
+"shared/image-manifest.js": function(load) {
+// Generated by tools/build-images.py from the individually reviewed image plan.
+const imageManifest = {
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/1 АРК для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/1 АРК для горизонтального скролла.png",
+    "sourceBytes": 1825063,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-01-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 15724
+        },
+        {
+          "src": "./assets/images/hero/image-01-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 19088
+        },
+        {
+          "src": "./assets/images/hero/image-01-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 29068
+        },
+        {
+          "src": "./assets/images/hero/image-01-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 46324
+        },
+        {
+          "src": "./assets/images/hero/image-01-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 54844
+        },
+        {
+          "src": "./assets/images/hero/image-01-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 84108
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/2 Грантмастер_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/2 Грантмастер_для горизонтального скролла.png",
+    "sourceBytes": 1536258,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-02-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 14614
+        },
+        {
+          "src": "./assets/images/hero/image-02-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 16354
+        },
+        {
+          "src": "./assets/images/hero/image-02-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 24132
+        },
+        {
+          "src": "./assets/images/hero/image-02-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 36368
+        },
+        {
+          "src": "./assets/images/hero/image-02-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 42526
+        },
+        {
+          "src": "./assets/images/hero/image-02-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 63512
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/3 СВЕТЛО_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/3 СВЕТЛО_для горизонтального скролла.png",
+    "sourceBytes": 1884449,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-03-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 20358
+        },
+        {
+          "src": "./assets/images/hero/image-03-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 24286
+        },
+        {
+          "src": "./assets/images/hero/image-03-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 34368
+        },
+        {
+          "src": "./assets/images/hero/image-03-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 52254
+        },
+        {
+          "src": "./assets/images/hero/image-03-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 60780
+        },
+        {
+          "src": "./assets/images/hero/image-03-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 91132
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/4 Индустриальная история_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/4 Индустриальная история_для горизонтального скролла.png",
+    "sourceBytes": 1899219,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-04-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 19514
+        },
+        {
+          "src": "./assets/images/hero/image-04-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 24186
+        },
+        {
+          "src": "./assets/images/hero/image-04-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 36144
+        },
+        {
+          "src": "./assets/images/hero/image-04-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 54356
+        },
+        {
+          "src": "./assets/images/hero/image-04-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 64382
+        },
+        {
+          "src": "./assets/images/hero/image-04-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 96526
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/5 Агент.Метрика_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/5 Агент.Метрика_для горизонтального скролла.png",
+    "sourceBytes": 1647552,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-05-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 18236
+        },
+        {
+          "src": "./assets/images/hero/image-05-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 21202
+        },
+        {
+          "src": "./assets/images/hero/image-05-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 30938
+        },
+        {
+          "src": "./assets/images/hero/image-05-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 45458
+        },
+        {
+          "src": "./assets/images/hero/image-05-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 52228
+        },
+        {
+          "src": "./assets/images/hero/image-05-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 75886
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/6 Студия рассылок_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/6 Студия рассылок_для горизонтального скролла.png",
+    "sourceBytes": 2057796,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-06-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 22890
+        },
+        {
+          "src": "./assets/images/hero/image-06-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 28138
+        },
+        {
+          "src": "./assets/images/hero/image-06-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 42614
+        },
+        {
+          "src": "./assets/images/hero/image-06-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 63964
+        },
+        {
+          "src": "./assets/images/hero/image-06-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 75652
+        },
+        {
+          "src": "./assets/images/hero/image-06-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 112954
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/7 Реестр залов_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/7 Реестр залов_для горизонтального скролла.png",
+    "sourceBytes": 1974964,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-07-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 21458
+        },
+        {
+          "src": "./assets/images/hero/image-07-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 25620
+        },
+        {
+          "src": "./assets/images/hero/image-07-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 39636
+        },
+        {
+          "src": "./assets/images/hero/image-07-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 60754
+        },
+        {
+          "src": "./assets/images/hero/image-07-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 72798
+        },
+        {
+          "src": "./assets/images/hero/image-07-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 104954
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/8 8_филиалов_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/8 8_филиалов_для горизонтального скролла.png",
+    "sourceBytes": 1660133,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-08-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 13648
+        },
+        {
+          "src": "./assets/images/hero/image-08-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 16714
+        },
+        {
+          "src": "./assets/images/hero/image-08-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 23604
+        },
+        {
+          "src": "./assets/images/hero/image-08-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 35516
+        },
+        {
+          "src": "./assets/images/hero/image-08-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 41930
+        },
+        {
+          "src": "./assets/images/hero/image-08-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 62780
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/9 Рабочий компас_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/9 Рабочий компас_для горизонтального скролла.png",
+    "sourceBytes": 1592749,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-09-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 13250
+        },
+        {
+          "src": "./assets/images/hero/image-09-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 15450
+        },
+        {
+          "src": "./assets/images/hero/image-09-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 22474
+        },
+        {
+          "src": "./assets/images/hero/image-09-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 33192
+        },
+        {
+          "src": "./assets/images/hero/image-09-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 39202
+        },
+        {
+          "src": "./assets/images/hero/image-09-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 57536
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/10 Блок мобильных приложений_для горизонтального скролла.png": {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/10 Блок мобильных приложений_для горизонтального скролла.png",
+    "sourceBytes": 1985725,
+    "hero": {
+      "variants": [
+        {
+          "src": "./assets/images/hero/image-10-320.webp",
+          "width": 320,
+          "height": 180,
+          "bytes": 22564
+        },
+        {
+          "src": "./assets/images/hero/image-10-360.webp",
+          "width": 360,
+          "height": 203,
+          "bytes": 26784
+        },
+        {
+          "src": "./assets/images/hero/image-10-480.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 40134
+        },
+        {
+          "src": "./assets/images/hero/image-10-640.webp",
+          "width": 640,
+          "height": 360,
+          "bytes": 61056
+        },
+        {
+          "src": "./assets/images/hero/image-10-720.webp",
+          "width": 720,
+          "height": 405,
+          "bytes": 72034
+        },
+        {
+          "src": "./assets/images/hero/image-10-960.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 106504
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/4 image 4 АРК_Приложения.png": {
+    "source": "REFERENCES/01_АРК/4 image 4 АРК_Приложения.png",
+    "sourceBytes": 2286034,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-11-1248.webp",
+          "width": 1248,
+          "height": 2446,
+          "bytes": 271470
+        },
+        {
+          "src": "./assets/images/display/image-11-1833.webp",
+          "width": 1833,
+          "height": 3592,
+          "bytes": 434116
+        }
+      ],
+      "aspectWidth": 1833,
+      "aspectHeight": 3592,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-11-416.webp",
+          "width": 416,
+          "height": 408,
+          "bytes": 20632
+        },
+        {
+          "src": "./assets/images/thumbnail/image-11-832.webp",
+          "width": 832,
+          "height": 816,
+          "bytes": 62520
+        }
+      ],
+      "aspectWidth": 1833,
+      "aspectHeight": 1798,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/2 image 2.png": {
+    "source": "REFERENCES/01_АРК/2 image 2.png",
+    "sourceBytes": 539350,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-12-416.webp",
+          "width": 416,
+          "height": 249,
+          "bytes": 16214
+        },
+        {
+          "src": "./assets/images/thumbnail/image-12-832.webp",
+          "width": 832,
+          "height": 498,
+          "bytes": 53936
+        }
+      ],
+      "aspectWidth": 1851,
+      "aspectHeight": 1108,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/3 image 3.png": {
+    "source": "REFERENCES/01_АРК/3 image 3.png",
+    "sourceBytes": 1193640,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-13-416.webp",
+          "width": 416,
+          "height": 408,
+          "bytes": 29158
+        },
+        {
+          "src": "./assets/images/thumbnail/image-13-832.webp",
+          "width": 832,
+          "height": 816,
+          "bytes": 92902
+        }
+      ],
+      "aspectWidth": 1851,
+      "aspectHeight": 1816,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/Грантмастер в золотом офисе - хиро проекта.png": {
+    "source": "REFERENCES/02_Грантмастер/Грантмастер в золотом офисе - хиро проекта.png",
+    "sourceBytes": 1537896,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-14-1672.webp",
+          "width": 1672,
+          "height": 630,
+          "bytes": 160360
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 630,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/Тёплый офис, экран с картой проекта.png": {
+    "source": "REFERENCES/02_Грантмастер/Тёплый офис, экран с картой проекта.png",
+    "sourceBytes": 1492668,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-15-2172.webp",
+          "width": 2172,
+          "height": 724,
+          "bytes": 138284
+        }
+      ],
+      "aspectWidth": 2172,
+      "aspectHeight": 724,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/1 Главная и диагностика.png": {
+    "source": "REFERENCES/02_Грантмастер/1 Главная и диагностика.png",
+    "sourceBytes": 2149606,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-16-320.webp",
+          "width": 320,
+          "height": 588,
+          "bytes": 47408
+        },
+        {
+          "src": "./assets/images/thumbnail/image-16-640.webp",
+          "width": 640,
+          "height": 1176,
+          "bytes": 150676
+        }
+      ],
+      "aspectWidth": 1365,
+      "aspectHeight": 2508,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/2 Карта логики проекта.png": {
+    "source": "REFERENCES/02_Грантмастер/2 Карта логики проекта.png",
+    "sourceBytes": 1062740,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-17-320.webp",
+          "width": 320,
+          "height": 588,
+          "bytes": 35866
+        },
+        {
+          "src": "./assets/images/thumbnail/image-17-640.webp",
+          "width": 640,
+          "height": 1176,
+          "bytes": 108394
+        }
+      ],
+      "aspectWidth": 1365,
+      "aspectHeight": 2508,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/3 Конструктор проекта.png": {
+    "source": "REFERENCES/02_Грантмастер/3 Конструктор проекта.png",
+    "sourceBytes": 1805736,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-18-320.webp",
+          "width": 320,
+          "height": 588,
+          "bytes": 32406
+        },
+        {
+          "src": "./assets/images/thumbnail/image-18-640.webp",
+          "width": 640,
+          "height": 1176,
+          "bytes": 103970
+        }
+      ],
+      "aspectWidth": 1195,
+      "aspectHeight": 2195,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/02_Грантмастер/Золотой закат в конференц-зале.png": {
+    "source": "REFERENCES/02_Грантмастер/Золотой закат в конференц-зале.png",
+    "sourceBytes": 1580545,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-19-2171.webp",
+          "width": 2171,
+          "height": 501,
+          "bytes": 164530
+        }
+      ],
+      "aspectWidth": 2171,
+      "aspectHeight": 501,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/1 Хиро.png": {
+    "source": "REFERENCES/03_Светло/1 Хиро.png",
+    "sourceBytes": 1954981,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-20-1993.webp",
+          "width": 1993,
+          "height": 789,
+          "bytes": 218814
+        }
+      ],
+      "aspectWidth": 1993,
+      "aspectHeight": 789,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/2 блок.png": {
+    "source": "REFERENCES/03_Светло/2 блок.png",
+    "sourceBytes": 1950260,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-21-2232.webp",
+          "width": 2232,
+          "height": 705,
+          "bytes": 171040
+        }
+      ],
+      "aspectWidth": 2232,
+      "aspectHeight": 705,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/2.png": {
+    "source": "REFERENCES/03_Светло/2.png",
+    "sourceBytes": 2637658,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-22-320.webp",
+          "width": 320,
+          "height": 231,
+          "bytes": 25964
+        },
+        {
+          "src": "./assets/images/thumbnail/image-22-640.webp",
+          "width": 640,
+          "height": 461,
+          "bytes": 79048
+        }
+      ],
+      "aspectWidth": 1912,
+      "aspectHeight": 1378,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/3.png": {
+    "source": "REFERENCES/03_Светло/3.png",
+    "sourceBytes": 1995535,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-23-320.webp",
+          "width": 320,
+          "height": 248,
+          "bytes": 16642
+        },
+        {
+          "src": "./assets/images/thumbnail/image-23-640.webp",
+          "width": 640,
+          "height": 495,
+          "bytes": 48016
+        }
+      ],
+      "aspectWidth": 1916,
+      "aspectHeight": 1482,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/4.png": {
+    "source": "REFERENCES/03_Светло/4.png",
+    "sourceBytes": 605299,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-24-320.webp",
+          "width": 320,
+          "height": 409,
+          "bytes": 12604
+        },
+        {
+          "src": "./assets/images/thumbnail/image-24-640.webp",
+          "width": 640,
+          "height": 818,
+          "bytes": 37848
+        }
+      ],
+      "aspectWidth": 1919,
+      "aspectHeight": 2453,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/5.png": {
+    "source": "REFERENCES/03_Светло/5.png",
+    "sourceBytes": 6418225,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-25-320.webp",
+          "width": 320,
+          "height": 409,
+          "bytes": 43550
+        },
+        {
+          "src": "./assets/images/thumbnail/image-25-640.webp",
+          "width": 640,
+          "height": 818,
+          "bytes": 136662
+        }
+      ],
+      "aspectWidth": 1180,
+      "aspectHeight": 1509,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/03_Светло/3 подвал.png": {
+    "source": "REFERENCES/03_Светло/3 подвал.png",
+    "sourceBytes": 913102,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-26-1740.webp",
+          "width": 1740,
+          "height": 423,
+          "bytes": 85506
+        }
+      ],
+      "aspectWidth": 1740,
+      "aspectHeight": 423,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/1 Хиро Монохромный интерьер с цветным экраном.png": {
+    "source": "REFERENCES/04_Индустриальная история/1 Хиро Монохромный интерьер с цветным экраном.png",
+    "sourceBytes": 1639336,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-27-1944.webp",
+          "width": 1944,
+          "height": 809,
+          "bytes": 159796
+        }
+      ],
+      "aspectWidth": 1944,
+      "aspectHeight": 809,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/2 Индустриальный город над рекой.png": {
+    "source": "REFERENCES/04_Индустриальная история/2 Индустриальный город над рекой.png",
+    "sourceBytes": 2607907,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-28-2055.webp",
+          "width": 2055,
+          "height": 765,
+          "bytes": 397624
+        }
+      ],
+      "aspectWidth": 2055,
+      "aspectHeight": 765,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/3.png": {
+    "source": "REFERENCES/04_Индустриальная история/3.png",
+    "sourceBytes": 3473841,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-29-320.webp",
+          "width": 320,
+          "height": 318,
+          "bytes": 20404
+        },
+        {
+          "src": "./assets/images/thumbnail/image-29-640.webp",
+          "width": 640,
+          "height": 635,
+          "bytes": 63766
+        }
+      ],
+      "aspectWidth": 1917,
+      "aspectHeight": 1903,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/4.png": {
+    "source": "REFERENCES/04_Индустриальная история/4.png",
+    "sourceBytes": 6617267,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-30-320.webp",
+          "width": 320,
+          "height": 451,
+          "bytes": 42630
+        },
+        {
+          "src": "./assets/images/thumbnail/image-30-640.webp",
+          "width": 640,
+          "height": 903,
+          "bytes": 147794
+        }
+      ],
+      "aspectWidth": 1919,
+      "aspectHeight": 2707,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/5.png": {
+    "source": "REFERENCES/04_Индустриальная история/5.png",
+    "sourceBytes": 2222326,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-31-320.webp",
+          "width": 320,
+          "height": 335,
+          "bytes": 33772
+        },
+        {
+          "src": "./assets/images/thumbnail/image-31-640.webp",
+          "width": 640,
+          "height": 670,
+          "bytes": 116342
+        }
+      ],
+      "aspectWidth": 1224,
+      "aspectHeight": 1282,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/6.png": {
+    "source": "REFERENCES/04_Индустриальная история/6.png",
+    "sourceBytes": 9536106,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-32-320.webp",
+          "width": 320,
+          "height": 451,
+          "bytes": 28688
+        },
+        {
+          "src": "./assets/images/thumbnail/image-32-640.webp",
+          "width": 640,
+          "height": 903,
+          "bytes": 86070
+        }
+      ],
+      "aspectWidth": 1149,
+      "aspectHeight": 1621,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/04_Индустриальная история/3 Стальной мост на закате над рекой_подвал.png": {
+    "source": "REFERENCES/04_Индустриальная история/3 Стальной мост на закате над рекой_подвал.png",
+    "sourceBytes": 2596564,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-33-2171.webp",
+          "width": 2171,
+          "height": 724,
+          "bytes": 468482
+        }
+      ],
+      "aspectWidth": 2171,
+      "aspectHeight": 724,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/05_Агент.Метрика/1_Агент.Метрика_ Главная.png": {
+    "source": "REFERENCES/05_Агент.Метрика/1_Агент.Метрика_ Главная.png",
+    "sourceBytes": 548643,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-34-736.webp",
+          "width": 736,
+          "height": 613,
+          "bytes": 50072
+        },
+        {
+          "src": "./assets/images/display/image-34-1472.webp",
+          "width": 1472,
+          "height": 1226,
+          "bytes": 142326
+        }
+      ],
+      "aspectWidth": 1920,
+      "aspectHeight": 1599,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-34-320.webp",
+          "width": 320,
+          "height": 266,
+          "bytes": 14464
+        },
+        {
+          "src": "./assets/images/thumbnail/image-34-640.webp",
+          "width": 640,
+          "height": 533,
+          "bytes": 42004
+        }
+      ],
+      "aspectWidth": 1920,
+      "aspectHeight": 1599,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/05_Агент.Метрика/2_Агент.Метрика_ Сравнение периодов.png": {
+    "source": "REFERENCES/05_Агент.Метрика/2_Агент.Метрика_ Сравнение периодов.png",
+    "sourceBytes": 239549,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-35-320.webp",
+          "width": 320,
+          "height": 96,
+          "bytes": 6962
+        },
+        {
+          "src": "./assets/images/thumbnail/image-35-640.webp",
+          "width": 640,
+          "height": 193,
+          "bytes": 17986
+        }
+      ],
+      "aspectWidth": 1920,
+      "aspectHeight": 578,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/05_Агент.Метрика/3_Агент.Метрика_ Сравнение периодов.png": {
+    "source": "REFERENCES/05_Агент.Метрика/3_Агент.Метрика_ Сравнение периодов.png",
+    "sourceBytes": 107726,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-36-320.webp",
+          "width": 320,
+          "height": 113,
+          "bytes": 5896
+        },
+        {
+          "src": "./assets/images/thumbnail/image-36-640.webp",
+          "width": 640,
+          "height": 227,
+          "bytes": 14534
+        }
+      ],
+      "aspectWidth": 1577,
+      "aspectHeight": 559,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/05_Агент.Метрика/4_Агент.Метрика_ Отчеты.png": {
+    "source": "REFERENCES/05_Агент.Метрика/4_Агент.Метрика_ Отчеты.png",
+    "sourceBytes": 321349,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-37-320.webp",
+          "width": 320,
+          "height": 178,
+          "bytes": 9372
+        },
+        {
+          "src": "./assets/images/thumbnail/image-37-640.webp",
+          "width": 640,
+          "height": 356,
+          "bytes": 27702
+        }
+      ],
+      "aspectWidth": 1908,
+      "aspectHeight": 1061,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/06_Студия рассылок/1.png": {
+    "source": "REFERENCES/06_Студия рассылок/1.png",
+    "sourceBytes": 206451,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-38-544.webp",
+          "width": 544,
+          "height": 1417,
+          "bytes": 62844
+        },
+        {
+          "src": "./assets/images/display/image-38-622.webp",
+          "width": 622,
+          "height": 1620,
+          "bytes": 75042
+        }
+      ],
+      "aspectWidth": 622,
+      "aspectHeight": 1620,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-38-224.webp",
+          "width": 224,
+          "height": 583,
+          "bytes": 16500
+        },
+        {
+          "src": "./assets/images/thumbnail/image-38-448.webp",
+          "width": 448,
+          "height": 1167,
+          "bytes": 47906
+        }
+      ],
+      "aspectWidth": 622,
+      "aspectHeight": 1620,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/06_Студия рассылок/Фон.png": {
+    "source": "REFERENCES/06_Студия рассылок/Фон.png",
+    "sourceBytes": 1737467,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-39-1672.webp",
+          "width": 1672,
+          "height": 940,
+          "bytes": 177016
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 940,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/06_Студия рассылок/2.png": {
+    "source": "REFERENCES/06_Студия рассылок/2.png",
+    "sourceBytes": 141436,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-40-224.webp",
+          "width": 224,
+          "height": 356,
+          "bytes": 12596
+        },
+        {
+          "src": "./assets/images/thumbnail/image-40-448.webp",
+          "width": 448,
+          "height": 712,
+          "bytes": 36310
+        }
+      ],
+      "aspectWidth": 598,
+      "aspectHeight": 951,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/06_Студия рассылок/3.png": {
+    "source": "REFERENCES/06_Студия рассылок/3.png",
+    "sourceBytes": 426145,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-41-224.webp",
+          "width": 224,
+          "height": 262,
+          "bytes": 7544
+        },
+        {
+          "src": "./assets/images/thumbnail/image-41-448.webp",
+          "width": 448,
+          "height": 524,
+          "bytes": 23132
+        }
+      ],
+      "aspectWidth": 1299,
+      "aspectHeight": 1520,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/06_Студия рассылок/4.png": {
+    "source": "REFERENCES/06_Студия рассылок/4.png",
+    "sourceBytes": 1475034,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-42-224.webp",
+          "width": 224,
+          "height": 343,
+          "bytes": 13584
+        },
+        {
+          "src": "./assets/images/thumbnail/image-42-448.webp",
+          "width": 448,
+          "height": 685,
+          "bytes": 42456
+        }
+      ],
+      "aspectWidth": 1921,
+      "aspectHeight": 2938,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/07_Реестр ЗАЛОВ/Абстрактный фон с медными дугами под скриншот.png": {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/Абстрактный фон с медными дугами под скриншот.png",
+    "sourceBytes": 1770072,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-43-1536.webp",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 69266
+        }
+      ],
+      "aspectWidth": 1536,
+      "aspectHeight": 1024,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/07_Реестр ЗАЛОВ/1 Реестр ЗАЛОВ главная.png": {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/1 Реестр ЗАЛОВ главная.png",
+    "sourceBytes": 646968,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-44-640.webp",
+          "width": 640,
+          "height": 480,
+          "bytes": 40832
+        },
+        {
+          "src": "./assets/images/display/image-44-1280.webp",
+          "width": 1280,
+          "height": 960,
+          "bytes": 105924
+        }
+      ],
+      "aspectWidth": 1897,
+      "aspectHeight": 1423,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-44-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 13910
+        },
+        {
+          "src": "./assets/images/thumbnail/image-44-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 36534
+        }
+      ],
+      "aspectWidth": 1897,
+      "aspectHeight": 996,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/07_Реестр ЗАЛОВ/Современный офис на закате_фон для хиро под текст.png": {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/Современный офис на закате_фон для хиро под текст.png",
+    "sourceBytes": 1763939,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-45-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 155612
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/07_Реестр ЗАЛОВ/2 Реестр ЗАЛОВ.png": {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/2 Реестр ЗАЛОВ.png",
+    "sourceBytes": 407885,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-46-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 15242
+        },
+        {
+          "src": "./assets/images/thumbnail/image-46-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 39768
+        }
+      ],
+      "aspectWidth": 1897,
+      "aspectHeight": 996,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/07_Реестр ЗАЛОВ/3 Реестр ЗАЛОВ добавить зал.png": {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/3 Реестр ЗАЛОВ добавить зал.png",
+    "sourceBytes": 538362,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-47-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 7592
+        },
+        {
+          "src": "./assets/images/thumbnail/image-47-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 21918
+        }
+      ],
+      "aspectWidth": 1844,
+      "aspectHeight": 968,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/08_8 филиалов/Фон для текста в хиро_Современный офис на закате.png": {
+    "source": "REFERENCES/08_8 филиалов/Фон для текста в хиро_Современный офис на закате.png",
+    "sourceBytes": 1848166,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-48-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 177074
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/08_8 филиалов/Футуристический фон для скриншота.png": {
+    "source": "REFERENCES/08_8 филиалов/Футуристический фон для скриншота.png",
+    "sourceBytes": 1681738,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-49-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 81140
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "REFERENCES/08_8 филиалов/1 главная.png": {
+    "source": "REFERENCES/08_8 филиалов/1 главная.png",
+    "sourceBytes": 676220,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-50-640.webp",
+          "width": 640,
+          "height": 669,
+          "bytes": 52020
+        },
+        {
+          "src": "./assets/images/display/image-50-1280.webp",
+          "width": 1280,
+          "height": 1337,
+          "bytes": 141406
+        }
+      ],
+      "aspectWidth": 1905,
+      "aspectHeight": 1990,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-50-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 15592
+        },
+        {
+          "src": "./assets/images/thumbnail/image-50-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 46722
+        }
+      ],
+      "aspectWidth": 1905,
+      "aspectHeight": 1000,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/08_8 филиалов/2 отчетность.png": {
+    "source": "REFERENCES/08_8 филиалов/2 отчетность.png",
+    "sourceBytes": 435234,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-51-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 15102
+        },
+        {
+          "src": "./assets/images/thumbnail/image-51-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 45388
+        }
+      ],
+      "aspectWidth": 1890,
+      "aspectHeight": 992,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/08_8 филиалов/3 сравнение.png": {
+    "source": "REFERENCES/08_8 филиалов/3 сравнение.png",
+    "sourceBytes": 211108,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-52-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 13986
+        },
+        {
+          "src": "./assets/images/thumbnail/image-52-832.webp",
+          "width": 832,
+          "height": 435,
+          "bytes": 40966
+        }
+      ],
+      "aspectWidth": 1317,
+      "aspectHeight": 689,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/09_Рабочий компас/Фон для текста.png": {
+    "source": "REFERENCES/09_Рабочий компас/Фон для текста.png",
+    "sourceBytes": 1751235,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-53-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 154948
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/09_Рабочий компас/Фон для скриншота.png": {
+    "source": "REFERENCES/09_Рабочий компас/Фон для скриншота.png",
+    "sourceBytes": 1637438,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-54-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 71028
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "REFERENCES/09_Рабочий компас/1.png": {
+    "source": "REFERENCES/09_Рабочий компас/1.png",
+    "sourceBytes": 1482385,
+    "display": {
+      "variants": [
+        {
+          "src": "./assets/images/display/image-55-768.webp",
+          "width": 768,
+          "height": 638,
+          "bytes": 43818
+        },
+        {
+          "src": "./assets/images/display/image-55-1536.webp",
+          "width": 1536,
+          "height": 1276,
+          "bytes": 114950
+        }
+      ],
+      "aspectWidth": 2560,
+      "aspectHeight": 2126,
+      "quality": 95,
+      "lossless": false
+    },
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-55-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 14130
+        },
+        {
+          "src": "./assets/images/thumbnail/image-55-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 38732
+        }
+      ],
+      "aspectWidth": 2560,
+      "aspectHeight": 1344,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/09_Рабочий компас/2.png": {
+    "source": "REFERENCES/09_Рабочий компас/2.png",
+    "sourceBytes": 647054,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-56-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 8484
+        },
+        {
+          "src": "./assets/images/thumbnail/image-56-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 23158
+        }
+      ],
+      "aspectWidth": 2048,
+      "aspectHeight": 1075,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/09_Рабочий компас/3.png": {
+    "source": "REFERENCES/09_Рабочий компас/3.png",
+    "sourceBytes": 430515,
+    "thumbnail": {
+      "variants": [
+        {
+          "src": "./assets/images/thumbnail/image-57-416.webp",
+          "width": 416,
+          "height": 218,
+          "bytes": 13286
+        },
+        {
+          "src": "./assets/images/thumbnail/image-57-832.webp",
+          "width": 832,
+          "height": 437,
+          "bytes": 37024
+        }
+      ],
+      "aspectWidth": 2048,
+      "aspectHeight": 1075,
+      "quality": 95,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/1 фон для хиро.png": {
+    "source": "REFERENCES/10/1 фон для хиро.png",
+    "sourceBytes": 1860985,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-58-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 113418
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/2 фон для Сова.png": {
+    "source": "REFERENCES/10/2 фон для Сова.png",
+    "sourceBytes": 1679985,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-59-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 91392
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/1 Сова/Сова 1 мокап.png": {
+    "source": "REFERENCES/10/1 Сова/Сова 1 мокап.png",
+    "sourceBytes": 1625481,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-60-1203.webp",
+          "width": 1203,
+          "height": 2468,
+          "bytes": 1016510
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2468,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/1 Сова/Сова 2 мокап.png": {
+    "source": "REFERENCES/10/1 Сова/Сова 2 мокап.png",
+    "sourceBytes": 921423,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-61-1203.webp",
+          "width": 1203,
+          "height": 2468,
+          "bytes": 464670
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2468,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/3 фон для Форум.png": {
+    "source": "REFERENCES/10/3 фон для Форум.png",
+    "sourceBytes": 1480675,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-62-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 29604
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/2 Форум/Форум 1 мокап.png": {
+    "source": "REFERENCES/10/2 Форум/Форум 1 мокап.png",
+    "sourceBytes": 5587176,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-63-1203.webp",
+          "width": 1203,
+          "height": 4415,
+          "bytes": 3605450
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 4415,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/2 Форум/Форум 2 мокап.png": {
+    "source": "REFERENCES/10/2 Форум/Форум 2 мокап.png",
+    "sourceBytes": 3266244,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-64-1203.webp",
+          "width": 1203,
+          "height": 2725,
+          "bytes": 2071234
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2725,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/2 Форум/Форум 3 мокап.png": {
+    "source": "REFERENCES/10/2 Форум/Форум 3 мокап.png",
+    "sourceBytes": 4922594,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-65-1203.webp",
+          "width": 1203,
+          "height": 4050,
+          "bytes": 3193222
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 4050,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/4 фон для Полка.png": {
+    "source": "REFERENCES/10/4 фон для Полка.png",
+    "sourceBytes": 1407443,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-66-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 28790
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/3 Полка/Полка 1 мокап.png": {
+    "source": "REFERENCES/10/3 Полка/Полка 1 мокап.png",
+    "sourceBytes": 2394906,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-67-1203.webp",
+          "width": 1203,
+          "height": 4855,
+          "bytes": 1484012
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 4855,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/3 Полка/Полка 2 мокап.png": {
+    "source": "REFERENCES/10/3 Полка/Полка 2 мокап.png",
+    "sourceBytes": 1024207,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-68-1203.webp",
+          "width": 1203,
+          "height": 2468,
+          "bytes": 618604
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2468,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/5 фон для Заметка.png": {
+    "source": "REFERENCES/10/5 фон для Заметка.png",
+    "sourceBytes": 1962727,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-69-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 188202
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/10/4 Заметка/Заметка 1 мокап.png": {
+    "source": "REFERENCES/10/4 Заметка/Заметка 1 мокап.png",
+    "sourceBytes": 532317,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-70-1203.webp",
+          "width": 1203,
+          "height": 2728,
+          "bytes": 292208
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2728,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "REFERENCES/10/4 Заметка/Заметка 2 мокап.png": {
+    "source": "REFERENCES/10/4 Заметка/Заметка 2 мокап.png",
+    "sourceBytes": 467473,
+    "mockup": {
+      "variants": [
+        {
+          "src": "./assets/images/mockup/image-71-1203.webp",
+          "width": 1203,
+          "height": 2774,
+          "bytes": 239554
+        }
+      ],
+      "aspectWidth": 1203,
+      "aspectHeight": 2774,
+      "quality": 100,
+      "lossless": true
+    }
+  },
+  "Вайфреймы в работу/Фон для Обсудить_Инопланетный рассвет над ледяной равниной_1.png": {
+    "source": "Вайфреймы в работу/Фон для Обсудить_Инопланетный рассвет над ледяной равниной_1.png",
+    "sourceBytes": 1843028,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-72-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 158966
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/Атмосферный офис с сайтом «АРК».png": {
+    "source": "REFERENCES/01_АРК/Атмосферный офис с сайтом «АРК».png",
+    "sourceBytes": 1569818,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-73-1672.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 137064
+        }
+      ],
+      "aspectWidth": 1672,
+      "aspectHeight": 941,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/Дымчатая мраморная туманность.png": {
+    "source": "REFERENCES/01_АРК/Дымчатая мраморная туманность.png",
+    "sourceBytes": 1291248,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-74-2022.webp",
+          "width": 2022,
+          "height": 778,
+          "bytes": 76342
+        }
+      ],
+      "aspectWidth": 2022,
+      "aspectHeight": 778,
+      "quality": 92,
+      "lossless": false
+    }
+  },
+  "REFERENCES/01_АРК/Современный дом над туманной долиной.png": {
+    "source": "REFERENCES/01_АРК/Современный дом над туманной долиной.png",
+    "sourceBytes": 1719413,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-75-2168.webp",
+          "width": 2168,
+          "height": 507,
+          "bytes": 128110
+        }
+      ],
+      "aspectWidth": 2168,
+      "aspectHeight": 507,
+      "quality": 90,
+      "lossless": false
+    }
+  },
+  "REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png": {
+    "source": "REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png",
+    "sourceBytes": 1717437,
+    "photo": {
+      "variants": [
+        {
+          "src": "./assets/images/photo/image-76-1536.webp",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 109414
+        }
+      ],
+      "aspectWidth": 1536,
+      "aspectHeight": 1024,
+      "quality": 92,
+      "lossless": false
+    }
+  }
+};
+
+return { imageManifest };
 },
 "projects/ark/ark.js": function(load) {
 const { elementFromHTML } = load("shared/dom.js");
@@ -257,6 +2390,7 @@ const ark = {
 return { ark };
 },
 "projects/ark/sections/cover.js": function(load) {
+const { setDeferredBackground } = load("shared/images.js");
 const { elementFromHTML } = load("shared/dom.js");
 const { siteCTA } = load("shared/cta.js");
 function renderCover(ark) {
@@ -272,7 +2406,7 @@ function renderCover(ark) {
         ${siteCTA(ark.url)}
       </div>
     </section>`);
-  section.style.setProperty('--section-image', `url("${new URL(ark.images.cover, document.baseURI).href}")`);
+  setDeferredBackground(section, ark.images.cover);
   return section;
 }
 
@@ -310,6 +2444,7 @@ function renderTaskSolution() {
 return { renderTaskSolution };
 },
 "projects/ark/sections/visual.js": function(load) {
+const { setDeferredBackground } = load("shared/images.js");
 const { elementFromHTML } = load("shared/dom.js");
 function renderVisual(ark) {
   const section = elementFromHTML(`
@@ -320,7 +2455,7 @@ function renderVisual(ark) {
         <ul><li>О нас</li><li>Направления</li><li>Проекты</li><li>Приложения</li><li>Подход</li><li>Контакты</li></ul>
       </div>
     </section>`);
-  section.style.setProperty('--section-image', `url("${new URL(ark.images.visualBackground, document.baseURI).href}")`);
+  setDeferredBackground(section, ark.images.visualBackground);
   return section;
 }
 
@@ -347,6 +2482,7 @@ function renderScreenshots(ark) {
 return { renderScreenshots };
 },
 "projects/ark/sections/result.js": function(load) {
+const { setDeferredBackground } = load("shared/images.js");
 const { elementFromHTML } = load("shared/dom.js");
 const { siteCTA } = load("shared/cta.js");
 function renderResult(ark) {
@@ -355,7 +2491,7 @@ function renderResult(ark) {
       <div><p class="eyebrow">РЕЗУЛЬТАТ</p><h3 id="ark-result-title">Единая профессиональная среда.<br>Проекты и продукты в одной системе.<br>Платформа для дальнейшего развития.</h3></div>
       <div class="ark-result__links">${siteCTA(ark.url)}</div>
     </section>`);
-  section.style.setProperty('--section-image', `url("${new URL(ark.images.result, document.baseURI).href}")`);
+  setDeferredBackground(section, ark.images.result);
   return section;
 }
 
@@ -779,9 +2915,10 @@ return { metrika };
 },
 "projects/metrika/sections/cover.js": function(load) {
 const { elementFromHTML, escapeHTML } = load("shared/dom.js");
+const { setDeferredBackground } = load("shared/images.js");
 function renderCover(project) {
   const screen = project.gallery[0];
-  return elementFromHTML(`
+  const section = elementFromHTML(`
     <section class="metrika-cover dark-section" aria-labelledby="metrika-title">
       <div class="metrika-cover__content">
         <p class="metrika__number"><span>05</span> / 10 <i aria-hidden="true"></i></p>
@@ -793,6 +2930,8 @@ function renderCover(project) {
       </div>
       <div class="metrika-cover__visual"><img class="metrika-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true"><img class="metrika-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync"></div>
     </section>`);
+  setDeferredBackground(section, './REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png', '--metrika-image');
+  return section;
 }
 
 return { renderCover };

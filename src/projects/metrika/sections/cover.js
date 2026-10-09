@@ -1,8 +1,9 @@
 import { elementFromHTML, escapeHTML } from '../../../shared/dom.js';
+import { setDeferredBackground } from '../../../shared/images.js';
 
 export function renderCover(project) {
   const screen = project.gallery[0];
-  return elementFromHTML(`
+  const section = elementFromHTML(`
     <section class="metrika-cover dark-section" aria-labelledby="metrika-title">
       <div class="metrika-cover__content">
         <p class="metrika__number"><span>05</span> / 10 <i aria-hidden="true"></i></p>
@@ -14,4 +15,6 @@ export function renderCover(project) {
       </div>
       <div class="metrika-cover__visual"><img class="metrika-cover__divider" src="./Вайфреймы в работу/Line.svg" width="29" height="1104" alt="" aria-hidden="true"><img class="metrika-cover__screen" src="${escapeHTML(screen.src)}" width="${screen.width}" height="${screen.height}" alt="${escapeHTML(screen.alt)}" decoding="sync"></div>
     </section>`);
+  setDeferredBackground(section, './REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png', '--metrika-image');
+  return section;
 }

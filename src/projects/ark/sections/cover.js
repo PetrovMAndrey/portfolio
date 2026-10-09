@@ -1,3 +1,4 @@
+import { setDeferredBackground } from '../../../shared/images.js';
 import { elementFromHTML } from '../../../shared/dom.js';
 import { siteCTA } from '../../../shared/cta.js';
 
@@ -14,6 +15,6 @@ export function renderCover(ark) {
         ${siteCTA(ark.url)}
       </div>
     </section>`);
-  section.style.setProperty('--section-image', `url("${new URL(ark.images.cover, document.baseURI).href}")`);
+  setDeferredBackground(section, ark.images.cover);
   return section;
 }

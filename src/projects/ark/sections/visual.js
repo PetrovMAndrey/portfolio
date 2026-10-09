@@ -1,3 +1,4 @@
+import { setDeferredBackground } from '../../../shared/images.js';
 import { elementFromHTML } from '../../../shared/dom.js';
 
 export function renderVisual(ark) {
@@ -9,6 +10,6 @@ export function renderVisual(ark) {
         <ul><li>О нас</li><li>Направления</li><li>Проекты</li><li>Приложения</li><li>Подход</li><li>Контакты</li></ul>
       </div>
     </section>`);
-  section.style.setProperty('--section-image', `url("${new URL(ark.images.visualBackground, document.baseURI).href}")`);
+  setDeferredBackground(section, ark.images.visualBackground);
   return section;
 }

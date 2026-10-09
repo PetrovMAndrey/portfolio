@@ -1,3 +1,5 @@
+import { prepareImages } from './images.js';
+
 // Bind short Russian function words to the next word without adding line breaks.
 // Unicode word boundaries avoid changing parts of words and hyphenated names.
 export function nonBreakingText(value) {
@@ -10,6 +12,7 @@ export function nonBreakingText(value) {
 export function elementFromHTML(html) {
   const template = document.createElement('template');
   template.innerHTML = html.trim();
+  prepareImages(template.content);
   // Only visible text changes: URLs, attributes, image paths and markup stay intact.
   const textNodes = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
   while (textNodes.nextNode()) {

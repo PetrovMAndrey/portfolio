@@ -1,0 +1,2864 @@
+[
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/1 АРК для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1825063,
+    "sha256": "77e46baa2f41d21d3ea02da64fe6ce0f3055e401ca529df58ab55fa0607a1b19",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-01"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/2 Грантмастер_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1536258,
+    "sha256": "d640fbbf8480458c37e2a67ed4f4b3136e5c3606a0dab0015d120c4337874deb",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-02"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/3 СВЕТЛО_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1884449,
+    "sha256": "b8160c77b6089da705738cf21d106a5e449216ebaa7ba274cec03d5f5192a819",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-03"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/4 Индустриальная история_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1899219,
+    "sha256": "ae6d00235926ec05f6f9ce1c88ef19bb30e9a2508ee489bbcd61cda918facce2",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-04"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/5 Агент.Метрика_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1647552,
+    "sha256": "54914d25dda11b1968dd4ca9f4643f6bc266c5cb491d762d6ee6073f5c48ac22",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-05"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/6 Студия рассылок_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2057796,
+    "sha256": "af65d7a0616d324d83bf6488e8f9e5c28095ed313417e1f63303e324048a5010",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-06"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/7 Реестр залов_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1974964,
+    "sha256": "d0cba7d8b746e4a788776bbaeaebf87513cb1f88536749e3ce4c17b0267d2c97",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-07"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/8 8_филиалов_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1660133,
+    "sha256": "96a1209e86b8a4d3e083854b96e93e25a4ee608a41d9d615062b4815546c12b3",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-08"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/9 Рабочий компас_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1592749,
+    "sha256": "0158b5180ac5b26cf4d1e3439a6176995a51c03b97735f75e75a93404a43046e",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-09"
+  },
+  {
+    "source": "Вайфреймы в работу/Для горизонтального скролла в хиро блоке/10 Блок мобильных приложений_для горизонтального скролла.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1985725,
+    "sha256": "ddcc50e5aca6c946125ca29f0169ef6d30712f22e29ff4e63983458d7c9594b8",
+    "roles": {
+      "hero": {
+        "quality": 90,
+        "widths": [
+          320,
+          360,
+          480,
+          640,
+          720,
+          960
+        ]
+      }
+    },
+    "id": "image-10"
+  },
+  {
+    "source": "REFERENCES/01_АРК/4 image 4 АРК_Приложения.png",
+    "width": 1833,
+    "height": 3592,
+    "bytes": 2286034,
+    "sha256": "47177066b2776bb53b7dfc9053304e972879e88029daad5f0fd11b4250337f41",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          1248,
+          1833
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1833,
+          1798
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 288,
+            "parentHeight": 288,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 261,
+            "height": 256,
+            "parentHeight": 256,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 319,
+            "height": 300,
+            "parentHeight": 300,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-11"
+  },
+  {
+    "source": "REFERENCES/01_АРК/2 image 2.png",
+    "width": 1851,
+    "height": 1108,
+    "bytes": 539350,
+    "sha256": "9fddd18b8f4e19e9f73874bbf165052dfa424e5d39d9e8f1417af08aea6d49fb",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1851,
+          1108
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "contain",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 297,
+            "height": 288,
+            "parentHeight": 288,
+            "fit": "contain",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 261,
+            "height": 256,
+            "parentHeight": 256,
+            "fit": "contain",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 319,
+            "height": 300,
+            "parentHeight": 300,
+            "fit": "contain",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "contain",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-12"
+  },
+  {
+    "source": "REFERENCES/01_АРК/3 image 3.png",
+    "width": 1851,
+    "height": 2328,
+    "bytes": 1193640,
+    "sha256": "4fb54db367ebeba121545ed53bf423e6b9457a7e9218b18774abd866e9d7059b",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1851,
+          1816
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 297,
+            "height": 288,
+            "parentHeight": 288,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 261,
+            "height": 256,
+            "parentHeight": 256,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 319,
+            "height": 300,
+            "parentHeight": 300,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 407,
+            "height": 330,
+            "parentHeight": 330,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-13"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/Грантмастер в золотом офисе - хиро проекта.png",
+    "width": 1672,
+    "height": 630,
+    "bytes": 1537896,
+    "sha256": "e294f8088f5d707e1cd1edc8f6a8a293537c37b234e6ab6cd335707de5666bf3",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Встроенный экран и мелкие цветные надписи"
+      }
+    },
+    "id": "image-14"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/Тёплый офис, экран с картой проекта.png",
+    "width": 2172,
+    "height": 724,
+    "bytes": 1492668,
+    "sha256": "98303c939adde94dbd8bd39917423016f697a0e424fc839b6093aea276aae1da",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2172
+        ],
+        "reason": "Встроенный экран с текстом и тонкие контуры"
+      }
+    },
+    "id": "image-15"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/1 Главная и диагностика.png",
+    "width": 1365,
+    "height": 4003,
+    "bytes": 2149606,
+    "sha256": "763931b48b94b1826b6f4c591d4fe49714859df3a2ae34f55aa3833bdf66c50c",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1365,
+          2508
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 235,
+            "height": 202,
+            "parentHeight": 202,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 207,
+            "height": 200,
+            "parentHeight": 200,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 98,
+            "height": 180,
+            "parentHeight": 180,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-16"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/2 Карта логики проекта.png",
+    "width": 1365,
+    "height": 2557,
+    "bytes": 1062740,
+    "sha256": "904f0e3b6dd417c35171fa20461eb458305953a8ba7cfb95c4fddd5133fbd07d",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1365,
+          2508
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 235,
+            "height": 202,
+            "parentHeight": 202,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 207,
+            "height": 200,
+            "parentHeight": 200,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 98,
+            "height": 180,
+            "parentHeight": 180,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-17"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/3 Конструктор проекта.png",
+    "width": 1195,
+    "height": 4096,
+    "bytes": 1805736,
+    "sha256": "4d335f51312d8ebb116792f4c77770eae757e898245c8089b342500ca698dae8",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1195,
+          2195
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 235,
+            "height": 202,
+            "parentHeight": 202,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 207,
+            "height": 200,
+            "parentHeight": 200,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 98,
+            "height": 180,
+            "parentHeight": 180,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 320,
+            "height": 269,
+            "parentHeight": 269,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-18"
+  },
+  {
+    "source": "REFERENCES/02_Грантмастер/Золотой закат в конференц-зале.png",
+    "width": 2171,
+    "height": 501,
+    "bytes": 1580545,
+    "sha256": "13cf0923f4fbaea207de2462aa4b367c6a93308e70c585828bea41be9e15d73d",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2171
+        ],
+        "reason": "Мелкая архитектура и листья на фоне заката"
+      }
+    },
+    "id": "image-19"
+  },
+  {
+    "source": "REFERENCES/03_Светло/1 Хиро.png",
+    "width": 1993,
+    "height": 789,
+    "bytes": 1954981,
+    "sha256": "a0b945c9c277698187a08bd9c541364fc70e269f19f663d071cfb55305a043fa",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1993
+        ],
+        "reason": "Встроенный экран, листья и фактура интерьера"
+      }
+    },
+    "id": "image-20"
+  },
+  {
+    "source": "REFERENCES/03_Светло/2 блок.png",
+    "width": 2232,
+    "height": 705,
+    "bytes": 1950260,
+    "sha256": "7bb5f3b42fd84f8e237ef4df52a989214286f47d55b1fda18b9dcae4703a180d",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2232
+        ],
+        "reason": "Ткань, дерево и рельеф стены"
+      }
+    },
+    "id": "image-21"
+  },
+  {
+    "source": "REFERENCES/03_Светло/2.png",
+    "width": 1912,
+    "height": 1378,
+    "bytes": 2637658,
+    "sha256": "81a9c96a170b38638addee69a9eae9af84a9193078febc3a346a714cd4aeeb60",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1912,
+          1378
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 218,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 225,
+            "height": 162,
+            "parentHeight": 185,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 200,
+            "height": 144,
+            "parentHeight": 178,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 108,
+            "parentHeight": 193,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 218,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-22"
+  },
+  {
+    "source": "REFERENCES/03_Светло/3.png",
+    "width": 1916,
+    "height": 1482,
+    "bytes": 1995535,
+    "sha256": "1a2978a2c46f02b2b5aad21a4deb511fa6b2816be56925e6560ab6517bca83a4",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1916,
+          1482
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 234,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 225,
+            "height": 174,
+            "parentHeight": 185,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 200,
+            "height": 154,
+            "parentHeight": 178,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 116,
+            "parentHeight": 193,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 234,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-23"
+  },
+  {
+    "source": "REFERENCES/03_Светло/4.png",
+    "width": 1919,
+    "height": 2963,
+    "bytes": 605299,
+    "sha256": "b0c34296201ad92bc36ae0aa56998e691645a9a3cf7416c9af2b1ae0e5249da4",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1919,
+          2453
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 467,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 225,
+            "height": 348,
+            "parentHeight": 185,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 200,
+            "height": 308,
+            "parentHeight": 178,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 232,
+            "parentHeight": 193,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 467,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-24"
+  },
+  {
+    "source": "REFERENCES/03_Светло/5.png",
+    "width": 1180,
+    "height": 7308,
+    "bytes": 6418225,
+    "sha256": "e62ef5853cda1f31701f21a6a96eda988233ecce58047cda44fda9b455b65712",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1180,
+          1509
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 1873,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 225,
+            "height": 1394,
+            "parentHeight": 185,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 200,
+            "height": 1236,
+            "parentHeight": 178,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 932,
+            "parentHeight": 193,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 302,
+            "height": 1873,
+            "parentHeight": 248,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-25"
+  },
+  {
+    "source": "REFERENCES/03_Светло/3 подвал.png",
+    "width": 1740,
+    "height": 423,
+    "bytes": 913102,
+    "sha256": "b9d6d784d1c2a70cb0363026669d9cb7d380e78a8f84ac3c61b07210ed95b5f5",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1740
+        ],
+        "reason": "Ткань и тонкая фактура интерьера"
+      }
+    },
+    "id": "image-26"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/1 Хиро Монохромный интерьер с цветным экраном.png",
+    "width": 1944,
+    "height": 809,
+    "bytes": 1639336,
+    "sha256": "33bedf015e19c7db96722160c516cd30120418767635a479203e9c00d3c3e922",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1944
+        ],
+        "reason": "Встроенный цветной экран и мелкие монохромные детали"
+      }
+    },
+    "id": "image-27"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/2 Индустриальный город над рекой.png",
+    "width": 2055,
+    "height": 765,
+    "bytes": 2607907,
+    "sha256": "779f6046048e1cccb94c506c137ae5c3cc9a6f9237794bbc07244d0d66af57c6",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2055
+        ],
+        "reason": "Историческое зерно и мелкая архитектура"
+      }
+    },
+    "id": "image-28"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/3.png",
+    "width": 1917,
+    "height": 1903,
+    "bytes": 3473841,
+    "sha256": "0dba9f050a9eae8d70c5ec8287861177e72f3c6f64b95f27cbd5e450e0f23ca0",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1917,
+          1903
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 288,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 217,
+            "height": 215,
+            "parentHeight": 286,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 192,
+            "height": 191,
+            "parentHeight": 254,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 149,
+            "parentHeight": 213,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 288,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-29"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/4.png",
+    "width": 1919,
+    "height": 2876,
+    "bytes": 6617267,
+    "sha256": "7e07f904a5e7aa2f941ef346326bdc4d70a515bcc6c7a6da17a9a0b2c5ff721e",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1919,
+          2707
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 435,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 217,
+            "height": 325,
+            "parentHeight": 286,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 192,
+            "height": 288,
+            "parentHeight": 254,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 226,
+            "parentHeight": 213,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 435,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-30"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/5.png",
+    "width": 1224,
+    "height": 1282,
+    "bytes": 2222326,
+    "sha256": "9c75ad689a1ff1e55d669663b2ca13afd51f1c11ef7d3ed6d8de8f4ec2432a84",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1224,
+          1282
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 304,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 217,
+            "height": 227,
+            "parentHeight": 286,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 192,
+            "height": 201,
+            "parentHeight": 254,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 158,
+            "parentHeight": 213,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 304,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-31"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/6.png",
+    "width": 1149,
+    "height": 8004,
+    "bytes": 9536106,
+    "sha256": "6485d796ab1e9f7ca5df88d5f4937c03a525d6e8fd650ae6db795ad99098181f",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1149,
+          1621
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 2023,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 217,
+            "height": 1509,
+            "parentHeight": 286,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 192,
+            "height": 1337,
+            "parentHeight": 254,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 1048,
+            "parentHeight": 213,
+            "fit": "fill",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 290,
+            "height": 2023,
+            "parentHeight": 378,
+            "fit": "fill",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-32"
+  },
+  {
+    "source": "REFERENCES/04_Индустриальная история/3 Стальной мост на закате над рекой_подвал.png",
+    "width": 2171,
+    "height": 724,
+    "bytes": 2596564,
+    "sha256": "3007fe18c2f697d24d532a9096a2b8a1e1f47606889d75e2e5b130f42f23fc5c",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2171
+        ],
+        "reason": "Металлические фермы, кирпич и отражения"
+      }
+    },
+    "id": "image-33"
+  },
+  {
+    "source": "REFERENCES/05_Агент.Метрика/1_Агент.Метрика_ Главная.png",
+    "width": 1920,
+    "height": 1599,
+    "bytes": 548643,
+    "sha256": "c1a5c545fefe222e18e594086acfad4edd864ed772d865c0330b54547a9849a8",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          736,
+          1472
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1920,
+          1599
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 219,
+            "height": 114,
+            "parentHeight": 114,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 193,
+            "height": 101,
+            "parentHeight": 101,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 78,
+            "parentHeight": 78,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-34"
+  },
+  {
+    "source": "REFERENCES/05_Агент.Метрика/2_Агент.Метрика_ Сравнение периодов.png",
+    "width": 1920,
+    "height": 578,
+    "bytes": 239549,
+    "sha256": "5c4ccf2d543dea34ef2e6d7cde5578df3de2f4a6ad3923ca81e30213bf7b3977",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1920,
+          578
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 219,
+            "height": 114,
+            "parentHeight": 114,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 194,
+            "height": 101,
+            "parentHeight": 101,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 78,
+            "parentHeight": 78,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-35"
+  },
+  {
+    "source": "REFERENCES/05_Агент.Метрика/3_Агент.Метрика_ Сравнение периодов.png",
+    "width": 1577,
+    "height": 559,
+    "bytes": 107726,
+    "sha256": "b5c99ce7705310cf60a09646bd6fa01e29a753353f075d925eddb8aa1667eb22",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1577,
+          559
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 219,
+            "height": 114,
+            "parentHeight": 114,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 193,
+            "height": 101,
+            "parentHeight": 101,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 78,
+            "parentHeight": 78,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-36"
+  },
+  {
+    "source": "REFERENCES/05_Агент.Метрика/4_Агент.Метрика_ Отчеты.png",
+    "width": 1908,
+    "height": 1061,
+    "bytes": 321349,
+    "sha256": "22ba619f00cd43bebcc31ddcacf3df7330639733b99866d05edd9c7f246318b7",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1908,
+          1061
+        ],
+        "widths": [
+          320,
+          640
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 219,
+            "height": 114,
+            "parentHeight": 114,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 194,
+            "height": 101,
+            "parentHeight": 101,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 151,
+            "height": 78,
+            "parentHeight": 78,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 294,
+            "height": 154,
+            "parentHeight": 154,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-37"
+  },
+  {
+    "source": "REFERENCES/06_Студия рассылок/1.png",
+    "width": 622,
+    "height": 1620,
+    "bytes": 206451,
+    "sha256": "e74d2e5638c2ac783828a4cdae063aa27035ed59e0dff7016c9171696e2682a7",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          544,
+          622
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          622,
+          1620
+        ],
+        "widths": [
+          224,
+          448
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 140,
+            "height": 185,
+            "parentHeight": 185,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 123,
+            "height": 164,
+            "parentHeight": 164,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 131,
+            "height": 238,
+            "parentHeight": 238,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-38"
+  },
+  {
+    "source": "REFERENCES/06_Студия рассылок/Фон.png",
+    "width": 1672,
+    "height": 940,
+    "bytes": 1737467,
+    "sha256": "6d4c8170bf73a43d905830ddf16cb1417a57aa818a9d171095e40d0fd4b7cbaa",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Книжные корешки и стеллажи"
+      }
+    },
+    "id": "image-39"
+  },
+  {
+    "source": "REFERENCES/06_Студия рассылок/2.png",
+    "width": 598,
+    "height": 951,
+    "bytes": 141436,
+    "sha256": "e02cb8c162f096152c3dbd30bd99959be2519fc56184d24e475ef40b28bd420d",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          598,
+          951
+        ],
+        "widths": [
+          224,
+          448
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 140,
+            "height": 185,
+            "parentHeight": 185,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 123,
+            "height": 164,
+            "parentHeight": 164,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 131,
+            "height": 238,
+            "parentHeight": 238,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-40"
+  },
+  {
+    "source": "REFERENCES/06_Студия рассылок/3.png",
+    "width": 1299,
+    "height": 1520,
+    "bytes": 426145,
+    "sha256": "bb9e5466263f607c065f80a5eb5d6384d99608b633d4e432504b7a5add288f3d",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1299,
+          1520
+        ],
+        "widths": [
+          224,
+          448
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 140,
+            "height": 185,
+            "parentHeight": 185,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 123,
+            "height": 164,
+            "parentHeight": 164,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 131,
+            "height": 238,
+            "parentHeight": 238,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-41"
+  },
+  {
+    "source": "REFERENCES/06_Студия рассылок/4.png",
+    "width": 1921,
+    "height": 2938,
+    "bytes": 1475034,
+    "sha256": "1602aeb60c308a135f0a7d932a1adf1cd28a79705457a8608d916bb13526a955",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1921,
+          2938
+        ],
+        "widths": [
+          224,
+          448
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1440,
+            "width": 140,
+            "height": 185,
+            "parentHeight": 185,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1280,
+            "width": 123,
+            "height": 164,
+            "parentHeight": 164,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 390,
+            "width": 131,
+            "height": 238,
+            "parentHeight": 238,
+            "fit": "contain",
+            "position": "50% 50%"
+          },
+          {
+            "viewport": 1920,
+            "width": 193,
+            "height": 248,
+            "parentHeight": 248,
+            "fit": "contain",
+            "position": "50% 50%"
+          }
+        ]
+      }
+    },
+    "id": "image-42"
+  },
+  {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/Абстрактный фон с медными дугами под скриншот.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 1770072,
+    "sha256": "75d42001aa44a5db89ac8c839f5f7a28989109e70e1cc0f6bcdc42d3f9b4082e",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1536
+        ],
+        "reason": "Крупные гладкие формы и плавный градиент; проверка q90 выявила сглаживание переходов на 200%, q92 принят с дополнительным запасом"
+      }
+    },
+    "id": "image-43"
+  },
+  {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/1 Реестр ЗАЛОВ главная.png",
+    "width": 1897,
+    "height": 1423,
+    "bytes": 646968,
+    "sha256": "9cef8fc86155576390a9050b9f562201da47d4cde7d6ba94ae16f7b3f08f2514",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          640,
+          1280
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1897,
+          996
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-44"
+  },
+  {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/Современный офис на закате_фон для хиро под текст.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1763939,
+    "sha256": "e7c168bf4463a183d00776c6f7d97cf77654dfaafc12c1ee66763e82d8c20c01",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Мелкие детали офиса, листья и отражения"
+      }
+    },
+    "id": "image-45"
+  },
+  {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/2 Реестр ЗАЛОВ.png",
+    "width": 1897,
+    "height": 1091,
+    "bytes": 407885,
+    "sha256": "560cd32975a8fcfb5d3ee4b73f75187084bff3878c76583ae1f1ef673facaa5f",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1897,
+          996
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-46"
+  },
+  {
+    "source": "REFERENCES/07_Реестр ЗАЛОВ/3 Реестр ЗАЛОВ добавить зал.png",
+    "width": 1844,
+    "height": 1757,
+    "bytes": 538362,
+    "sha256": "39ad8ab07572661a68e6f007a2b9fd63604c27727bb081a2d84587b40f5f053b",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1844,
+          968
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-47"
+  },
+  {
+    "source": "REFERENCES/08_8 филиалов/Фон для текста в хиро_Современный офис на закате.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1848166,
+    "sha256": "c063240a331f849d263fd8456f02af8b0743ec03ecfe89105d43bdbf085a05b4",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Мелкие детали офиса и солнечные отражения"
+      }
+    },
+    "id": "image-48"
+  },
+  {
+    "source": "REFERENCES/08_8 филиалов/Футуристический фон для скриншота.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1681738,
+    "sha256": "74e27cd4e0c9064ef3b695f3306b298cf9b5854f1daa54bbfb83f1b2e4d53bbc",
+    "roles": {
+      "photo": {
+        "quality": 90,
+        "widths": [
+          1672
+        ],
+        "reason": "Крупные гладкие формы; проверить градиент и поверхность"
+      }
+    },
+    "id": "image-49"
+  },
+  {
+    "source": "REFERENCES/08_8 филиалов/1 главная.png",
+    "width": 1905,
+    "height": 1990,
+    "bytes": 676220,
+    "sha256": "98050e7af0d27f4b19a981b6150bcd39adfda272f700b5b345dad3af23c30bdf",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          640,
+          1280
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1905,
+          1000
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-50"
+  },
+  {
+    "source": "REFERENCES/08_8 филиалов/2 отчетность.png",
+    "width": 1890,
+    "height": 1142,
+    "bytes": 435234,
+    "sha256": "5defc182ba0ff83c75075c3a320891a1386e04dd4859e543e777c2e2189a6d46",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          1890,
+          992
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-51"
+  },
+  {
+    "source": "REFERENCES/08_8 филиалов/3 сравнение.png",
+    "width": 1885,
+    "height": 689,
+    "bytes": 211108,
+    "sha256": "e8d52253f5fe4cfc72f33f83dd7741b3351b6caf43e8b45546ed5670d8319c21",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          284,
+          0,
+          1601,
+          689
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-52"
+  },
+  {
+    "source": "REFERENCES/09_Рабочий компас/Фон для текста.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1751235,
+    "sha256": "0976391c9237bfa4660587f31c850f1925301b53c134c81ef64ec109838a1985",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Архивные стеллажи, тонкие контуры и отражения"
+      }
+    },
+    "id": "image-53"
+  },
+  {
+    "source": "REFERENCES/09_Рабочий компас/Фон для скриншота.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1637438,
+    "sha256": "63d75732ad35d76e24bdeba3fab5dc6f4b8a65d09ffa24da42f13ae5c63e3f9c",
+    "roles": {
+      "photo": {
+        "quality": 90,
+        "widths": [
+          1672
+        ],
+        "reason": "Крупные гладкие формы; проверить градиент и поверхность"
+      }
+    },
+    "id": "image-54"
+  },
+  {
+    "source": "REFERENCES/09_Рабочий компас/1.png",
+    "width": 2560,
+    "height": 2126,
+    "bytes": 1482385,
+    "sha256": "0d3308947bac6484f10e3cab8830a03848e48dfcbaa95f4187ef388f9930b620",
+    "roles": {
+      "display": {
+        "quality": 95,
+        "widths": [
+          768,
+          1536
+        ]
+      },
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          2560,
+          1344
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-55"
+  },
+  {
+    "source": "REFERENCES/09_Рабочий компас/2.png",
+    "width": 2048,
+    "height": 2547,
+    "bytes": 647054,
+    "sha256": "1ce466b43c728d412984926ad594829a83189fd00c25a25a0d672ed8b8e5876d",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          2048,
+          1075
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-56"
+  },
+  {
+    "source": "REFERENCES/09_Рабочий компас/3.png",
+    "width": 2048,
+    "height": 1867,
+    "bytes": 430515,
+    "sha256": "3cb4c935ea00c46136ff1b0e2a1d822aeb2e17ac71146c57779677e578ca9091",
+    "roles": {
+      "thumbnail": {
+        "quality": 95,
+        "crop": [
+          0,
+          0,
+          2048,
+          1075
+        ],
+        "widths": [
+          416,
+          832
+        ],
+        "windows": [
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1440,
+            "width": 298,
+            "height": 156,
+            "parentHeight": 156,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1280,
+            "width": 263,
+            "height": 138,
+            "parentHeight": 138,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 390,
+            "width": 317,
+            "height": 166,
+            "parentHeight": 166,
+            "fit": "cover",
+            "position": "50% 0%"
+          },
+          {
+            "viewport": 1920,
+            "width": 399,
+            "height": 209,
+            "parentHeight": 209,
+            "fit": "cover",
+            "position": "50% 0%"
+          }
+        ]
+      }
+    },
+    "id": "image-57"
+  },
+  {
+    "source": "REFERENCES/10/1 фон для хиро.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1860985,
+    "sha256": "5aa90428603713cb0cc692ec414b3ba31de5bffde78ab858dbbf6e546ee503ed",
+    "roles": {
+      "photo": {
+        "quality": 90,
+        "widths": [
+          1672
+        ],
+        "reason": "Крупные световые дуги и плавный градиент"
+      }
+    },
+    "id": "image-58"
+  },
+  {
+    "source": "REFERENCES/10/2 фон для Сова.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1679985,
+    "sha256": "f29a34be6f8aad6ab4a2d39cc08ece7f0c88e1238a333ddf14641ea88201ee87",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Мелкая фактура льда на светлом фоне"
+      }
+    },
+    "id": "image-59"
+  },
+  {
+    "source": "REFERENCES/10/1 Сова/Сова 1 мокап.png",
+    "width": 1203,
+    "height": 2468,
+    "bytes": 1625481,
+    "sha256": "1a893f505c7c26a4ac9e36d1652ed933ccbb45f4e7e9654f5f528fa7546df51f",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-60"
+  },
+  {
+    "source": "REFERENCES/10/1 Сова/Сова 2 мокап.png",
+    "width": 1203,
+    "height": 2468,
+    "bytes": 921423,
+    "sha256": "c6ee65b99ed04aa52b3599cc8b2fa6727afb7193595aaa8f3b05e187363c0800",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-61"
+  },
+  {
+    "source": "REFERENCES/10/3 фон для Форум.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1480675,
+    "sha256": "30eed05a5b3852f2acd3788487a5056e0cfff6c4923c6029bf60b6898cc5a036",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Плавный абстрактный градиент без мелкого текста; проверка q90 выявила сглаживание переходов на 200%, q92 принят с дополнительным запасом"
+      }
+    },
+    "id": "image-62"
+  },
+  {
+    "source": "REFERENCES/10/2 Форум/Форум 1 мокап.png",
+    "width": 1203,
+    "height": 4415,
+    "bytes": 5587176,
+    "sha256": "bb7ff94c48dd94d45af464084456c1127a2cdd387643f0a39f3a30a697c4939f",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-63"
+  },
+  {
+    "source": "REFERENCES/10/2 Форум/Форум 2 мокап.png",
+    "width": 1203,
+    "height": 2725,
+    "bytes": 3266244,
+    "sha256": "ec60d7f27e95cf1b98fa522f0de2c2f3f80f8d7655ccb7d93bec28655e5f747f",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-64"
+  },
+  {
+    "source": "REFERENCES/10/2 Форум/Форум 3 мокап.png",
+    "width": 1203,
+    "height": 4050,
+    "bytes": 4922594,
+    "sha256": "48543e80618c137158891e31c3e793e5a5cec22564bb8cb41f8f5457b0dad10e",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-65"
+  },
+  {
+    "source": "REFERENCES/10/4 фон для Полка.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1407443,
+    "sha256": "707f57ce1e2a08a0a14a5a2a1f13c7ad6d2156dd600df188f7f4bbbb031ca1e8",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Светлые абстрактные формы и плавный градиент; проверка q90 выявила сглаживание переходов на 200%, q92 принят с дополнительным запасом"
+      }
+    },
+    "id": "image-66"
+  },
+  {
+    "source": "REFERENCES/10/3 Полка/Полка 1 мокап.png",
+    "width": 1203,
+    "height": 4855,
+    "bytes": 2394906,
+    "sha256": "732f86e0cb8fce5ed7fae640d5ed3f2143dfb708a278354f9b72046453e46b8a",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-67"
+  },
+  {
+    "source": "REFERENCES/10/3 Полка/Полка 2 мокап.png",
+    "width": 1203,
+    "height": 2468,
+    "bytes": 1024207,
+    "sha256": "78195e8b6a9ac280fb20dcdba33c1cfd66fac01b13becac5a442cfd78b583780",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-68"
+  },
+  {
+    "source": "REFERENCES/10/5 фон для Заметка.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1962727,
+    "sha256": "54fc201a6d5384750e848fae1759da9b7fee729efb8c3eec30a63e7b39d24e7e",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Тёмная фактура поверхности и световые дуги"
+      }
+    },
+    "id": "image-69"
+  },
+  {
+    "source": "REFERENCES/10/4 Заметка/Заметка 1 мокап.png",
+    "width": 1203,
+    "height": 2728,
+    "bytes": 532317,
+    "sha256": "1915d9c06f3c5a069ac4dad869cf8a0946eb8665bf1146c30712924d9479df1a",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-70"
+  },
+  {
+    "source": "REFERENCES/10/4 Заметка/Заметка 2 мокап.png",
+    "width": 1203,
+    "height": 2774,
+    "bytes": 467473,
+    "sha256": "0839a01b0970d341e966eaad3bdad20323013350e8c39ac47183e164af2a2763",
+    "roles": {
+      "mockup": {
+        "lossless": true,
+        "quality": 100,
+        "widths": [
+          1203
+        ]
+      }
+    },
+    "id": "image-71"
+  },
+  {
+    "source": "Вайфреймы в работу/Фон для Обсудить_Инопланетный рассвет над ледяной равниной_1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1843028,
+    "sha256": "f7e4dde014924b58261132c0891e5cfba8bc21be904e986c8c47cdacf0ea5061",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Ледяная поверхность, маленькая фигура и световой шар"
+      }
+    },
+    "id": "image-72"
+  },
+  {
+    "source": "REFERENCES/01_АРК/Атмосферный офис с сайтом «АРК».png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 1569818,
+    "sha256": "45459bba49feb7c8108c49e7c396984141efaed0e50699da36ff4bcaeb545f41",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1672
+        ],
+        "reason": "Встроенный экран и детали интерьера"
+      }
+    },
+    "id": "image-73"
+  },
+  {
+    "source": "REFERENCES/01_АРК/Дымчатая мраморная туманность.png",
+    "width": 2022,
+    "height": 778,
+    "bytes": 1291248,
+    "sha256": "1c00b6e32ffa2191a9e85f9e3195e1bee79f838873f02fb4901e07561fb21ded",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          2022
+        ],
+        "reason": "Тонкие световые жилы на тёмной фактуре"
+      }
+    },
+    "id": "image-74"
+  },
+  {
+    "source": "REFERENCES/01_АРК/Современный дом над туманной долиной.png",
+    "width": 2168,
+    "height": 507,
+    "bytes": 1719413,
+    "sha256": "390cb713bf3900a23250f53e9d2b099a5a704819a1185f9632fa17fd4f24c9cc",
+    "roles": {
+      "photo": {
+        "quality": 90,
+        "widths": [
+          2168
+        ],
+        "reason": "Контрольный тест q90: небо, туман, горный ландшафт"
+      }
+    },
+    "id": "image-75"
+  },
+  {
+    "source": "REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 1717437,
+    "sha256": "47e9104e2f4d5034a8154d919a2121a13a0b80ffae969f55e2ae6f69c0138080",
+    "roles": {
+      "photo": {
+        "quality": 92,
+        "widths": [
+          1536
+        ],
+        "reason": "Тонкая фактура стен, листья и солнечные тени"
+      }
+    },
+    "id": "image-76"
+  }
+]

@@ -1,5 +1,5 @@
 .metrika-cover { --metrika-gap: clamp(48px, 4.2vw, 80px); display: grid; grid-template-columns: .85fr 1.15fr; gap: var(--metrika-gap); padding: 42px var(--section-gutter); position: relative; isolation: isolate; overflow: hidden; }
-.metrika-cover::before { content: ''; position: absolute; z-index: -1; inset: 0; right: calc(57.5% - var(--section-gutter) * .15 - var(--metrika-gap) * .075); background: linear-gradient(#0002, #0002), url('../../../../REFERENCES/05_Агент.Метрика/Кинематографичный интерьер с солнечными тенями.png') center / cover no-repeat; }
+.metrika-cover::before { content: ''; position: absolute; z-index: -1; inset: 0; right: calc(57.5% - var(--section-gutter) * .15 - var(--metrika-gap) * .075); background: linear-gradient(#0002, #0002), var(--metrika-image, none) center / cover no-repeat; }
 .metrika-cover__content { min-width: 0; align-self: center; }
 .metrika__number { display: flex; align-items: center; gap: 14px; font-size: 19px; margin-bottom: 26px; }
 .metrika__number span { color: var(--orange); font-size: 38px; }

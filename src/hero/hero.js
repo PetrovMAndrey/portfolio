@@ -1,4 +1,5 @@
 import { elementFromHTML, escapeHTML } from '../shared/dom.js';
+import { loadImage, imageIsReady } from '../shared/images.js';
 
 const directory = './Вайфреймы в работу/Для горизонтального скролла в хиро блоке/';
 const cards = [
@@ -68,24 +69,61 @@ export function mountHero(hero) {
   rail.addEventListener('pointerleave', () => hoverProject(null));
   let frame = 0, drag = null, suppressClick = false, cycle = 0, animation = 0;
   const modulo = (value, length) => ((value % length) + length) % length;
-  function setPosition(value) {
+  let positionRequest = 0, pendingPosition = null;
+  function normalize(value) {
     const lower = cycle - rail.clientWidth / 2;
-    const next = lower + modulo(value - lower, cycle);
+    return lower + modulo(value - lower, cycle);
+  }
+  function imagesAt(value, margin = 0) {
+    const rect = rail.getBoundingClientRect();
+    const scale = rect.width / rail.clientWidth || 1;
+    const projects = new Set(visualCards.filter(card => {
+      const left = rail.scrollLeft + (card.getBoundingClientRect().left - rect.left) / scale;
+      return left < value + rail.clientWidth + margin && left + card.offsetWidth > value - margin;
+    }).map(card => card.dataset.heroProject));
+    // Decode every DOM copy of a requested project, including the wrap boundary.
+    return visualCards.filter(card => projects.has(card.dataset.heroProject)).map(card => card.querySelector('img'));
+  }
+  function prepare(images) { return Promise.all(images.map(loadImage)); }
+  function warmRail() { return prepare(visualCards.map(card => card.querySelector('img'))); }
+  function applyPosition(next, value = next) {
     rail.scrollLeft = next;
     if (drag) drag.scroll += next - value;
   }
-  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; }
+  function setPosition(value) {
+    const next = normalize(value);
+    const images = imagesAt(next);
+    const request = ++positionRequest;
+    pendingPosition = next;
+    if (images.every(imageIsReady)) {
+      applyPosition(next, value); pendingPosition = null;
+    } else {
+      // Network latency must never expose an empty target card. Keep the current
+      // painted position until the requested images and all their copies decode.
+      prepare(images).then(() => {
+        if (request !== positionRequest) return;
+        applyPosition(next, value); pendingPosition = null;
+      }).catch(error => console.error('Hero image failed to load', error));
+    }
+    prepare(imagesAt(next, first.offsetWidth)).catch(error => console.error('Hero neighbour failed to load', error));
+  }
+  let movement = 0;
+  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; movement++; }
   function moveBy(distance) {
     stopAnimation();
+    const request = movement;
     const start = rail.scrollLeft;
     if (reducedMotion.matches) { setPosition(start + distance); return; }
-    const began = performance.now();
-    function tick(now) {
+    warmRail().then(() => {
+      if (request !== movement) return;
+      const began = performance.now();
+      function tick(now) {
       const progress = Math.min(1, (now - began) / 350);
       setPosition(start + distance * (1 - Math.pow(1 - progress, 3)));
       animation = progress < 1 ? requestAnimationFrame(tick) : 0;
-    }
-    animation = requestAnimationFrame(tick);
+      }
+      animation = requestAnimationFrame(tick);
+    }).catch(error => console.error('Hero image failed to load', error));
   }
   function update() {
     frame = 0;
@@ -99,7 +137,10 @@ export function mountHero(hero) {
     stopAnimation();
     const previousCycle = cycle;
     cycle = parseFloat(getComputedStyle(list).width) + parseFloat(getComputedStyle(rail).gap);
-    setPosition(previousCycle ? rail.scrollLeft * cycle / previousCycle : cycle - parseFloat(getComputedStyle(first).width) * (234 / 386));
+    const next = normalize(previousCycle ? rail.scrollLeft * cycle / previousCycle : cycle - parseFloat(getComputedStyle(first).width) * (234 / 386));
+    // Initial geometry is established synchronously before the first paint.
+    pendingPosition = null; applyPosition(next);
+    prepare(imagesAt(next)).catch(error => console.error('Hero image failed to load', error));
     update();
   }
   rail.addEventListener('scroll', () => {
@@ -109,7 +150,7 @@ export function mountHero(hero) {
   rail.addEventListener('wheel', event => {
     if (event.ctrlKey) return;
     const delta = (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * (event.deltaMode === 1 ? 20 : event.deltaMode === 2 ? rail.clientWidth : 1);
-    event.preventDefault(); stopAnimation(); setPosition(rail.scrollLeft + delta);
+    event.preventDefault(); stopAnimation(); warmRail().catch(error => console.error('Hero image failed to load', error)); setPosition((pendingPosition ?? rail.scrollLeft) + delta);
   }, { passive: false });
   rail.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
@@ -119,6 +160,7 @@ export function mountHero(hero) {
   rail.addEventListener('pointerdown', event => {
     if (event.button !== 0 || event.pointerType !== 'mouse') return;
     stopAnimation();
+    warmRail().catch(error => console.error('Hero image failed to load', error));
     drag = { id: event.pointerId, start: event.clientX, scroll: rail.scrollLeft, moved: false }; suppressClick = false;
   });
   rail.addEventListener('dragstart', event => event.preventDefault());
@@ -131,6 +173,9 @@ export function mountHero(hero) {
     if (drag.moved) { setPosition(drag.scroll - delta); event.preventDefault(); }
   });
   const endDrag = () => { suppressClick = !!drag?.moved; drag = null; rail.classList.remove('is-dragging'); };
+  rail.addEventListener('pointerenter', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { once: true });
+  rail.addEventListener('focusin', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { once: true });
+  rail.addEventListener('touchstart', () => { warmRail().catch(error => console.error('Hero image failed to load', error)); }, { passive: true, once: true });
   rail.addEventListener('pointerup', endDrag);
   rail.addEventListener('pointercancel', endDrag);
   rail.addEventListener('lostpointercapture', () => { if (drag) endDrag(); });
